@@ -1,0 +1,788 @@
+
+[2026-03-19T13:30:19.478Z] goToUrl: url="google" activeTabId=1 wcExists=true
+[2026-03-19T13:30:19.479Z] loading URL: "https://www.google.com/search?q=google"
+
+[2026-03-19T13:30:21.435Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:30:21.435Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:30:30.314Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:30:30.315Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:30:43.973Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:30:43.973Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:30:45.919Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:30:45.920Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:31:56.308Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:31:56.309Z] loading URL: "about:blank"
+
+[2026-03-19T13:31:58.575Z] goToUrl: url="sdasd" activeTabId=1 wcExists=true
+[2026-03-19T13:31:58.576Z] loading URL: "https://www.google.com/search?q=sdasd"
+
+[2026-03-19T13:31:59.916Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:31:59.917Z] loading URL: "about:blank"
+
+[2026-03-19T13:32:00.931Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:32:00.932Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:32:01.997Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:32:01.998Z] loading URL: "about:blank"
+
+[2026-03-19T13:32:02.639Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T13:32:02.639Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T13:32:04.812Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:32:04.812Z] loading URL: "about:blank"
+
+[2026-03-19T13:32:17.215Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T13:32:17.216Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T13:32:23.079Z] goToUrl: url="about:blank" activeTabId=2 wcExists=true
+[2026-03-19T13:32:23.079Z] loading URL: "about:blank"
+
+[2026-03-19T13:34:33.539Z] goToUrl: url="about:blank" activeTabId=2 wcExists=true
+[2026-03-19T13:34:33.540Z] loading URL: "about:blank"
+
+[2026-03-19T13:34:35.814Z] goToUrl: url="https://www.google.com" activeTabId=2 wcExists=true
+[2026-03-19T13:34:35.815Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:34:55.136Z] goToUrl: url="porno" activeTabId=2 wcExists=true
+[2026-03-19T13:34:55.137Z] loading URL: "https://www.google.com/search?q=porno"
+
+[2026-03-19T13:38:26.370Z] goToUrl: url="https://www.google.com" activeTabId=5 wcExists=true
+[2026-03-19T13:38:26.370Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:39:31.753Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:39:48.829Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:39:48.829Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:39:49.133Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:39:49.134Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:39:49.134Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:39:49.166Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:39:49.166Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:39:53.446Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:39:53.447Z] tm.onNavigate: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz"
+[2026-03-19T13:39:53.447Z] addVisit: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz"
+
+[2026-03-19T13:39:53.463Z] tm.onNavigate: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+[2026-03-19T13:39:53.464Z] addVisit: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+
+[2026-03-19T13:39:56.192Z] goToUrl: url="https://www.google.com/" activeTabId=1 wcExists=true
+[2026-03-19T13:39:56.193Z] loading URL: "https://www.google.com/"
+
+[2026-03-19T13:39:56.364Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:39:56.365Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:39:56.366Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:39:56.372Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:39:56.372Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:39:56.969Z] goToUrl: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" activeTabId=1 wcExists=true
+[2026-03-19T13:39:56.969Z] loading URL: "https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz"
+
+[2026-03-19T13:39:57.095Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:39:57.095Z] tm.onNavigate: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz"
+[2026-03-19T13:39:57.096Z] addVisit: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz"
+
+[2026-03-19T13:39:57.115Z] tm.onNavigate: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+[2026-03-19T13:39:57.116Z] addVisit: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+
+[2026-03-19T13:39:58.798Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:39:58.799Z] tm.onNavigate: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+[2026-03-19T13:39:58.799Z] addVisit: url="https://www.google.com/search?q=deneme&sca_esv=f818ef0c6d37c692&source=hp&ei=pfy7aejHBZiP-d8PqPyDuQI&iflsig=AFdpzrgAAAAAabwKtafHRAOE1k8IMdAV7gbJdgkOBqwb&ved=0ahUKEwiorriei6yTAxWYR_4FHSj-ICcQ4dUDCA4&uact=5&oq=deneme&gs_lp=Egdnd3Mtd2l6IgZkZW5lbWUyCxAAGIAEGLEDGIMBMggQABiABBixAzIFEAAYgAQyCBAAGIAEGLEDMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQMyCxAuGIAEGMcBGK8BSJYJULABWMcHcAF4AJABAJgBcqAB8wSqAQMxLjW4AQPIAQD4AQGYAgegAocFqAIKwgIKEAAYAxjqAhiPAcICChAuGAMY6gIYjwHCAg4QABiABBixAxiDARiKBcICCxAuGIAEGNEDGMcBwgIKEAAYgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAg0QABiABBixAxhDGIoFwgIKEC4YgAQYQxiKBcICDhAuGIAEGLEDGNEDGMcBwgIREC4YgAQYsQMY0QMYgwEYxwHCAhYQLhiABBixAxjRAxhDGIMBGMcBGIoFwgILEC4YgAQYsQMYgwHCAggQLhiABBixA8ICEBAAGIAEGLEDGEMYgwEYigXCAg4QLhiABBixAxiDARiKBZgDBfEF6seOHzSzHYCSBwMyLjWgB586sgcDMS41uAeCBcIHBTAuNi4xyAcPgAgA&sclient=gws-wiz" title="deneme - Google'da Ara"
+
+[2026-03-19T13:40:01.484Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:40:01.484Z] tm.onNavigate: url="https://tr.wikipedia.org/wiki/Deneme" title="tr.wikipedia.org/wiki/Deneme"
+[2026-03-19T13:40:01.484Z] addVisit: url="https://tr.wikipedia.org/wiki/Deneme" title="tr.wikipedia.org/wiki/Deneme"
+
+[2026-03-19T13:40:01.544Z] tm.onNavigate: url="https://tr.wikipedia.org/wiki/Deneme" title="Deneme - Vikipedi"
+[2026-03-19T13:40:01.544Z] addVisit: url="https://tr.wikipedia.org/wiki/Deneme" title="Deneme - Vikipedi"
+
+[2026-03-19T13:40:19.995Z] goToUrl: url="idm" activeTabId=2 wcExists=true
+[2026-03-19T13:40:19.995Z] loading URL: "https://www.google.com/search?q=idm"
+
+[2026-03-19T13:40:20.158Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:40:20.158Z] tm.onNavigate: url="https://www.google.com/search?q=idm" title="google.com/search?q=idm"
+[2026-03-19T13:40:20.158Z] addVisit: url="https://www.google.com/search?q=idm" title="google.com/search?q=idm"
+
+[2026-03-19T13:40:20.190Z] tm.onNavigate: url="https://www.google.com/search?q=idm" title="idm - Google'da Ara"
+[2026-03-19T13:40:20.190Z] addVisit: url="https://www.google.com/search?q=idm" title="idm - Google'da Ara"
+
+[2026-03-19T13:40:21.622Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:40:21.622Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/" title="internetdownloadmanager.com"
+[2026-03-19T13:40:21.623Z] addVisit: url="https://www.internetdownloadmanager.com/" title="internetdownloadmanager.com"
+
+[2026-03-19T13:40:21.642Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/" title="Internet Download Manager is a powerful download accelerator"
+[2026-03-19T13:40:21.643Z] addVisit: url="https://www.internetdownloadmanager.com/" title="Internet Download Manager is a powerful download accelerator"
+
+[2026-03-19T13:42:23.924Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:43:16.073Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:43:16.073Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:43:16.373Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:43:16.374Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:43:16.374Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:43:16.402Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:43:16.402Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:43:20.337Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:43:20.337Z] tm.onNavigate: url="https://www.google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz" title="google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz"
+[2026-03-19T13:43:20.338Z] addVisit: url="https://www.google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz" title="google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz"
+
+[2026-03-19T13:43:20.350Z] tm.onNavigate: url="https://www.google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz" title="idm download - Google'da Ara"
+[2026-03-19T13:43:20.350Z] addVisit: url="https://www.google.com/search?q=idm+download&sca_esv=f818ef0c6d37c692&source=hp&ei=dP27abHIFJuM-d8P5bbSkAw&iflsig=AFdpzrgAAAAAabwLhDHLL6npkhjjITb0g8O_2KTUsTCL&oq=i&gs_lp=Egdnd3Mtd2l6IgFpKgIIATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIKEAAYgAQYQxiKBTIOEC4YgAQYsQMYgwEYigVIoRZQqAlYqAlwAXgAkAEAmAFkoAFkqgEDMC4xuAEByAEA-AEBmAICoAJ0qAIKwgITEAAYgAQYQxi0AhjnBhiKBRjqAsICHRAAGIAEGLQCGNQDGOUCGOcGGLcDGIoFGOoCGIoDmAMF8QVTMLgJGoq0oJIHAzEuMaAHqweyBwMwLjG4B27CBwMyLTLIBwuACAA&sclient=gws-wiz" title="idm download - Google'da Ara"
+
+[2026-03-19T13:43:21.623Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:43:21.623Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+[2026-03-19T13:43:21.624Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:43:21.636Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+[2026-03-19T13:43:21.637Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+
+[2026-03-19T13:45:09.253Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:45:12.574Z] HISTORY_GET: count=7
+
+[2026-03-19T13:45:12.574Z] HISTORY_GET: count=7
+
+[2026-03-19T13:45:13.534Z] HISTORY_GET: count=7
+
+[2026-03-19T13:45:13.534Z] HISTORY_GET: count=7
+
+[2026-03-19T13:45:14.209Z] goToUrl: url="https://www.internetdownloadmanager.com/download.html" activeTabId=1 wcExists=true
+[2026-03-19T13:45:14.209Z] loading URL: "https://www.internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:45:14.774Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:45:14.774Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+[2026-03-19T13:45:14.775Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:45:14.808Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+[2026-03-19T13:45:14.809Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+
+[2026-03-19T13:45:39.369Z] goToUrl: url="https://x.com" activeTabId=2 wcExists=true
+[2026-03-19T13:45:39.369Z] loading URL: "https://x.com"
+
+[2026-03-19T13:45:39.730Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:45:39.730Z] tm.onNavigate: url="https://x.com/" title="x.com"
+[2026-03-19T13:45:39.730Z] addVisit: url="https://x.com/" title="x.com"
+
+[2026-03-19T13:45:41.777Z] tm.onNavigate: url="https://x.com/" title="X"
+[2026-03-19T13:45:41.778Z] addVisit: url="https://x.com/" title="X"
+
+[2026-03-19T13:45:42.020Z] tm.onNavigate: url="https://x.com/" title="X. Olan biten burada / X"
+[2026-03-19T13:45:42.020Z] addVisit: url="https://x.com/" title="X. Olan biten burada / X"
+
+[2026-03-19T13:45:51.701Z] goToUrl: url="indir" activeTabId=1 wcExists=true
+[2026-03-19T13:45:51.701Z] loading URL: "https://www.google.com/search?q=indir"
+
+[2026-03-19T13:45:51.866Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:45:51.866Z] tm.onNavigate: url="https://www.google.com/search?q=indir" title="google.com/search?q=indir"
+[2026-03-19T13:45:51.867Z] addVisit: url="https://www.google.com/search?q=indir" title="google.com/search?q=indir"
+
+[2026-03-19T13:45:51.918Z] tm.onNavigate: url="https://www.google.com/search?q=indir" title="indir - Google'da Ara"
+[2026-03-19T13:45:51.918Z] addVisit: url="https://www.google.com/search?q=indir" title="indir - Google'da Ara"
+
+[2026-03-19T13:45:54.313Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:45:54.313Z] tm.onNavigate: url="https://www.tamindir.com/" title="tamindir.com"
+[2026-03-19T13:45:54.313Z] addVisit: url="https://www.tamindir.com/" title="tamindir.com"
+
+[2026-03-19T13:45:54.331Z] tm.onNavigate: url="https://www.tamindir.com/" title="Tamindir | Teknoloji Haberleri, Program, Oyun, Uygulama indir"
+[2026-03-19T13:45:54.331Z] addVisit: url="https://www.tamindir.com/" title="Tamindir | Teknoloji Haberleri, Program, Oyun, Uygulama indir"
+
+[2026-03-19T13:45:58.360Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:45:58.360Z] tm.onNavigate: url="https://www.tamindir.com/indir/avast-free-antivirus/" title="tamindir.com/indir/avast-free-antivirus/"
+[2026-03-19T13:45:58.360Z] addVisit: url="https://www.tamindir.com/indir/avast-free-antivirus/" title="tamindir.com/indir/avast-free-antivirus/"
+
+[2026-03-19T13:45:58.364Z] tm.onNavigate: url="https://www.tamindir.com/indir/avast-free-antivirus/" title="Avast Free Antivirus İndir - Ücretsiz İndir - Tamindir"
+[2026-03-19T13:45:58.365Z] addVisit: url="https://www.tamindir.com/indir/avast-free-antivirus/" title="Avast Free Antivirus İndir - Ücretsiz İndir - Tamindir"
+
+[2026-03-19T13:46:36.935Z] goToUrl: url="https://www.google.com" activeTabId=3 wcExists=true
+[2026-03-19T13:46:36.936Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:46:37.164Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:46:37.165Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:46:37.165Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:46:37.219Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:46:37.219Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:46:37.489Z] goToUrl: url="https://www.google.com" activeTabId=3 wcExists=true
+[2026-03-19T13:46:37.489Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:46:37.648Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:46:37.648Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:46:37.648Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:46:45.324Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:46:49.713Z] HISTORY_GET: count=11
+
+[2026-03-19T13:46:49.713Z] HISTORY_GET: count=11
+
+[2026-03-19T13:46:51.058Z] HISTORY_GET: count=11
+
+[2026-03-19T13:46:51.059Z] HISTORY_GET: count=11
+
+[2026-03-19T13:46:55.804Z] goToUrl: url="https://www.internetdownloadmanager.com/download.html" activeTabId=2 wcExists=true
+[2026-03-19T13:46:55.805Z] loading URL: "https://www.internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:46:56.378Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:46:56.378Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+[2026-03-19T13:46:56.379Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:46:56.416Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+[2026-03-19T13:46:56.416Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+
+[2026-03-19T13:47:25.324Z] HISTORY_GET: count=11
+
+[2026-03-19T13:47:25.325Z] HISTORY_GET: count=11
+
+[2026-03-19T13:48:51.398Z] HISTORY_GET: count=11
+
+[2026-03-19T13:48:51.399Z] HISTORY_GET: count=11
+
+[2026-03-19T13:49:09.630Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:49:12.671Z] HISTORY_GET: count=11
+
+[2026-03-19T13:49:12.671Z] HISTORY_GET: count=11
+
+[2026-03-19T13:49:13.238Z] goToUrl: url="https://www.internetdownloadmanager.com/download.html" activeTabId=1 wcExists=true
+[2026-03-19T13:49:13.238Z] loading URL: "https://www.internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:49:13.804Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:49:13.804Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+[2026-03-19T13:49:13.804Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:49:13.837Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+[2026-03-19T13:49:13.837Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+
+[2026-03-19T13:50:25.080Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:50:27.282Z] HISTORY_GET: count=11
+
+[2026-03-19T13:50:27.282Z] HISTORY_GET: count=11
+
+[2026-03-19T13:50:27.832Z] goToUrl: url="https://www.internetdownloadmanager.com/download.html" activeTabId=1 wcExists=true
+[2026-03-19T13:50:27.832Z] loading URL: "https://www.internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:50:28.393Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:50:28.393Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+[2026-03-19T13:50:28.393Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="internetdownloadmanager.com/download.html"
+
+[2026-03-19T13:50:28.429Z] tm.onNavigate: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+[2026-03-19T13:50:28.430Z] addVisit: url="https://www.internetdownloadmanager.com/download.html" title="Download the latest free trial version of Internet Download Manager"
+
+[2026-03-19T13:50:33.758Z] will-download fired: url=https://raw.githubusercontent.com/electron/electron/main/README.md name=README.md
+
+[2026-03-19T13:50:36.339Z] will-download fired: url=https://raw.githubusercontent.com/electron/electron/main/README.md name=README.md
+
+[2026-03-19T13:50:49.407Z] goToUrl: url="steam" activeTabId=2 wcExists=true
+[2026-03-19T13:50:49.407Z] loading URL: "https://www.google.com/search?q=steam"
+
+[2026-03-19T13:50:49.657Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:50:49.657Z] tm.onNavigate: url="https://www.google.com/search?q=steam" title="google.com/search?q=steam"
+[2026-03-19T13:50:49.657Z] addVisit: url="https://www.google.com/search?q=steam" title="google.com/search?q=steam"
+
+[2026-03-19T13:50:49.690Z] tm.onNavigate: url="https://www.google.com/search?q=steam" title="steam - Google'da Ara"
+[2026-03-19T13:50:49.691Z] addVisit: url="https://www.google.com/search?q=steam" title="steam - Google'da Ara"
+
+[2026-03-19T13:50:51.084Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:50:51.085Z] tm.onNavigate: url="https://store.steampowered.com/?l=turkish" title="store.steampowered.com/?l=turkish"
+[2026-03-19T13:50:51.085Z] addVisit: url="https://store.steampowered.com/?l=turkish" title="store.steampowered.com/?l=turkish"
+
+[2026-03-19T13:50:51.107Z] tm.onNavigate: url="https://store.steampowered.com/?l=turkish" title="Steam'e Hoş Geldiniz"
+[2026-03-19T13:50:51.108Z] addVisit: url="https://store.steampowered.com/?l=turkish" title="Steam'e Hoş Geldiniz"
+
+[2026-03-19T13:50:53.269Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:50:53.270Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="store.steampowered.com/about/?snr=1_4_4__global-header"
+[2026-03-19T13:50:53.270Z] addVisit: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="store.steampowered.com/about/?snr=1_4_4__global-header"
+
+[2026-03-19T13:50:53.274Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+[2026-03-19T13:50:53.274Z] addVisit: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+
+[2026-03-19T13:51:42.326Z] will-download fired: url=https://raw.githubusercontent.com/electron/electron/main/README.md name=README.md
+
+[2026-03-19T13:52:07.139Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:52:07.140Z] loading URL: "about:blank"
+
+[2026-03-19T13:52:07.145Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:52:07.145Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T13:52:07.146Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T13:52:28.527Z] goToUrl: url="sa" activeTabId=1 wcExists=true
+[2026-03-19T13:52:28.528Z] loading URL: "https://www.google.com/search?q=sa"
+
+[2026-03-19T13:52:28.689Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:52:28.690Z] tm.onNavigate: url="https://www.google.com/search?q=sa" title="google.com/search?q=sa"
+[2026-03-19T13:52:28.690Z] addVisit: url="https://www.google.com/search?q=sa" title="google.com/search?q=sa"
+
+[2026-03-19T13:52:28.699Z] tm.onNavigate: url="https://www.google.com/search?q=sa" title="sa - Google'da Ara"
+[2026-03-19T13:52:28.700Z] addVisit: url="https://www.google.com/search?q=sa" title="sa - Google'da Ara"
+
+[2026-03-19T13:52:34.660Z] goToUrl: url="https://www.google.com/search?q=sa&zx=1773928349625&no_sw_cr=1" activeTabId=1 wcExists=true
+[2026-03-19T13:52:34.660Z] loading URL: "https://www.google.com/search?q=sa&zx=1773928349625&no_sw_cr=1"
+
+[2026-03-19T13:52:34.802Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:52:34.802Z] tm.onNavigate: url="https://www.google.com/search?q=sa&zx=1773928349625&no_sw_cr=1" title="sa - Google'da Ara"
+[2026-03-19T13:52:34.802Z] addVisit: url="https://www.google.com/search?q=sa&zx=1773928349625&no_sw_cr=1" title="sa - Google'da Ara"
+
+[2026-03-19T13:52:44.588Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:52:44.588Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_14_4__global-header" title="store.steampowered.com/about/?snr=1_14_4__global-header"
+[2026-03-19T13:52:44.588Z] addVisit: url="https://store.steampowered.com/about/?snr=1_14_4__global-header" title="store.steampowered.com/about/?snr=1_14_4__global-header"
+
+[2026-03-19T13:52:44.593Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_14_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+[2026-03-19T13:52:44.594Z] addVisit: url="https://store.steampowered.com/about/?snr=1_14_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+
+[2026-03-19T13:52:49.382Z] HISTORY_GET: count=17
+
+[2026-03-19T13:52:49.383Z] HISTORY_GET: count=17
+
+[2026-03-19T13:52:50.706Z] HISTORY_GET: count=17
+
+[2026-03-19T13:52:50.707Z] HISTORY_GET: count=17
+
+[2026-03-19T13:52:58.972Z] goToUrl: url="sad" activeTabId=null wcExists=false
+[2026-03-19T13:52:58.973Z] wc is null, returning
+
+[2026-03-19T13:53:00.568Z] goToUrl: url="sad" activeTabId=null wcExists=false
+[2026-03-19T13:53:00.569Z] wc is null, returning
+
+[2026-03-19T13:53:05.051Z] goToUrl: url="sad" activeTabId=2 wcExists=true
+[2026-03-19T13:53:05.051Z] loading URL: "https://www.google.com/search?q=sad"
+
+[2026-03-19T13:53:05.337Z] did-navigate: callbackExists=false isIncognito=true
+
+[2026-03-19T13:53:05.582Z] did-navigate: callbackExists=false isIncognito=true
+
+[2026-03-19T13:53:06.191Z] HISTORY_GET: count=17
+
+[2026-03-19T13:53:06.193Z] HISTORY_GET: count=17
+
+[2026-03-19T13:53:08.061Z] HISTORY_GET: count=17
+
+[2026-03-19T13:53:08.062Z] HISTORY_GET: count=17
+
+[2026-03-19T13:53:12.628Z] did-navigate: callbackExists=false isIncognito=true
+
+[2026-03-19T13:55:43.829Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:55:47.948Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:55:47.949Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:55:48.226Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:55:48.226Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:55:48.226Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:55:48.256Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:55:48.256Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:55:51.806Z] will-download fired: url=https://raw.githubusercontent.com/electron/electron/main/README.md name=README.md
+
+[2026-03-19T13:55:57.994Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:55:57.995Z] tm.onNavigate: url="https://www.google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz" title="google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz"
+[2026-03-19T13:55:57.995Z] addVisit: url="https://www.google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz" title="google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz"
+
+[2026-03-19T13:55:58.006Z] tm.onNavigate: url="https://www.google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz" title="steam - Google'da Ara"
+[2026-03-19T13:55:58.007Z] addVisit: url="https://www.google.com/search?q=steam&sca_esv=f818ef0c6d37c692&source=hp&ei=ZAC8ac-aDbuG9u8PpKzJYA&iflsig=AFdpzrgAAAAAabwOdPKFJ6vvY5L8iXD-xAWhy3gHhh8Z&oq=ste&gs_lp=Egdnd3Mtd2l6IgNzdGUqAggAMhAQABiABBixAxhDGIMBGIoFMg4QLhiABBixAxiDARiKBTIKEC4YgAQYQxiKBTILEAAYgAQYsQMYgwEyCBAuGIAEGLEDMgsQABiABBixAxiDATIOEC4YgAQYsQMYgwEYigUyCBAAGIAEGLEDMggQABiABBixAzILEAAYgAQYsQMYgwFImhJQogZY8AtwAXgAkAEAmAF4oAHVAqoBAzAuM7gBAcgBAPgBAZgCBKAC5QKoAgrCAhkQLhiABBjRAxhDGLQCGOcGGMcBGIoFGOoCwgITEC4YgAQYQxi0AhjnBhiKBRjqAsICExAAGIAEGEMYtAIY5wYYigUY6gLCAgoQABiABBhDGIoFwgILEC4YgAQYsQMYgwHCAhAQLhiABBjRAxhDGMcBGIoFwgIFEC4YgASYAwbxBaveqPoiME9pkgcDMS4zoAeXIbIHAzAuM7gH3wLCBwUwLjMuMcgHC4AIAA&sclient=gws-wiz" title="steam - Google'da Ara"
+
+[2026-03-19T13:55:58.517Z] HISTORY_GET: count=18
+
+[2026-03-19T13:55:58.518Z] HISTORY_GET: count=18
+
+[2026-03-19T13:56:01.679Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:56:01.680Z] tm.onNavigate: url="https://store.steampowered.com/?l=turkish" title="store.steampowered.com/?l=turkish"
+[2026-03-19T13:56:01.680Z] addVisit: url="https://store.steampowered.com/?l=turkish" title="store.steampowered.com/?l=turkish"
+
+[2026-03-19T13:56:01.697Z] tm.onNavigate: url="https://store.steampowered.com/?l=turkish" title="Steam'e Hoş Geldiniz"
+[2026-03-19T13:56:01.697Z] addVisit: url="https://store.steampowered.com/?l=turkish" title="Steam'e Hoş Geldiniz"
+
+[2026-03-19T13:56:02.834Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:56:02.834Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="store.steampowered.com/about/?snr=1_4_4__global-header"
+[2026-03-19T13:56:02.834Z] addVisit: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="store.steampowered.com/about/?snr=1_4_4__global-header"
+
+[2026-03-19T13:56:02.848Z] tm.onNavigate: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+[2026-03-19T13:56:02.849Z] addVisit: url="https://store.steampowered.com/about/?snr=1_4_4__global-header" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+
+[2026-03-19T13:56:13.014Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T13:56:13.014Z] loading URL: "about:blank"
+
+[2026-03-19T13:56:13.020Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:56:13.020Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T13:56:13.020Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T13:56:41.091Z] HISTORY_GET: count=18
+
+[2026-03-19T13:56:41.099Z] HISTORY_GET: count=18
+
+[2026-03-19T13:57:14.264Z] goToUrl: url="https://www.google.com" activeTabId=null wcExists=false
+[2026-03-19T13:57:14.264Z] wc is null, returning
+
+[2026-03-19T13:57:16.264Z] goToUrl: url="https://www.google.com" activeTabId=null wcExists=false
+[2026-03-19T13:57:16.265Z] wc is null, returning
+
+[2026-03-19T13:58:58.253Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T13:59:34.521Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T13:59:34.522Z] loading URL: "https://www.google.com"
+
+[2026-03-19T13:59:34.805Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:59:34.806Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T13:59:34.806Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T13:59:34.840Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T13:59:34.840Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T13:59:35.886Z] HISTORY_GET: count=18
+
+[2026-03-19T13:59:35.888Z] HISTORY_GET: count=18
+
+[2026-03-19T13:59:38.374Z] HISTORY_GET: count=18
+
+[2026-03-19T13:59:38.375Z] HISTORY_GET: count=18
+
+[2026-03-19T13:59:39.885Z] goToUrl: url="https://store.steampowered.com/about/" activeTabId=1 wcExists=true
+[2026-03-19T13:59:39.885Z] loading URL: "https://store.steampowered.com/about/"
+
+[2026-03-19T13:59:40.378Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:59:40.379Z] tm.onNavigate: url="https://store.steampowered.com/about/" title="store.steampowered.com/about/"
+[2026-03-19T13:59:40.379Z] addVisit: url="https://store.steampowered.com/about/" title="store.steampowered.com/about/"
+
+[2026-03-19T13:59:40.394Z] tm.onNavigate: url="https://store.steampowered.com/about/" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+[2026-03-19T13:59:40.395Z] addVisit: url="https://store.steampowered.com/about/" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+
+[2026-03-19T13:59:41.490Z] will-download fired: url=https://cdn.fastly.steamstatic.com/client/installer/SteamSetup.exe name=SteamSetup.exe
+
+[2026-03-19T13:59:54.114Z] goToUrl: url="epic games" activeTabId=2 wcExists=true
+[2026-03-19T13:59:54.115Z] loading URL: "https://www.google.com/search?q=epic%20games"
+
+[2026-03-19T13:59:54.269Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:59:54.269Z] tm.onNavigate: url="https://www.google.com/search?q=epic%20games" title="google.com/search?q=epic games"
+[2026-03-19T13:59:54.269Z] addVisit: url="https://www.google.com/search?q=epic%20games" title="google.com/search?q=epic games"
+
+[2026-03-19T13:59:54.301Z] tm.onNavigate: url="https://www.google.com/search?q=epic%20games" title="epic games - Google'da Ara"
+[2026-03-19T13:59:54.301Z] addVisit: url="https://www.google.com/search?q=epic%20games" title="epic games - Google'da Ara"
+
+[2026-03-19T13:59:56.549Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T13:59:56.549Z] tm.onNavigate: url="https://store.epicgames.com/tr" title="store.epicgames.com/tr"
+[2026-03-19T13:59:56.550Z] addVisit: url="https://store.epicgames.com/tr" title="store.epicgames.com/tr"
+
+[2026-03-19T13:59:56.740Z] tm.onNavigate: url="https://store.epicgames.com/tr" title="Epic Games Store | PC Oyunlarını, Modları, DLC'leri ve Daha Fazlasını İndir ve Oyna – Epic Games"
+[2026-03-19T13:59:56.741Z] addVisit: url="https://store.epicgames.com/tr" title="Epic Games Store | PC Oyunlarını, Modları, DLC'leri ve Daha Fazlasını İndir ve Oyna – Epic Games"
+
+[2026-03-19T14:00:00.054Z] will-download fired: url=https://epicgames-download1.akamaized.net/Builds/UnrealEngineLauncher/Installers/Windows/EpicInstaller-19.2.3.msi?launcherfilename=EpicInstaller-19.2.3.msi name=EpicInstaller-19.2.3.msi
+
+[2026-03-19T14:00:46.097Z] goToUrl: url="https://www.google.com" activeTabId=4 wcExists=true
+[2026-03-19T14:00:46.098Z] loading URL: "https://www.google.com"
+
+[2026-03-19T14:00:46.329Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:00:46.329Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T14:00:46.330Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T14:00:46.366Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T14:00:46.366Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T14:00:49.645Z] goToUrl: url="https://x.com" activeTabId=8 wcExists=true
+[2026-03-19T14:00:49.646Z] loading URL: "https://x.com"
+
+[2026-03-19T14:00:49.991Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:00:49.992Z] tm.onNavigate: url="https://x.com/" title="x.com"
+[2026-03-19T14:00:49.992Z] addVisit: url="https://x.com/" title="x.com"
+
+[2026-03-19T14:00:50.789Z] goToUrl: url="https://github.com" activeTabId=7 wcExists=true
+[2026-03-19T14:00:50.789Z] loading URL: "https://github.com"
+
+[2026-03-19T14:00:51.004Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:00:51.005Z] tm.onNavigate: url="https://github.com/" title="github.com"
+[2026-03-19T14:00:51.006Z] addVisit: url="https://github.com/" title="github.com"
+
+[2026-03-19T14:00:51.950Z] goToUrl: url="https://www.youtube.com" activeTabId=6 wcExists=true
+[2026-03-19T14:00:51.950Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:00:52.142Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:00:52.143Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:00:52.143Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:00:52.198Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:00:52.199Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:00:52.591Z] tm.onNavigate: url="https://github.com/" title="GitHub · Change is constant. GitHub keeps you ahead. · GitHub"
+[2026-03-19T14:00:52.591Z] addVisit: url="https://github.com/" title="GitHub · Change is constant. GitHub keeps you ahead. · GitHub"
+
+[2026-03-19T14:01:02.037Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T14:01:02.038Z] loading URL: "about:blank"
+
+[2026-03-19T14:01:02.043Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:01:02.043Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T14:01:02.043Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T14:01:14.968Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-19T14:01:14.968Z] loading URL: "https://www.google.com"
+
+[2026-03-19T14:01:15.167Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:01:15.167Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-19T14:01:15.168Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-19T14:01:15.182Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-19T14:01:15.182Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-19T14:01:15.970Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:01:15.970Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T14:01:15.970Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T14:01:15.970Z] tm.onNavigate: url="about:blank" title=""
+[2026-03-19T14:01:15.971Z] addVisit: url="about:blank" title="Yeni Sekme"
+
+[2026-03-19T14:01:22.005Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-19T14:01:22.005Z] loading URL: "about:blank"
+
+[2026-03-19T14:01:22.011Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:01:22.012Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T14:01:22.012Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T14:01:22.012Z] tm.onNavigate: url="about:blank" title=""
+[2026-03-19T14:01:22.012Z] addVisit: url="about:blank" title="Yeni Sekme"
+
+[2026-03-19T14:01:23.889Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:23.889Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:54.500Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:54.501Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:56.309Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:56.309Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:59.526Z] HISTORY_GET: count=23
+
+[2026-03-19T14:01:59.526Z] HISTORY_GET: count=23
+
+[2026-03-19T14:02:00.800Z] HISTORY_GET: count=23
+
+[2026-03-19T14:02:00.800Z] HISTORY_GET: count=23
+
+[2026-03-19T14:02:46.597Z] goToUrl: url="about:blank" activeTabId=4 wcExists=true
+[2026-03-19T14:02:46.597Z] loading URL: "about:blank"
+
+[2026-03-19T14:02:46.638Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:02:46.638Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-19T14:02:46.638Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-19T14:03:26.830Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:26.830Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:31.017Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:31.018Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:31.902Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:31.903Z] HISTORY_GET: count=23
+
+[2026-03-19T14:03:47.205Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:05:00.232Z] HISTORY_GET: count=23
+
+[2026-03-19T14:05:00.232Z] HISTORY_GET: count=23
+
+[2026-03-19T14:05:05.622Z] goToUrl: url="https://store.steampowered.com/about/" activeTabId=3 wcExists=true
+[2026-03-19T14:05:05.623Z] loading URL: "https://store.steampowered.com/about/"
+
+[2026-03-19T14:05:05.962Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:05:05.962Z] tm.onNavigate: url="https://store.steampowered.com/about/" title="store.steampowered.com/about/"
+[2026-03-19T14:05:05.963Z] addVisit: url="https://store.steampowered.com/about/" title="store.steampowered.com/about/"
+
+[2026-03-19T14:05:06.003Z] tm.onNavigate: url="https://store.steampowered.com/about/" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+[2026-03-19T14:05:06.003Z] addVisit: url="https://store.steampowered.com/about/" title="Steam, Üstün Çevrimiçi Oyun Platformu"
+
+[2026-03-19T14:05:06.561Z] HISTORY_GET: count=23
+
+[2026-03-19T14:05:06.562Z] HISTORY_GET: count=23
+
+[2026-03-19T14:07:07.301Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T14:07:07.301Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:07:07.619Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:07:07.619Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:07:07.619Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:07:07.668Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:07:07.668Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:07:28.618Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:08:06.356Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T14:08:06.356Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:08:06.688Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:08:06.689Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:08:06.689Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:08:06.723Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:08:06.723Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:08:09.427Z] HISTORY_GET: count=1
+
+[2026-03-19T14:08:09.428Z] HISTORY_GET: count=1
+
+[2026-03-19T14:08:12.059Z] HISTORY_GET: count=1
+
+[2026-03-19T14:08:12.060Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:01.537Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:10:09.873Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:09.873Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:11.841Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:11.842Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:13.430Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:13.430Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:15.369Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:15.370Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:41.354Z] HISTORY_GET: count=1
+
+[2026-03-19T14:10:41.355Z] HISTORY_GET: count=1
+
+[2026-03-19T14:24:21.472Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:24:26.968Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T14:24:26.968Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:24:27.272Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:24:27.272Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:24:27.273Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:24:27.319Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:24:27.319Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:24:31.678Z] HISTORY_GET: count=1
+
+[2026-03-19T14:24:31.678Z] HISTORY_GET: count=1
+
+[2026-03-19T14:31:44.981Z] HISTORY_GET: count=1
+
+[2026-03-19T14:31:44.982Z] HISTORY_GET: count=1
+
+[2026-03-19T14:32:18.601Z] HISTORY_GET: count=1
+
+[2026-03-19T14:32:18.603Z] HISTORY_GET: count=1
+
+[2026-03-19T14:33:40.169Z] HISTORY_GET: count=1
+
+[2026-03-19T14:33:40.170Z] HISTORY_GET: count=1
+
+[2026-03-19T14:33:41.526Z] goToUrl: url="https://www.youtube.com" activeTabId=3 wcExists=true
+[2026-03-19T14:33:41.526Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:33:41.760Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:33:41.760Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:33:41.760Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:33:41.809Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:33:41.810Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:33:51.190Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:34:52.202Z] goToUrl: url="https://www.youtube.com" activeTabId=1 wcExists=true
+[2026-03-19T14:34:52.202Z] loading URL: "https://www.youtube.com"
+
+[2026-03-19T14:34:52.504Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-19T14:34:52.505Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-19T14:34:52.505Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-19T14:34:52.552Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-19T14:34:52.553Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-19T14:43:47.613Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:47:27.897Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:48:38.621Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:49:16.506Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:51:09.420Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:51:11.784Z] HISTORY_GET: count=1
+
+[2026-03-19T14:51:13.836Z] HISTORY_GET: count=1
+
+[2026-03-19T14:53:43.064Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:54:01.647Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:54:11.712Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:54:34.902Z] registerIPCHandlers: tmExists=true
+
+[2026-03-19T14:56:10.345Z] registerIPCHandlers: tmExists=true

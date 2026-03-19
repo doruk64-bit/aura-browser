@@ -1,0 +1,39 @@
+appId: com.aura.browser
+productName: Aura Browser
+copyright: Copyright © 2025 bseester
+
+directories:
+  output: release
+  buildResources: resources
+
+files:
+  - dist/**/*
+  - package.json
+
+win:
+  target: nsis
+  icon: resources/icons/icon.png
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - universal
+  icon: resources/icons/icon.icns
+  category: public.app-category.productivity
+
+dmg:
+  artifactName: ${productName}-${version}.${ext}
+
+linux:
+  target:
+    - AppImage
+  icon: resources/icons/icon.png
+  category: Network
+
+# Publish block removed

@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5173",
+  "executionArgs": {
+    "projectName": "tarayıcı",
+    "projectPath": "c:\\Users\\bseester\\tarayıcı",
+    "testIds": [],
+    "additionalInstruction": "Uygulama Electron tabanlı; testler Vite preview (http://localhost:5173) üzerinde koşacak. window.electronAPI web preview'da olmayabilir; bu nedenle UI smoke testlerine (TopBar, Sidebar, panel aç/kapat, omnibox input etkileşimi, ctrl+f findbar görünürlüğü) odaklan. Electron-IPC çağrılarına bağlı aksiyonlar başarısız olursa bunu beklenen kısıt olarak raporla.",
+    "serverMode": "production",
+    "envs": {
+      "API_KEY": "sk-user-Wq0VssCWn8iCyXI0QsokrpdLODJgZXxzeNPMxc6E58ho4D85VEqKM7XhWVnCxxQwDlZb-wuYh0NXfXUFNKDWBo0dSvlkbbpRws2wG6vnsGLf-N_lcRtWaY2dChbQTLyYmQ0"
+    }
+  },
+  "serverPort": 51726,
+  "proxy": "http://ab018528-0e77-4aa9-8303-0b204f98d4b7:CxNP7ZzpHHfolDRaJM8KGNlfhvCFQ0BR@tun.testsprite.com:8080"
+}
