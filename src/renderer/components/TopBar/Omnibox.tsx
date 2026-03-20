@@ -7,12 +7,15 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore, SEARCH_ENGINES } from '../../store/useSettingsStore';
+import { Star } from 'lucide-react';
 
 export default function Omnibox() {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkId, setBookmarkId] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { tabs, activeTabId } = useTabStore();
 
@@ -37,6 +40,24 @@ export default function Omnibox() {
     }, 200);
     return () => clearTimeout(timer);
   }, [inputValue, isFocused]);
+
+  useEffect(() => {
+    if (activeTab?.url && activeTab.url !== 'about:blank' && activeTab.url !== 'aura://newtab') {
+      window.electronAPI?.bookmarks?.get?.()?.then((data: any[]) => {
+        const found = data?.find((b) => b.url === activeTab.url);
+        if (found) {
+          setIsBookmarked(true);
+          setBookmarkId(found.id);
+        } else {
+          setIsBookmarked(false);
+          setBookmarkId(null);
+        }
+      });
+    } else {
+      setIsBookmarked(false);
+      setBookmarkId(null);
+    }
+  }, [activeTab?.url]);
 
   const handleGo = (text: string) => {
     if (!text.trim()) return;
@@ -81,6 +102,26 @@ export default function Omnibox() {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleGo(inputValue);
+    }
+  };
+
+  const handleBookmarkToggle = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!activeTab?.url || activeTab.url === 'about:blank') return;
+
+    if (isBookmarked && bookmarkId !== null) {
+      await window.electronAPI?.bookmarks?.remove?.(bookmarkId);
+      setIsBookmarked(false);
+      setBookmarkId(null);
+    } else {
+      await window.electronAPI?.bookmarks?.add?.(activeTab.url, activeTab.title || activeTab.url);
+      const data = await window.electronAPI?.bookmarks?.get?.();
+      const found = data?.find((b: any) => b.url === activeTab.url);
+      if (found) {
+        setIsBookmarked(true);
+        setBookmarkId(found.id);
+      }
     }
   };
 
@@ -180,28 +221,59 @@ export default function Omnibox() {
           </motion.button>
         )}
 
-        {/* AI Modu Button - Bar içine yerleştirildi */}
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.08)' }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            background: 'rgba(99, 102, 241, 0.1)',
-            border: '1px solid rgba(99, 102, 241, 0.2)',
-            borderRadius: '14px',
-            padding: '3px 10px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'var(--accent)',
-            fontSize: '11px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            marginLeft: 'auto', // sağa yasla
-          }}
-        >
-          <span>✨ AI</span>
-        </motion.button>
+        {/* Bar Butonları (Star & AI) */}
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Yer İmi (Yıldız) Butonu */}
+          {activeTab?.url && activeTab.url !== 'about:blank' && activeTab.url !== 'aura://newtab' && (
+            <motion.button
+              type="button"
+              onClick={handleBookmarkToggle}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: isBookmarked ? 'var(--accent)' : 'var(--text-muted)',
+                cursor: 'pointer',
+                fontSize: '16px',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'color var(--transition-fast)',
+              }}
+              title={isBookmarked ? 'Yer imini kaldır' : 'Yer imlerine ekle'}
+            >
+              <Star 
+                size={16} 
+                fill={isBookmarked ? 'var(--accent)' : 'none'} 
+                color={isBookmarked ? 'var(--accent)' : 'var(--text-muted)'} 
+              />
+            </motion.button>
+          )}
+
+          {/* AI Modu Button - Bar içine yerleştirildi */}
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.08)' }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              background: 'rgba(99, 102, 241, 0.1)',
+              border: '1px solid rgba(99, 102, 241, 0.2)',
+              borderRadius: '14px',
+              padding: '3px 10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              color: 'var(--accent)',
+              fontSize: '11px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            <span>✨ AI</span>
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* ─── AutoComplete Arama Önerileri ─── */}
