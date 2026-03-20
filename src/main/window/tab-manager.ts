@@ -58,7 +58,7 @@ export class TabManager {
     const tabId = ++this.tabCounter;
 
     // Dal 4: Gizli sekme veya standart partition
-    const partition = this.isIncognito ? 'in-memory:incognito' : 'persist:bseester';
+    const partition = this.isIncognito ? 'in-memory:incognito' : '';
 
     const view = new WebContentsView({
       webPreferences: {
@@ -270,7 +270,7 @@ export class TabManager {
     }
 
     let normalizedUrl = url;
-    if (!/^https?:\/\//i.test(url) && !/^file:\/\//i.test(url) && !/^about:/i.test(url)) {
+    if (!/^https?:\/\//i.test(url) && !/^file:\/\//i.test(url) && !/^about:/i.test(url) && !/^chrome-extension:\/\//i.test(url)) {
       if (url.includes('.') && !url.includes(' ')) {
         normalizedUrl = `https://${url}`;
       } else {

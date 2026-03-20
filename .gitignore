@@ -4,3 +4,9 @@ release/
 *.log
 .DS_Store
 Thumbs.db
+build_log*.txt
+nav_log.txt
+testsprite_tests/
+convert_icon.js
+print_log.js
+show_aura.ps1

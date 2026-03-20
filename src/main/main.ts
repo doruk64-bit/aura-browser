@@ -107,6 +107,8 @@ if (!gotLock) {
       });
     });
 
+
+
     // Varsayılan sekme oluştur
     const tabManager = windowManager.getTabManager();
     if (tabManager) {
