@@ -61,7 +61,7 @@ export default function Tab({ tab, isActive, onSelect, onClose }: TabProps) {
       }}
       onContextMenu={(e) => {
         e.preventDefault();
-        window.electronAPI?.tabs.showContextMenu(tab.id);
+        window.electronAPI?.tabs.showContextMenu(tab.id, !!tab.isPinned);
       }}
       className="no-drag no-select"
       style={{
@@ -73,8 +73,8 @@ export default function Tab({ tab, isActive, onSelect, onClose }: TabProps) {
         padding: '0 12px',
         borderRadius: 'var(--radius-sm)',
         cursor: 'pointer',
-        minWidth: '100px',
-        maxWidth: '200px',
+        minWidth: tab.isPinned ? '36px' : '100px',
+        maxWidth: tab.isPinned ? '36px' : '200px',
         fontSize: '12px',
         fontWeight: isActive ? 500 : 400,
         color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
@@ -132,40 +132,44 @@ export default function Tab({ tab, isActive, onSelect, onClose }: TabProps) {
       </div>
 
       {/* Başlık */}
-      <span style={{
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        flex: 1,
-      }}>
-        {tab.title || 'Yeni Sekme'}
-      </span>
+      {!tab.isPinned && (
+        <span style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          flex: 1,
+        }}>
+          {tab.title || 'Yeni Sekme'}
+        </span>
+      )}
 
       {/* Kapat butonu */}
-      <motion.button
-        onClick={onClose}
-        onPointerDown={(e) => e.stopPropagation()} // Drag'ı engelle
-        whileHover={{ scale: 1.15, background: 'rgba(255,255,255,0.12)' }}
-        whileTap={{ scale: 0.9 }}
-        style={{
-          width: '18px',
-          height: '18px',
-          borderRadius: '50%',
-          border: 'none',
-          background: 'transparent',
-          color: 'var(--text-muted)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '10px',
-          flexShrink: 0,
-          padding: 0,
-          transition: 'color var(--transition-fast)',
-        }}
-      >
-        ✕
-      </motion.button>
+      {!tab.isPinned && (
+        <motion.button
+          onClick={onClose}
+          onPointerDown={(e) => e.stopPropagation()} // Drag'ı engelle
+          whileHover={{ scale: 1.15, background: 'rgba(255,255,255,0.12)' }}
+          whileTap={{ scale: 0.9 }}
+          style={{
+            width: '18px',
+            height: '18px',
+            borderRadius: '50%',
+            border: 'none',
+            background: 'transparent',
+            color: 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '10px',
+            flexShrink: 0,
+            padding: 0,
+            transition: 'color var(--transition-fast)',
+          }}
+        >
+          ✕
+        </motion.button>
+      )}
     </motion.div>
   );
 }

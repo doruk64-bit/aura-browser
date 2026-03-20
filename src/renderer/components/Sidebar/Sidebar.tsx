@@ -102,6 +102,15 @@ export default function Sidebar() {
         onClick={() => togglePanel('extensions')}
       />
 
+      {/* Panic Button */}
+      <SidebarItem
+        icon="🚨"
+        label="Panic Button (Google)"
+        onClick={() => {
+          window.electronAPI?.tabs.panic();
+        }}
+      />
+
       {/* ─── Ayırıcı ─── */}
       <div style={{ flex: 1 }} />
 

@@ -14,6 +14,7 @@ export interface DatabaseSchema {
   bookmarks: any[];
   downloads: any[];
   workspaces: any[];
+  pinnedTabs: any[];
 }
 
 const defaultSchema: DatabaseSchema = {
@@ -25,6 +26,7 @@ const defaultSchema: DatabaseSchema = {
     { id: 'work', name: 'İş', icon: '💼' },
     { id: 'dev', name: 'Yazılım', icon: '💻' },
   ],
+  pinnedTabs: [],
 };
 
 class JSONDatabase {
@@ -100,6 +102,15 @@ class JSONDatabase {
 
   setWorkspaces(workspaces: any[]) {
     this.data.workspaces = workspaces;
+    this.saveData();
+  }
+
+  getPinnedTabs() {
+    return this.data.pinnedTabs || [];
+  }
+
+  setPinnedTabs(tabs: any[]) {
+    this.data.pinnedTabs = tabs;
     this.saveData();
   }
 }

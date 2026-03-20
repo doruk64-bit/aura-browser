@@ -28,6 +28,10 @@ export default function TabStrip() {
     window.electronAPI?.tabs.create('about:blank');
   };
 
+  const handleCloseAll = () => {
+    window.electronAPI?.tabs.closeAll();
+  };
+
   const handleClose = (e: React.MouseEvent, tabId: number) => {
     e.stopPropagation();
     window.electronAPI?.tabs.close(tabId);
@@ -106,6 +110,33 @@ export default function TabStrip() {
         }}
       >
         +
+      </motion.button>
+
+      {/* Tüm Sekmeleri Kapat */}
+      <motion.button
+        onClick={handleCloseAll}
+        whileHover={{ scale: 1.1, background: 'rgba(255,100,100,0.1)' }}
+        whileTap={{ scale: 0.9 }}
+        className="no-drag"
+        title="Tüm Sekmeleri Kapat"
+        style={{
+          width: '28px',
+          height: '28px',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border-subtle)',
+          background: 'transparent',
+          color: '#ff4d4f',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '11px',
+          flexShrink: 0,
+          padding: 0,
+          marginLeft: '2px',
+        }}
+      >
+        ✕
       </motion.button>
     </div>
   );

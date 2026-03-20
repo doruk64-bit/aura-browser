@@ -25,8 +25,10 @@ const electronAPI = {
       ipcRenderer.invoke(IPC_CHANNELS.TAB_LIST),
     reorder: (activeId: number, overId: number) =>
       ipcRenderer.invoke(IPC_CHANNELS.TAB_REORDER, activeId, overId),
-    showContextMenu: (tabId: number) =>
-      ipcRenderer.invoke('tab:show-context-menu', tabId),
+    showContextMenu: (tabId: number, isPinned: boolean) =>
+      ipcRenderer.invoke('tab:show-context-menu', tabId, isPinned),
+    closeAll: () => ipcRenderer.invoke('tabs:close-all'),
+    panic: () => ipcRenderer.invoke('tabs:panic'),
     onUpdate: (callback: (data: unknown) => void) => {
       const listener = (_event: Electron.IpcRendererEvent, data: unknown) => callback(data);
       ipcRenderer.on(IPC_CHANNELS.TAB_UPDATE, listener);
@@ -167,6 +169,18 @@ const electronAPI = {
     remove: (extensionId: string) => ipcRenderer.invoke(IPC_CHANNELS.EXTENSION_REMOVE, extensionId),
     list: () => ipcRenderer.invoke(IPC_CHANNELS.EXTENSION_LIST),
     installCrx: (extensionId: string) => ipcRenderer.invoke(IPC_CHANNELS.EXTENSION_INSTALL_CRX, extensionId),
+  },
+
+  // ─── Custom HTML ContextMenu ───
+  contextMenu: {
+    onShow: (cb: (data: any) => void) => {
+      const listener = (_e: any, data: any) => cb(data);
+      ipcRenderer.on('context-menu:show', listener);
+      return () => { ipcRenderer.removeListener('context-menu:show', listener); };
+    },
+    click: (id: string) => {
+      ipcRenderer.send('context-menu:click', id);
+    }
   },
 
   // ─── Platform Bilgisi ───

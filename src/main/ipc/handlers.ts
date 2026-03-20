@@ -95,7 +95,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     getTabManager()?.reorderTabs(activeId, overId);
   });
 
-  ipcMain.handle('tab:show-context-menu', (_event, tabId: number) => {
+  ipcMain.handle('tab:show-context-menu', (_event, tabId: number, isPinned: boolean) => {
     const tabManager = getTabManager();
     const win = windowManager.getMainWindow();
     if (!tabManager || !win) return;
@@ -105,6 +105,11 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       {
         label: 'Yeni Sekme',
         click: () => tabManager.createTab('about:blank')
+      },
+      { type: 'separator' },
+      {
+        label: isPinned ? '📌 Sabitlemeyi Kaldır' : '📌 Sabitle',
+        click: () => tabManager.togglePinTab(tabId)
       },
       { type: 'separator' },
       {
@@ -124,6 +129,14 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
     const menu = Menu.buildFromTemplate(template);
     menu.popup({ window: win });
+  });
+
+  ipcMain.handle('tabs:close-all', () => {
+    getTabManager()?.closeAllTabs();
+  });
+
+  ipcMain.handle('tabs:panic', () => {
+    getTabManager()?.panic();
   });
 
   // ─── Navigasyon ───
@@ -581,5 +594,13 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle(IPC_CHANNELS.EXTENSION_INSTALL_CRX, async (_event, extensionId: string) => {
     return extensionManager.installCrx(extensionId);
+  });
+
+  // ─── Custom HTML ContextMenu Click Forwards ───
+  ipcMain.on('context-menu:click', (_event, id: string) => {
+    const tm = getTabManager();
+    if (!tm) return;
+    const callback = tm.contextMenuCallbacks.get(id);
+    if (callback) callback();
   });
 }

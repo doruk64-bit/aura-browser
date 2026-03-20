@@ -47,6 +47,12 @@ export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
         window.electronAPI?.system?.newIncognitoWindow();
       }
 
+      // Ctrl+Shift+X (Panic Button)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault();
+        window.electronAPI?.tabs.panic();
+      }
+
       // Ctrl+P veya Cmd+P (Yazdır)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
         e.preventDefault();

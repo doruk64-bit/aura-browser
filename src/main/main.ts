@@ -110,7 +110,7 @@ if (!gotLock) {
     // Varsayılan sekme oluştur
     const tabManager = windowManager.getTabManager();
     if (tabManager) {
-      tabManager.createTab('about:blank');
+      tabManager.loadPinnedTabs();
     }
 
     // macOS: dock ikonuna tıklanınca pencere yoksa yenisini oluştur

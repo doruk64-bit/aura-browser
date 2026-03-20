@@ -23,6 +23,7 @@ export interface TabInfo {
   favicon?: string;
   workspaceId?: string;
   isIncognito?: boolean;
+  isPinned?: boolean;
 }
 
 export class TabManager {
@@ -36,6 +37,8 @@ export class TabManager {
   public activeWorkspace: string = 'default';
   private sidebarPanelWidth: number = 0;
   private onNavigateCallback?: (url: string, title: string) => void;
+  public contextMenuCallbacks = new Map<string, () => void>(); // Custom HTML ContextMenu callback map
+  private pinnedTabIds: Set<number> = new Set();
 
   constructor(mainWindow: BrowserWindow, isIncognito: boolean = false) {
     this.mainWindow = mainWindow;
@@ -328,6 +331,34 @@ export class TabManager {
     return this.activeTabId;
   }
 
+  togglePinTab(tabId: number): void {
+    if (this.pinnedTabIds.has(tabId)) {
+      this.pinnedTabIds.delete(tabId);
+    } else {
+      this.pinnedTabIds.add(tabId);
+    }
+
+    // Veritabanını güncelle
+    const { getDatabase } = require('../database/db');
+    const db = getDatabase();
+    
+    const pinnedTabs = [];
+    for (const [id, view] of this.tabs) {
+      if (this.pinnedTabIds.has(id)) {
+        const wc = view.webContents;
+        const wsId = this.tabWorkspaces.get(id) || 'default';
+        pinnedTabs.push({
+          url: wc.getURL(),
+          title: wc.getTitle(),
+          workspaceId: wsId
+        });
+      }
+    }
+    db.setPinnedTabs(pinnedTabs);
+    
+    this.notifyTabUpdate();
+  }
+
   getTabList(): TabInfo[] {
     const list: TabInfo[] = [];
     for (const id of this.tabOrder) {
@@ -346,6 +377,7 @@ export class TabManager {
         canGoForward: wc.canGoForward(),
         workspaceId: wsId,
         isIncognito: this.isIncognito,
+        isPinned: this.pinnedTabIds.has(id),
       });
     }
     return list;
@@ -453,6 +485,10 @@ export class TabManager {
 
     // ─── Native Context Menu (Dinamik Sağ Tık) ───
     wc.on('context-menu', (_event, params) => {
+      const fs = require('fs');
+      try {
+        fs.appendFileSync('C:\\Users\\bseester\\tarayıcı\\nav_log.txt', `\n[${new Date().toISOString()}] context-menu event fired! params: x=${params.x}, y=${params.y}\n`);
+      } catch {}
       const { Menu, clipboard } = require('electron');
       const template: Electron.MenuItemConstructorOptions[] = [];
 
@@ -540,19 +576,48 @@ export class TabManager {
           click: () => wc.reload()
         });
         template.push({ type: 'separator' });
+        
+        template.push({
+          label: 'Farklı Kaydet...',
+          click: () => {
+            const { dialog } = require('electron');
+            dialog.showSaveDialog(this.mainWindow, {
+              defaultPath: wc.getTitle() + '.html',
+              filters: [{ name: 'Web Sayfası', extensions: ['html', 'htm'] }]
+            }).then((result: any) => {
+              if (result.filePath) {
+                wc.savePage(result.filePath, 'HTMLComplete').catch(console.error);
+              }
+            });
+          }
+        });
+
         template.push({
           label: 'Yazdır...',
           click: () => wc.print()
         });
         template.push({ type: 'separator' });
+
         template.push({
-          label: 'İncele (DevTools)',
-          click: () => wc.openDevTools({ mode: 'detach' })
+          label: 'Türkçe Diline Çevir',
+          click: () => this.createTab(`https://translate.google.com/translate?sl=auto&tl=tr&u=${encodeURIComponent(wc.getURL())}`)
+        });
+        template.push({ type: 'separator' });
+
+        template.push({
+          label: 'Sayfa Kaynağını Görüntüle',
+          click: () => this.createTab(`view-source:${wc.getURL()}`)
+        });
+        
+        template.push({
+          label: 'İncele',
+          click: () => wc.openDevTools()
         });
       }
 
+      // ─── Native Context Menu ───
       const menu = Menu.buildFromTemplate(template);
-      menu.popup();
+      menu.popup({ window: this.mainWindow });
     });
 
     wc.on('did-start-loading', () => {
@@ -599,55 +664,19 @@ export class TabManager {
       return { action: 'deny' };
     });
 
-    // Yazım denetimi ve bağlam menüsü (Context Menu)
-    wc.on('context-menu', (event, params) => {
-      import('electron').then(({ Menu, clipboard }) => {
-        const template: Electron.MenuItemConstructorOptions[] = [];
-        
-        // --- 1. Yazım Denetimi Önerileri ---
-        if (params.dictionarySuggestions && params.dictionarySuggestions.length > 0) {
-          params.dictionarySuggestions.forEach(suggestion => {
-            template.push({
-              label: suggestion,
-              click: () => wc.replaceMisspelling(suggestion)
-            });
-          });
-          template.push({ type: 'separator' });
-          
-          template.push({
-            label: 'Sözlüğe Ekle',
-            click: () => wc.session.addWordToSpellCheckerDictionary(params.misspelledWord)
-          });
-          template.push({ type: 'separator' });
-        }
 
-        // --- 2. Bağlantı (Link) Seçenekleri ---
-        if (params.linkURL) {
-          template.push({
-            label: 'Bağlantıyı Yeni Sekmede Aç',
-            click: () => this.createTab(params.linkURL)
-          });
-          template.push({
-            label: 'Bağlantı Adresini Kopyala',
-            click: () => clipboard.writeText(params.linkURL)
-          });
-          template.push({ type: 'separator' });
-        }
-
-        // --- 3. Standart Düzenleme Seçenekleri ---
-        if (params.editFlags.canCopy) template.push({ role: 'copy', label: 'Kopyala' });
-        if (params.editFlags.canPaste) template.push({ role: 'paste', label: 'Yapıştır' });
-        if (params.editFlags.canSelectAll) template.push({ role: 'selectAll', label: 'Tümünü Seç' });
-        
-        if (template.length > 0) {
-          const menu = Menu.buildFromTemplate(template);
-          menu.popup();
-        }
-      });
-    });
 
     // Ana Pencereden Bağımsız Kısayol Dinleyicisi (Örn: WebContent'e tıklanmışken Ctrl+P çalışması için)
     wc.on('before-input-event', (event, input) => {
+      // F12 ile DevTools'u Aç/Kapat
+      if (input.key === 'F12' && (input.type === 'keyDown' || input.type === 'keyUp')) {
+        if (input.type === 'keyDown') {
+          wc.toggleDevTools();
+        }
+        event.preventDefault();
+        return;
+      }
+
       // Ctrl+P veya Cmd+P yazdır komutu
       if ((input.control || input.meta) && input.key.toLowerCase() === 'p') {
         event.preventDefault();
@@ -679,6 +708,58 @@ export class TabManager {
       activeTabId: this.activeTabId,
       activeWorkspaceId: this.activeWorkspace,
     });
+  }
+
+  /**
+   * Tüm sekmeleri kapatır ve bir adet boş sekme açar
+   */
+  closeAllTabs(): void {
+    const ids = Array.from(this.tabs.keys());
+    for (const id of ids) {
+      if (this.pinnedTabIds.has(id)) continue; // Sabitlenen sekmelere DOKUNMA
+      this.closeTab(id);
+    }
+    // Eğer geriye sıfır sekme kaldıysa boş sekme aç (Tüm sekmeler kapanmışsa)
+    if (this.getTabCount() === 0) {
+      this.createTab('about:blank');
+    }
+  }
+
+  /**
+   * Tüm sekmeleri kapatıp Google'ı açar (Panic Butonu)
+   */
+  panic(): void {
+    // 1. Sabitlenen Sekmeleri Temizle (Unpin All)
+    this.pinnedTabIds.clear();
+
+    // 2. Veritabanını Sıfırla
+    const { getDatabase } = require('../database/db');
+    getDatabase().setPinnedTabs([]);
+
+    // 3. Tüm Sekmeleri Kapat
+    const ids = Array.from(this.tabs.keys());
+    for (const id of ids) {
+      this.closeTab(id);
+    }
+    this.createTab('https://www.google.com');
+  }
+
+  /**
+   * Hafızadaki sabitli sekmeleri yükler
+   */
+  loadPinnedTabs(): void {
+    const { getDatabase } = require('../database/db');
+    const db = getDatabase();
+    const pinnedTabs = db.getPinnedTabs();
+    
+    if (pinnedTabs && pinnedTabs.length > 0) {
+      for (const pinned of pinnedTabs) {
+        const tabId = this.createTab(pinned.url, pinned.workspaceId || 'default');
+        this.pinnedTabIds.add(tabId);
+      }
+    } else {
+      this.createTab('about:blank');
+    }
   }
 
   /**

@@ -17,6 +17,7 @@ export interface Tab {
   favicon?: string;
   isIncognito?: boolean;
   workspaceId?: string;
+  isPinned?: boolean;
 }
 
 interface TabState {

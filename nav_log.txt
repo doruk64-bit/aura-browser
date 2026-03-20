@@ -2600,3 +2600,566 @@
 [2026-03-20T16:10:59.911Z] createTab called with url="about:blank" workspaceId="default"
 
 [2026-03-20T16:10:59.912Z] switchToTab called with tabId=2. Previous activeTabId=1
+
+[2026-03-20T16:16:32.664Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:18:18.688Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:18:26.400Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T16:18:26.405Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T16:18:26.751Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:18:26.752Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T16:18:26.752Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T16:18:26.845Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T16:18:26.845Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T16:26:40.814Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-20T16:26:40.815Z] loading URL: "about:blank"
+
+[2026-03-20T16:26:40.861Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:26:40.861Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T16:26:40.861Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T16:27:22.429Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:27:26.284Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T16:27:26.289Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T16:27:26.615Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:27:26.615Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T16:27:26.615Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T16:27:26.706Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T16:27:26.707Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T16:33:22.001Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:33:32.549Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T16:33:32.554Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T16:33:32.885Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:33:32.886Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T16:33:32.886Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T16:33:32.979Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T16:33:32.980Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T16:33:38.829Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:33:38.829Z] tm.onNavigate: url="https://www.google.com/search?q=sevdi%C4%9Fim+sensin+7+b%C3%B6l%C3%BCm+fragman%C4%B1&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz" title="google.com/search?q=sevdiğim+sensin+7+bölüm+fragmanı&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz"
+[2026-03-20T16:33:38.830Z] addVisit: url="https://www.google.com/search?q=sevdi%C4%9Fim+sensin+7+b%C3%B6l%C3%BCm+fragman%C4%B1&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz" title="google.com/search?q=sevdiğim+sensin+7+bölüm+fragmanı&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz"
+
+[2026-03-20T16:33:38.847Z] tm.onNavigate: url="https://www.google.com/search?q=sevdi%C4%9Fim+sensin+7+b%C3%B6l%C3%BCm+fragman%C4%B1&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz" title="sevdiğim sensin 7 bölüm fragmanı - Google'da Ara"
+[2026-03-20T16:33:38.847Z] addVisit: url="https://www.google.com/search?q=sevdi%C4%9Fim+sensin+7+b%C3%B6l%C3%BCm+fragman%C4%B1&sca_esv=9168363fdbf9efb6&source=hp&ei=3Ha9abPiAryti-gP1YLRqQc&iflsig=AFdpzrgAAAAAab2E7JfD9oDRzXuNxFar3NMJofYfwiMM&gs_ss=1&oq=&gs_lp=Egdnd3Mtd2l6IgAqAggAMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BMgoQABgDGOoCGI8BSMcMUABYAHABeACQAQCYAQCgAQCqAQC4AQHIAQCYAgGgAgaoAgqYAwbxBYjgAy0y7wcGkgcBMaAHALIHALgHAMIHAzItMcgHBIAIAA&sclient=gws-wiz" title="sevdiğim sensin 7 bölüm fragmanı - Google'da Ara"
+
+[2026-03-20T16:36:20.841Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:37:21.921Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T16:37:21.926Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T16:37:22.235Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:37:22.235Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T16:37:22.236Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T16:37:22.327Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T16:37:22.328Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T16:37:25.129Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-20T16:37:25.130Z] loading URL: "about:blank"
+
+[2026-03-20T16:37:25.172Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:37:25.172Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T16:37:25.172Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T16:37:25.953Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-20T16:37:25.954Z] loading URL: "https://www.google.com"
+
+[2026-03-20T16:37:26.134Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:37:26.134Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T16:37:26.135Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T16:37:26.146Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T16:37:26.147Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T16:40:24.371Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-20T16:40:24.371Z] loading URL: "about:blank"
+
+[2026-03-20T16:40:24.423Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:40:24.423Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T16:40:24.423Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T16:40:25.880Z] HISTORY_GET: count=48
+
+[2026-03-20T16:40:25.881Z] HISTORY_GET: count=48
+
+[2026-03-20T16:40:55.732Z] HISTORY_GET: count=48
+
+[2026-03-20T16:40:55.733Z] HISTORY_GET: count=48
+
+[2026-03-20T16:40:56.654Z] HISTORY_GET: count=48
+
+[2026-03-20T16:40:56.654Z] HISTORY_GET: count=48
+
+[2026-03-20T16:41:07.243Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T16:41:12.508Z] createTab called with url="https://www.google.com/search?q=asdas" workspaceId="default"
+
+[2026-03-20T16:41:12.512Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T16:41:12.815Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T16:41:12.816Z] tm.onNavigate: url="https://www.google.com/search?q=asdas" title="google.com/search?q=asdas"
+[2026-03-20T16:41:12.816Z] addVisit: url="https://www.google.com/search?q=asdas" title="google.com/search?q=asdas"
+
+[2026-03-20T16:41:12.910Z] tm.onNavigate: url="https://www.google.com/search?q=asdas" title="asdas - Google'da Ara"
+[2026-03-20T16:41:12.910Z] addVisit: url="https://www.google.com/search?q=asdas" title="asdas - Google'da Ara"
+
+[2026-03-20T17:01:05.310Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:01:07.506Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:01:07.510Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T17:01:07.833Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:01:07.834Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:01:07.834Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:01:07.926Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:01:07.926Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:01:14.090Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-20T17:01:14.091Z] loading URL: "about:blank"
+
+[2026-03-20T17:01:14.133Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:01:14.134Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T17:01:14.134Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T17:01:15.104Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-20T17:01:15.104Z] loading URL: "https://www.google.com"
+
+[2026-03-20T17:01:15.301Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:01:15.301Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:01:15.301Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:01:15.315Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:01:15.315Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:02:12.951Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:02:18.833Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:02:18.837Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T17:02:19.157Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:02:19.158Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:02:19.158Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:02:19.250Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:02:19.250Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:02:19.922Z] context-menu event fired! params: x=454, y=309
+
+[2026-03-20T17:02:20.737Z] context-menu event fired! params: x=398, y=261
+
+[2026-03-20T17:02:20.896Z] context-menu event fired! params: x=398, y=260
+
+[2026-03-20T17:02:21.083Z] context-menu event fired! params: x=397, y=255
+
+[2026-03-20T17:02:24.762Z] context-menu event fired! params: x=1127, y=296
+
+[2026-03-20T17:02:24.940Z] context-menu event fired! params: x=1135, y=298
+
+[2026-03-20T17:02:25.151Z] context-menu event fired! params: x=1135, y=298
+
+[2026-03-20T17:02:26.398Z] goToUrl: url="about:blank" activeTabId=1 wcExists=true
+[2026-03-20T17:02:26.398Z] loading URL: "about:blank"
+
+[2026-03-20T17:02:26.444Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:02:26.445Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T17:02:26.445Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T17:02:27.306Z] goToUrl: url="https://www.google.com" activeTabId=1 wcExists=true
+[2026-03-20T17:02:27.306Z] loading URL: "https://www.google.com"
+
+[2026-03-20T17:02:27.492Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:02:27.493Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:02:27.493Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:02:27.509Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:02:27.509Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:02:27.829Z] context-menu event fired! params: x=693, y=408
+
+[2026-03-20T17:02:28.323Z] context-menu event fired! params: x=762, y=467
+
+[2026-03-20T17:02:28.488Z] context-menu event fired! params: x=762, y=467
+
+[2026-03-20T17:02:28.653Z] context-menu event fired! params: x=765, y=468
+
+[2026-03-20T17:02:28.847Z] context-menu event fired! params: x=767, y=468
+
+[2026-03-20T17:02:29.234Z] context-menu event fired! params: x=769, y=468
+
+[2026-03-20T17:02:29.426Z] context-menu event fired! params: x=769, y=468
+
+[2026-03-20T17:02:29.570Z] context-menu event fired! params: x=769, y=468
+
+[2026-03-20T17:02:29.735Z] context-menu event fired! params: x=771, y=468
+
+[2026-03-20T17:02:29.897Z] context-menu event fired! params: x=783, y=468
+
+[2026-03-20T17:02:30.220Z] context-menu event fired! params: x=795, y=466
+
+[2026-03-20T17:02:30.364Z] context-menu event fired! params: x=794, y=471
+
+[2026-03-20T17:02:30.582Z] context-menu event fired! params: x=799, y=471
+
+[2026-03-20T17:02:30.756Z] context-menu event fired! params: x=811, y=471
+
+[2026-03-20T17:02:30.929Z] context-menu event fired! params: x=816, y=470
+
+[2026-03-20T17:02:31.103Z] context-menu event fired! params: x=812, y=468
+
+[2026-03-20T17:03:07.101Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:03:09.361Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:03:09.366Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T17:03:09.686Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:03:09.686Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:03:09.687Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:03:09.781Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:03:09.781Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:03:10.191Z] context-menu event fired! params: x=384, y=393
+
+[2026-03-20T17:03:10.623Z] context-menu event fired! params: x=333, y=470
+
+[2026-03-20T17:03:10.819Z] context-menu event fired! params: x=339, y=471
+
+[2026-03-20T17:03:11.031Z] context-menu event fired! params: x=342, y=471
+
+[2026-03-20T17:03:11.236Z] context-menu event fired! params: x=338, y=472
+
+[2026-03-20T17:03:11.452Z] context-menu event fired! params: x=337, y=471
+
+[2026-03-20T17:03:11.717Z] context-menu event fired! params: x=352, y=462
+
+[2026-03-20T17:03:11.962Z] context-menu event fired! params: x=358, y=461
+
+[2026-03-20T17:03:17.122Z] context-menu event fired! params: x=1048, y=484
+
+[2026-03-20T17:03:27.574Z] context-menu event fired! params: x=1005, y=478
+
+[2026-03-20T17:03:27.764Z] context-menu event fired! params: x=993, y=472
+
+[2026-03-20T17:03:30.172Z] HISTORY_GET: count=49
+
+[2026-03-20T17:03:30.173Z] HISTORY_GET: count=49
+
+[2026-03-20T17:03:31.413Z] context-menu event fired! params: x=118, y=143
+
+[2026-03-20T17:03:31.603Z] context-menu event fired! params: x=117, y=149
+
+[2026-03-20T17:03:33.125Z] context-menu event fired! params: x=552, y=357
+
+[2026-03-20T17:04:04.884Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:04:08.465Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:04:08.470Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T17:04:08.787Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:04:08.788Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:04:08.788Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:04:08.883Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:04:08.884Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:04:09.289Z] context-menu event fired! params: x=723, y=304
+
+[2026-03-20T17:04:11.272Z] context-menu event fired! params: x=901, y=588
+
+[2026-03-20T17:04:18.161Z] context-menu event fired! params: x=1140, y=250
+
+[2026-03-20T17:04:19.513Z] createTab called with url="view-source:https://www.google.com/" workspaceId="default"
+
+[2026-03-20T17:04:19.518Z] switchToTab called with tabId=2. Previous activeTabId=1
+
+[2026-03-20T17:04:19.676Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:04:19.677Z] tm.onNavigate: url="https://www.google.com/" title="view-source:https://www.google.com"
+[2026-03-20T17:04:19.677Z] addVisit: url="https://www.google.com/" title="view-source:https://www.google.com"
+
+[2026-03-20T17:04:20.648Z] switchToTab called with tabId=1. Previous activeTabId=2
+
+[2026-03-20T17:05:01.884Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:01.886Z] switchToTab called with tabId=3. Previous activeTabId=1
+
+[2026-03-20T17:05:02.734Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:02.735Z] switchToTab called with tabId=4. Previous activeTabId=3
+
+[2026-03-20T17:05:03.301Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:03.303Z] switchToTab called with tabId=5. Previous activeTabId=4
+
+[2026-03-20T17:05:03.855Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:03.857Z] switchToTab called with tabId=6. Previous activeTabId=5
+
+[2026-03-20T17:05:04.428Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:04.430Z] switchToTab called with tabId=7. Previous activeTabId=6
+
+[2026-03-20T17:05:04.964Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:04.966Z] switchToTab called with tabId=8. Previous activeTabId=7
+
+[2026-03-20T17:05:05.516Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:05.518Z] switchToTab called with tabId=9. Previous activeTabId=8
+
+[2026-03-20T17:05:06.068Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:06.070Z] switchToTab called with tabId=10. Previous activeTabId=9
+
+[2026-03-20T17:05:06.599Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:06.601Z] switchToTab called with tabId=11. Previous activeTabId=10
+
+[2026-03-20T17:05:07.111Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:07.113Z] switchToTab called with tabId=12. Previous activeTabId=11
+
+[2026-03-20T17:05:08.528Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:08.530Z] switchToTab called with tabId=13. Previous activeTabId=12
+
+[2026-03-20T17:05:08.872Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:05:08.873Z] switchToTab called with tabId=14. Previous activeTabId=13
+
+[2026-03-20T17:05:17.021Z] switchToTab called with tabId=3. Previous activeTabId=14
+
+[2026-03-20T17:05:17.361Z] switchToTab called with tabId=1. Previous activeTabId=3
+
+[2026-03-20T17:11:39.886Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:11:44.415Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:11:44.419Z] switchToTab called with tabId=1. Previous activeTabId=null
+
+[2026-03-20T17:11:44.759Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:11:44.759Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:11:44.760Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:11:44.853Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:11:44.854Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:11:46.679Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:46.680Z] switchToTab called with tabId=2. Previous activeTabId=1
+
+[2026-03-20T17:11:47.353Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:47.354Z] switchToTab called with tabId=3. Previous activeTabId=2
+
+[2026-03-20T17:11:47.960Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:47.961Z] switchToTab called with tabId=4. Previous activeTabId=3
+
+[2026-03-20T17:11:48.585Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:48.587Z] switchToTab called with tabId=5. Previous activeTabId=4
+
+[2026-03-20T17:11:49.213Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:49.215Z] switchToTab called with tabId=6. Previous activeTabId=5
+
+[2026-03-20T17:11:50.187Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:50.189Z] switchToTab called with tabId=7. Previous activeTabId=6
+
+[2026-03-20T17:11:51.810Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:11:51.813Z] switchToTab called with tabId=8. Previous activeTabId=null
+
+[2026-03-20T17:11:52.013Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:11:52.013Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:11:52.013Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:11:52.049Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:11:52.049Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:11:53.920Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:53.922Z] switchToTab called with tabId=9. Previous activeTabId=8
+
+[2026-03-20T17:11:54.509Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:54.511Z] switchToTab called with tabId=10. Previous activeTabId=9
+
+[2026-03-20T17:11:55.278Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:55.279Z] switchToTab called with tabId=11. Previous activeTabId=10
+
+[2026-03-20T17:11:55.832Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:55.833Z] switchToTab called with tabId=12. Previous activeTabId=11
+
+[2026-03-20T17:11:57.628Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:11:57.629Z] switchToTab called with tabId=13. Previous activeTabId=null
+
+[2026-03-20T17:12:16.907Z] switchToTab called with tabId=13. Previous activeTabId=13
+
+[2026-03-20T17:12:19.477Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:12:19.479Z] switchToTab called with tabId=14. Previous activeTabId=13
+
+[2026-03-20T17:12:20.320Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:12:20.321Z] switchToTab called with tabId=15. Previous activeTabId=14
+
+[2026-03-20T17:12:20.856Z] switchToTab called with tabId=13. Previous activeTabId=15
+
+[2026-03-20T17:12:21.941Z] goToUrl: url="https://www.youtube.com" activeTabId=13 wcExists=true
+[2026-03-20T17:12:21.941Z] loading URL: "https://www.youtube.com"
+
+[2026-03-20T17:12:22.249Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:12:22.249Z] tm.onNavigate: url="https://www.youtube.com/" title="youtube.com"
+[2026-03-20T17:12:22.250Z] addVisit: url="https://www.youtube.com/" title="youtube.com"
+
+[2026-03-20T17:12:22.285Z] tm.onNavigate: url="https://www.youtube.com/" title="YouTube"
+[2026-03-20T17:12:22.286Z] addVisit: url="https://www.youtube.com/" title="YouTube"
+
+[2026-03-20T17:12:23.391Z] switchToTab called with tabId=14. Previous activeTabId=13
+
+[2026-03-20T17:12:24.307Z] switchToTab called with tabId=13. Previous activeTabId=14
+
+[2026-03-20T17:12:24.952Z] switchToTab called with tabId=14. Previous activeTabId=13
+
+[2026-03-20T17:12:38.775Z] goToUrl: url="https://www.google.com" activeTabId=14 wcExists=true
+[2026-03-20T17:12:38.775Z] loading URL: "https://www.google.com"
+
+[2026-03-20T17:12:38.981Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:12:38.981Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:12:38.982Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:12:39.019Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:12:39.019Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:12:40.071Z] switchToTab called with tabId=15. Previous activeTabId=14
+
+[2026-03-20T17:12:40.766Z] goToUrl: url="https://www.google.com" activeTabId=15 wcExists=true
+[2026-03-20T17:12:40.766Z] loading URL: "https://www.google.com"
+
+[2026-03-20T17:12:40.954Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:12:40.954Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:12:40.954Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:12:40.993Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:12:40.993Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:12:42.241Z] switchToTab called with tabId=13. Previous activeTabId=15
+
+[2026-03-20T17:12:42.785Z] switchToTab called with tabId=14. Previous activeTabId=13
+
+[2026-03-20T17:12:43.189Z] switchToTab called with tabId=15. Previous activeTabId=14
+
+[2026-03-20T17:14:01.207Z] goToUrl: url="about:blank" activeTabId=15 wcExists=true
+[2026-03-20T17:14:01.208Z] loading URL: "about:blank"
+
+[2026-03-20T17:14:01.253Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:14:01.254Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T17:14:01.254Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T17:14:02.094Z] switchToTab called with tabId=14. Previous activeTabId=15
+
+[2026-03-20T17:14:02.597Z] switchToTab called with tabId=13. Previous activeTabId=14
+
+[2026-03-20T17:14:04.667Z] switchToTab called with tabId=15. Previous activeTabId=13
+
+[2026-03-20T17:14:16.604Z] switchToTab called with tabId=15. Previous activeTabId=15
+
+[2026-03-20T17:14:18.475Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:14:18.476Z] switchToTab called with tabId=16. Previous activeTabId=null
+
+[2026-03-20T17:14:21.650Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:14:21.654Z] switchToTab called with tabId=17. Previous activeTabId=null
+
+[2026-03-20T17:14:21.856Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:14:21.857Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:14:21.857Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:14:21.889Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:14:21.889Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:14:46.679Z] createTab called with url="https://www.google.com" workspaceId="default"
+
+[2026-03-20T17:14:46.683Z] switchToTab called with tabId=18. Previous activeTabId=null
+
+[2026-03-20T17:14:46.875Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:14:46.875Z] tm.onNavigate: url="https://www.google.com/" title="google.com"
+[2026-03-20T17:14:46.876Z] addVisit: url="https://www.google.com/" title="google.com"
+
+[2026-03-20T17:14:46.913Z] tm.onNavigate: url="https://www.google.com/" title="Google"
+[2026-03-20T17:14:46.913Z] addVisit: url="https://www.google.com/" title="Google"
+
+[2026-03-20T17:14:56.876Z] goToUrl: url="about:blank" activeTabId=18 wcExists=true
+[2026-03-20T17:14:56.876Z] loading URL: "about:blank"
+
+[2026-03-20T17:14:56.918Z] did-navigate: callbackExists=true isIncognito=false
+
+[2026-03-20T17:14:56.918Z] tm.onNavigate: url="about:blank" title="about:blank"
+[2026-03-20T17:14:56.918Z] addVisit: url="about:blank" title="about:blank"
+
+[2026-03-20T17:14:58.269Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:14:58.270Z] switchToTab called with tabId=19. Previous activeTabId=18
+
+[2026-03-20T17:15:00.235Z] createTab called with url="about:blank" workspaceId="default"
+
+[2026-03-20T17:15:00.237Z] switchToTab called with tabId=20. Previous activeTabId=null
+
+[2026-03-20T17:15:12.985Z] registerIPCHandlers: tmExists=true
+
+[2026-03-20T17:15:59.313Z] HISTORY_GET: count=49
+
+[2026-03-20T17:15:59.319Z] HISTORY_GET: count=49
