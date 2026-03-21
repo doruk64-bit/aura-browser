@@ -44,5 +44,5 @@ jobs:
       - name: Upload Artifacts 📦
         uses: actions/upload-artifact@v4
         with:
-          name: AuraBrowser-${{ matrix.os }}
+          name: MorrowBrowser-${{ matrix.os }}
           path: release/*
