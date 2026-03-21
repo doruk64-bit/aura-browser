@@ -40,7 +40,7 @@ export function setupAutoUpdater(): void {
         type: 'info',
         buttons: ['Yeniden Başlat', 'Daha Sonra'],
         title: 'Güncelleme Hazır',
-        message: 'Aura Browser için yeni bir güncelleme indirildi.',
+        message: 'Morrow Browser için yeni bir güncelleme indirildi.',
         detail: `Sürüm ${info.version} kuruluma hazır. Uygulamayı yeniden başlatmak ister misiniz?`,
       })
       .then((returnValue) => {

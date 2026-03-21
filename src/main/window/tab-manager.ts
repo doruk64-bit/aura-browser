@@ -413,7 +413,7 @@ export class TabManager {
         if (extensionId && extensionId.length > 20) {
           // CSS Enjeksiyonu
           wc.insertCSS(`
-            #aura-install-btn {
+            #morrow-install-btn {
               position: fixed !important;
               top: 80px !important;
               right: 48px !important;
@@ -433,15 +433,15 @@ export class TabManager {
               align-items: center !important;
               gap: 8px !important;
             }
-            #aura-install-btn:hover {
+            #morrow-install-btn:hover {
               transform: translateY(-2px) !important;
               box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.6) !important;
               filter: brightness(1.1) !important;
             }
-            #aura-install-btn:active {
+            #morrow-install-btn:active {
               transform: translateY(0) !important;
             }
-            #aura-install-btn.loading {
+            #morrow-install-btn.loading {
               opacity: 0.7 !important;
               cursor: wait !important;
             }
@@ -450,10 +450,10 @@ export class TabManager {
           // JS Enjeksiyonu (Button Ekleme & Click Listener)
           wc.executeJavaScript(`
             (function() {
-              if (document.getElementById('aura-install-btn')) return;
+              if (document.getElementById('morrow-install-btn')) return;
               const btn = document.createElement('button');
-              btn.id = 'aura-install-btn';
-              btn.innerHTML = '<span>➕</span> Aura Browser\\'a Ekle';
+              btn.id = 'morrow-install-btn';
+              btn.innerHTML = '<span>➕</span> Morrow Browser\\'a Ekle';
               
               btn.onclick = async () => {
                 if (btn.classList.contains('loading')) return;

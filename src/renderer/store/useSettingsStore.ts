@@ -73,7 +73,7 @@ export const useSettingsStore = create<SettingsState>()(
         set({ homepage: url }),
     }),
     {
-      name: 'aura-settings',
+      name: 'morrow-settings',
       // Sadece kalıcı olması gereken alanları seç
       partialize: (state) => ({
         theme: state.theme,

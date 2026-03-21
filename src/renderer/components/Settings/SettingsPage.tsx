@@ -666,7 +666,7 @@ function AboutSection() {
           </div>
           <div style={{ textAlign: 'center' }}>
             <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              Aura Browser
+              Morrow Browser
             </h3>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
               Sürüm 1.0.0

@@ -211,7 +211,7 @@ if (typeof window !== 'undefined' && window.location.hostname.includes('chromewe
     });
 
     // Zaten butonumuzu eklediysek çık
-    if (document.getElementById('aura-install-btn')) return;
+    if (document.getElementById('morrow-install-btn')) return;
 
     const match = window.location.pathname.match(/\/([a-z]{32})(\/|$|\?)/);
     if (!match) return;
@@ -220,8 +220,8 @@ if (typeof window !== 'undefined' && window.location.hostname.includes('chromewe
     
     // Web store kendi DOM'unu manipüle edebildiği için Body yerine document.documentElement'e asıyoruz
     const btn = document.createElement('button');
-    btn.id = 'aura-install-btn';
-    btn.innerText = '✨ Aura Tarayıcıya Ekle';
+    btn.id = 'morrow-install-btn';
+    btn.innerText = '✨ Morrow Tarayıcıya Ekle';
 
     // CSS styling tab-manager.ts üzerinden insertCSS ile yapılır (CSP kısıtlamalarını aşmak için)
 
@@ -234,7 +234,7 @@ if (typeof window !== 'undefined' && window.location.hostname.includes('chromewe
           setTimeout(() => { btn.style.display = 'none'; }, 5000);
         } else {
           btn.innerText = '❌ Hata Oluştu';
-          setTimeout(() => { btn.innerText = '✨ Aura Tarayıcıya Ekle'; }, 3000);
+          setTimeout(() => { btn.innerText = '✨ Morrow Tarayıcıya Ekle'; }, 3000);
         }
       });
     };

@@ -1,6 +1,6 @@
-# Aura Browser V1.3.1 - AdBlock Integration Release
+# Morrow Browser V1.3.1 - AdBlock Integration Release
 
-Bu sürümde Aura Browser'a tam kapsamlı reklam engelleme (AdBlock) özellikleri entegre edildi.
+Bu sürümde Morrow Browser'a tam kapsamlı reklam engelleme (AdBlock) özellikleri entegre edildi.
 
 ### Yeni Özellikler (AdBlock & Güvenlik)
 - **uBlock Origin Entegrasyonu**: Dünyanın en güçlü reklam engelleyicisi olan uBlock Origin, tarayıcıya "Core Extension" olarak dahil edildi. Her açılışta otomatik olarak yüklenir.
@@ -14,7 +14,7 @@ Bu sürümde Aura Browser'a tam kapsamlı reklam engelleme (AdBlock) özellikler
 ### Diğer İyileştirmeler
 - **Omnibox Yıldız Butonu**: Adres çubuğuna Lucide ikon setinden modern bir "Favorilere Ekle" yıldızı eklendi.
 - **Kullanıcı Arayüzü**: Yıldız butonu ve AI yardımcısı yan yana getirilerek Omnibox düzenlendi.
-- **Paketleme**: Windows için yeni yükleyici (`Aura Browser Setup 1.3.1.exe`) oluşturuldu.
+- **Paketleme**: Windows için yeni yükleyici (`Morrow Browser Setup 1.3.1.exe`) oluşturuldu.
 
 ---
-*Aura Browser ile daha temiz ve hızlı bir web deneyimi sizi bekliyor!*
+*Morrow Browser ile daha temiz ve hızlı bir web deneyimi sizi bekliyor!*
