@@ -13,8 +13,9 @@ import HistoryPanel from './HistoryPanel';
 import DownloadsPanel from './DownloadsPanel';
 import WorkspacesPanel from './WorkspacesPanel';
 import ExtensionsPanel from './ExtensionsPanel';
+import PerformancePanel from './PerformancePanel';
 
-type PanelType = 'none' | 'bookmarks' | 'history' | 'downloads' | 'workspaces' | 'extensions';
+type PanelType = 'none' | 'bookmarks' | 'history' | 'downloads' | 'workspaces' | 'extensions' | 'performance';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -101,6 +102,12 @@ export default function Sidebar() {
         isActive={activePanel === 'extensions'}
         onClick={() => togglePanel('extensions')}
       />
+      <SidebarItem
+        icon="⚡"
+        label="Performans"
+        isActive={activePanel === 'performance'}
+        onClick={() => togglePanel('performance')}
+      />
 
       {/* Panic Button */}
       <SidebarItem
@@ -155,6 +162,7 @@ export default function Sidebar() {
               {activePanel === 'downloads' && '📥 İndirmeler'}
               {activePanel === 'workspaces' && '📂 Çalışma Alanları'}
               {activePanel === 'extensions' && '🧩 Eklentiler'}
+              {activePanel === 'performance' && '⚡ Performans'}
             </h3>
             <motion.button
               onClick={() => setActivePanel('none')}
@@ -179,6 +187,7 @@ export default function Sidebar() {
             {activePanel === 'downloads' && <DownloadsPanel />}
             {activePanel === 'workspaces' && <WorkspacesPanel />}
             {activePanel === 'extensions' && <ExtensionsPanel />}
+            {activePanel === 'performance' && <PerformancePanel />}
           </div>
         </motion.div>
       )}

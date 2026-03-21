@@ -5,6 +5,7 @@ export default function DownloadsPanel() {
   const [downloads, setDownloads] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [quickFilter, setQuickFilter] = useState<'all' | 'today' | 'yesterday' | 'week'>('all');
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     const api = window.electronAPI;
@@ -47,6 +48,26 @@ export default function DownloadsPanel() {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
   };
 
+  const filteredDownloads = downloads.filter(item => {
+    const matchQuery = item.filename?.toLowerCase().includes(searchQuery.toLowerCase());
+    const itemDate = new Date(item.startedAt);
+    const today = new Date();
+    const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
+    
+    let matchDate = true;
+    if (selectedDate) {
+      matchDate = itemDate.toLocaleDateString('en-CA') === selectedDate;
+    } else if (quickFilter === 'today') {
+      matchDate = itemDate.toDateString() === today.toDateString();
+    } else if (quickFilter === 'yesterday') {
+      matchDate = itemDate.toDateString() === yesterday.toDateString();
+    } else if (quickFilter === 'week') {
+      const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
+      matchDate = itemDate >= weekAgo;
+    }
+    return matchQuery && matchDate;
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '100%', overflowY: 'auto', padding: '0 4px' }}>
       <button 
@@ -63,6 +84,21 @@ export default function DownloadsPanel() {
         onChange={(e) => setSearchQuery(e.target.value)}
         style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)', fontSize: '12px', marginBottom: '8px', width: '100%', outline: 'none' }}
       />
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <input 
+          type="date" 
+          value={selectedDate}
+          onChange={(e) => {
+            setSelectedDate(e.target.value);
+            if (e.target.value) setQuickFilter('all');
+          }}
+          style={{ flex: 1, padding: '6px 10px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)', fontSize: '11px', outline: 'none', cursor: 'pointer' }}
+        />
+        {selectedDate && (
+          <button onClick={() => setSelectedDate('')} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>✕ Sıfırla</button>
+        )}
+      </div>
 
       <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
         {['all', 'today', 'yesterday', 'week'].map((filter) => (
@@ -89,40 +125,12 @@ export default function DownloadsPanel() {
         ))}
       </div>
 
-      {downloads.filter(item => {
-        const matchQuery = item.filename?.toLowerCase().includes(searchQuery.toLowerCase());
-        const itemDate = new Date(item.startedAt);
-        const today = new Date();
-        const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
-        
-        let matchDate = true;
-        if (quickFilter === 'today') matchDate = itemDate.toDateString() === today.toDateString();
-        else if (quickFilter === 'yesterday') matchDate = itemDate.toDateString() === yesterday.toDateString();
-        else if (quickFilter === 'week') {
-          const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
-          matchDate = itemDate >= weekAgo;
-        }
-        return matchQuery && matchDate;
-      }).length === 0 ? (
+      {filteredDownloads.length === 0 ? (
         <p style={{ color: 'var(--text-muted)', fontSize: '12px', padding: '20px', textAlign: 'center' }}>
           {downloads.length === 0 ? 'Henüz bir indirme yok.' : 'Eşleşen dosya bulunamadı.'}
         </p>
       ) : (
-        downloads.filter(item => {
-          const matchQuery = item.filename?.toLowerCase().includes(searchQuery.toLowerCase());
-          const itemDate = new Date(item.startedAt);
-          const today = new Date();
-          const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
-          
-          let matchDate = true;
-          if (quickFilter === 'today') matchDate = itemDate.toDateString() === today.toDateString();
-          else if (quickFilter === 'yesterday') matchDate = itemDate.toDateString() === yesterday.toDateString();
-          else if (quickFilter === 'week') {
-            const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
-            matchDate = itemDate >= weekAgo;
-          }
-          return matchQuery && matchDate;
-        }).map((item) => {
+        filteredDownloads.map((item) => {
           const progress = item.totalBytes > 0 ? (item.receivedBytes / item.totalBytes) * 100 : 0;
           const isFinished = item.state === 'completed' || item.state === 'cancelled';
 

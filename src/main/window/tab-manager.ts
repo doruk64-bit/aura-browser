@@ -41,9 +41,13 @@ export class TabManager {
   private pinnedTabIds: Set<number> = new Set();
   private ramSnoozeMinutes: number = 0;
   private maxRamLimitMb: number = 0;
+  private ramLimiterEnabled: boolean = false;
+  private ramHardLimit: boolean = false;
+  private networkSpeedLimitMbps: number = 0;
   private tabLastAccessed: Map<number, number> = new Map();
   private snoozedTabs: Set<number> = new Set();
   private tabUrls: Map<number, string> = new Map();
+  private tabTitles: Map<number, string> = new Map();
   private snoozeInterval: any = null;
 
   constructor(mainWindow: BrowserWindow, isIncognito: boolean = false) {
@@ -77,6 +81,19 @@ export class TabManager {
         plugins: true,
       },
     });
+
+    if (this.networkSpeedLimitMbps > 0) {
+      const bps = (this.networkSpeedLimitMbps * 1024 * 1024) / 8;
+      view.webContents.session.enableNetworkEmulation({
+        offline: false,
+        latency: 100,
+        downloadThroughput: bps,
+        uploadThroughput: bps,
+      });
+      console.log(`[TabManager] Applied network limit ${this.networkSpeedLimitMbps} Mbps to new tab ${tabId}`);
+    }
+
+    this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
 
     this.tabs.set(tabId, view);
     this.tabWorkspaces.set(tabId, workspaceId);
@@ -199,13 +216,45 @@ export class TabManager {
       }
     }
 
-    // Sekme uyutulmuşsa uyandır
+    // Sekme uyutulmuşsa (tamamen kapatılmışsa) yeniden canlandır (Resurrect)
     if (this.snoozedTabs.has(tabId)) {
       this.snoozedTabs.delete(tabId);
-      const view = this.tabs.get(tabId);
-      const url = this.tabUrls.get(tabId);
-      if (view && url && url !== 'about:blank') {
-        console.log(`[TabManager] Waking up tab ${tabId} to ${url}`);
+      const url = this.tabUrls.get(tabId) || 'about:blank';
+      console.log(`[TabManager] Waking up (recreating) tab ${tabId} to ${url}`);
+
+      const partition = this.isIncognito ? 'in-memory:incognito' : '';
+      const view = new WebContentsView({
+        webPreferences: {
+          contextIsolation: true,
+          nodeIntegration: false,
+          sandbox: true,
+          webviewTag: false,
+          partition,
+          plugins: true,
+        },
+      });
+
+      if (this.networkSpeedLimitMbps > 0) {
+        const bps = (this.networkSpeedLimitMbps * 1024 * 1024) / 8;
+        view.webContents.session.enableNetworkEmulation({
+          offline: false,
+          latency: 100,
+          downloadThroughput: bps,
+          uploadThroughput: bps,
+        });
+        console.log(`[TabManager] Applied network limit ${this.networkSpeedLimitMbps} Mbps to resurrected tab ${tabId}`);
+      }
+
+      this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
+
+      this.tabs.set(tabId, view);
+      this.attachWebContentsListeners(tabId, view.webContents);
+      
+      if (!this.mainWindow.isDestroyed()) {
+        this.mainWindow.contentView.addChildView(view);
+      }
+
+      if (url !== 'about:blank') {
         view.webContents.loadURL(url);
       }
     }
@@ -380,7 +429,24 @@ export class TabManager {
       if (wsId !== this.activeWorkspace) continue; // Sadece aktif workspace
 
       const view = this.tabs.get(id);
-      if (!view) continue;
+      if (!view) {
+        // Sekme uyutulmuş/kapatılmış olabilir, metadata'ları önbellekten çekelim
+        if (this.snoozedTabs.has(id)) {
+          list.push({
+            id,
+            title: this.tabTitles.get(id) || 'Uyutulmuş Sekme',
+            url: this.tabUrls.get(id) || 'about:blank',
+            isLoading: false,
+            canGoBack: false,
+            canGoForward: false,
+            workspaceId: wsId,
+            isIncognito: this.isIncognito,
+            isPinned: this.pinnedTabIds.has(id),
+          });
+        }
+        continue;
+      }
+
       const wc = view.webContents;
       list.push({
         id,
@@ -801,6 +867,58 @@ export class TabManager {
     console.log(`[TabManager] Max RAM Limit set to ${limitMb} MB`);
   }
 
+  setRamLimiterEnabled(enabled: boolean): void {
+    this.ramLimiterEnabled = enabled;
+    console.log(`[TabManager] RAM Limiter Enabled: ${enabled}`);
+  }
+
+  setRamHardLimit(hard: boolean): void {
+    this.ramHardLimit = hard;
+    console.log(`[TabManager] RAM Hard Limit: ${hard}`);
+  }
+
+  setNetworkSpeedLimit(limitMbps: number): void {
+    this.networkSpeedLimitMbps = limitMbps;
+    console.log(`[TabManager] Network Speed Limit set to ${limitMbps} Mbps`);
+    this.applyNetworkLimitToAll(limitMbps);
+  }
+
+  private applyNetworkLimitToView(view: any, limitMbps: number): void {
+    try {
+      if (limitMbps <= 0) {
+        if (view.webContents.debugger.isAttached()) {
+          view.webContents.debugger.sendCommand('Network.emulateNetworkConditions', {
+            offline: false,
+            latency: 0,
+            downloadThroughput: -1,
+            uploadThroughput: -1,
+          });
+        }
+        return;
+      }
+
+      const bps = (limitMbps * 1024 * 1024) / 8;
+      if (!view.webContents.debugger.isAttached()) {
+        view.webContents.debugger.attach('1.3');
+      }
+      view.webContents.debugger.sendCommand('Network.enable');
+      view.webContents.debugger.sendCommand('Network.emulateNetworkConditions', {
+        offline: false,
+        latency: 100, // ms
+        downloadThroughput: bps, // Bytes/sec
+        uploadThroughput: bps,
+      }).catch((err: any) => console.error('[TabManager] CDP Throttling Error:', err));
+    } catch (err) {
+      console.error('[TabManager] applyNetworkLimitToView failed:', err);
+    }
+  }
+
+  public applyNetworkLimitToAll(limitMbps: number): void {
+    this.tabs.forEach((view) => {
+      this.applyNetworkLimitToView(view, limitMbps);
+    });
+  }
+
   private startSnoozeTimer(): void {
     this.snoozeInterval = setInterval(() => {
       const now = Date.now();
@@ -809,19 +927,26 @@ export class TabManager {
       // ─── 1. Kademe: Acil Durum Toplam RAM Limiti ───
       try {
         const metrics = app.getAppMetrics();
-        const totalWorkingSetKB = metrics.reduce((sum: number, m: any) => sum + m.memory.workingSetSize, 0);
+        const totalWorkingSetKB = metrics.reduce((sum: number, m: any) => {
+          if (m.type !== 'Tab') return sum; // Sadece sekmeleri (Tab) say
+          
+          const ramKB = m.memory.privateBytes !== undefined 
+                        ? m.memory.privateBytes 
+                        : m.memory.workingSetSize;
+          return sum + ramKB;
+        }, 0);
         const totalAppRamMB = Math.floor(totalWorkingSetKB / 1024);
 
-        if (this.maxRamLimitMb > 0 && totalAppRamMB >= this.maxRamLimitMb) {
-          console.log(`[TabManager] EMERGENCY: RAM limit exceeded (${totalAppRamMB}MB >= ${this.maxRamLimitMb}MB). Snoozing oldest tab.`);
+        if (this.ramLimiterEnabled && this.ramHardLimit && this.maxRamLimitMb > 0 && totalAppRamMB >= this.maxRamLimitMb) {
+          console.log(`[TabManager] EMERGENCY: RAM limit exceeded (${totalAppRamMB}MB >= ${this.maxRamLimitMb}MB). Snoozing all inactive tabs.`);
           
           const inactiveTabs = Array.from(this.tabs.keys())
             .filter(id => id !== this.activeTabId && !this.snoozedTabs.has(id))
             .sort((a, b) => (this.tabLastAccessed.get(a) || 0) - (this.tabLastAccessed.get(b) || 0));
 
-          if (inactiveTabs.length > 0) {
-            this.snoozeTab(inactiveTabs[0]); // En eski pasif sekmeyi uyut
-            return; // Bu turda sadece 1 adet uyutmak yeterli (cycle freni)
+          // 1 tane değil, tüm arka plandaki uyutulmamış pasif sekmeleri agresif kapat!
+          for (const id of inactiveTabs) {
+            this.snoozeTab(id);
           }
         }
       } catch (e) {
@@ -842,7 +967,7 @@ export class TabManager {
           this.snoozeTab(id);
         }
       }
-    }, 15000); // 15 saniyede bir kontrol (Acil durumlar için dah hızlı)
+    }, 5000); // 5 saniyede bir kontrol (Acil durumlar için çok daha tepkisel)
   }
 
   private snoozeTab(tabId: number): void {
@@ -852,11 +977,22 @@ export class TabManager {
     const url = view.webContents.getURL();
     if (url === 'about:blank' || url === '') return;
 
-    console.log(`[TabManager] Snoozing tab ${tabId} (${url})`);
+    console.log(`[TabManager] Aggressive Snoozing (Destroying) tab ${tabId} (${url})`);
     this.snoozedTabs.add(tabId);
     this.tabUrls.set(tabId, url); // Son geçerli url'i kurtar
+    this.tabTitles.set(tabId, view.webContents.getTitle()); // Son başlığı kurtar
 
-    view.webContents.loadURL('about:blank');
+    // View'u tamamen yok et
+    try {
+      if (!this.mainWindow.isDestroyed()) {
+        this.mainWindow.contentView.removeChildView(view);
+      }
+      view.webContents.close(); // Belleği derhal boşaltır
+    } catch (e) {
+      console.error(`[TabManager] Failed to close snoozed view ${tabId}`, e);
+    }
+
+    this.tabs.delete(tabId); // Map'ten sil ki re-creation tetiklenebilsin
     this.notifyTabUpdate();
   }
 }

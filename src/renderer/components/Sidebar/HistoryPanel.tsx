@@ -9,6 +9,7 @@ export default function HistoryPanel() {
   const [history, setHistory] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [quickFilter, setQuickFilter] = useState<'all' | 'today' | 'yesterday' | 'week'>('all');
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     // IPC üzerinden geçmişi yükle
@@ -29,6 +30,30 @@ export default function HistoryPanel() {
     window.electronAPI?.history?.clear?.();
     setHistory([]);
   };
+
+  // Filtreleme mantığını tek bir yerde toplayalım
+  const filteredHistory = history.filter(item => {
+    const matchQuery = (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) || 
+                       (item.url && item.url.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const itemDate = new Date(item.last_visited_at);
+    const today = new Date();
+    const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
+    
+    let matchDate = true;
+    if (selectedDate) {
+      matchDate = itemDate.toLocaleDateString('en-CA') === selectedDate;
+    } else if (quickFilter === 'today') {
+      matchDate = itemDate.toDateString() === today.toDateString();
+    } else if (quickFilter === 'yesterday') {
+      matchDate = itemDate.toDateString() === yesterday.toDateString();
+    } else if (quickFilter === 'week') {
+      const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
+      matchDate = itemDate >= weekAgo;
+    }
+
+    return matchQuery && matchDate;
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '12px' }}>
@@ -59,6 +84,21 @@ export default function HistoryPanel() {
         )}
       </div>
 
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <input 
+          type="date" 
+          value={selectedDate}
+          onChange={(e) => {
+            setSelectedDate(e.target.value);
+            if (e.target.value) setQuickFilter('all');
+          }}
+          style={{ flex: 1, padding: '6px 10px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)', fontSize: '11px', outline: 'none', cursor: 'pointer' }}
+        />
+        {selectedDate && (
+          <button onClick={() => setSelectedDate('')} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>✕ Sıfırla</button>
+        )}
+      </div>
+
       <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
         {['all', 'today', 'yesterday', 'week'].map((filter) => (
           <button 
@@ -85,32 +125,12 @@ export default function HistoryPanel() {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', flex: 1 }}>
-        {history.filter(item => {
-          const matchQuery = (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) || (item.url && item.url.toLowerCase().includes(searchQuery.toLowerCase()));
-          
-          const itemDate = new Date(item.last_visited_at);
-          const today = new Date();
-          const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
-          
-          let matchDate = true;
-          if (quickFilter === 'today') matchDate = itemDate.toDateString() === today.toDateString();
-          else if (quickFilter === 'yesterday') matchDate = itemDate.toDateString() === yesterday.toDateString();
-          else if (quickFilter === 'week') {
-            const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
-            matchDate = itemDate >= weekAgo;
-          }
-
-          return matchQuery && matchDate;
-        }).length === 0 ? (
+        {filteredHistory.length === 0 ? (
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '12px' }}>
             {history.length === 0 ? 'Geçmiş kaydı yok.' : 'Eşleşen kayıt bulunamadı.'}
           </div>
         ) : (
-          history.filter(item => {
-            const matchQuery = (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) || (item.url && item.url.toLowerCase().includes(searchQuery.toLowerCase()));
-            const matchDate = !selectedDate || item.last_visited_at?.startsWith(selectedDate);
-            return matchQuery && matchDate;
-          }).map((item) => (
+          filteredHistory.map((item) => (
             <motion.div
               key={item.id}
               onClick={() => handleOpen(item.url)}

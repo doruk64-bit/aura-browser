@@ -41,9 +41,10 @@ interface SettingsState {
   // Performans
   ramSnoozeTime: number; // 0 = Kapalı, dakika cinsinden
   networkSpeedLimit: number; // 0 = Sınırsız, Mbps cinsinden
+  networkLimiterEnabled: boolean;
   maxRamLimit: number; // 0 = Sınırsız, MB cinsinden
-
-  // Aksiyonlar
+  ramLimiterEnabled: boolean;
+  ramHardLimit: boolean;
   toggleSidebar: () => void;
   setSidebarWidth: (width: number) => void;
   setTheme: (theme: 'dark' | 'light') => void;
@@ -53,7 +54,10 @@ interface SettingsState {
   setAdblockEnabled: (enabled: boolean) => void;
   setRamSnoozeTime: (time: number) => void;
   setNetworkSpeedLimit: (limit: number) => void;
+  setNetworkLimiterEnabled: (enabled: boolean) => void;
   setMaxRamLimit: (limit: number) => void;
+  setRamLimiterEnabled: (enabled: boolean) => void;
+  setRamHardLimit: (hard: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -68,7 +72,10 @@ export const useSettingsStore = create<SettingsState>()(
       adblockEnabled: true,
       ramSnoozeTime: 0,
       networkSpeedLimit: 0,
+      networkLimiterEnabled: false,
       maxRamLimit: 0,
+      ramLimiterEnabled: false,
+      ramHardLimit: false,
 
       toggleSidebar: () =>
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
@@ -94,11 +101,26 @@ export const useSettingsStore = create<SettingsState>()(
       setRamSnoozeTime: (time) =>
         set({ ramSnoozeTime: time }),
 
-      setNetworkSpeedLimit: (limit) =>
-        set({ networkSpeedLimit: limit }),
+      setNetworkSpeedLimit: (limit) => {
+        set({ networkSpeedLimit: limit });
+        window.electronAPI?.system?.setNetworkLimit?.(limit);
+      },
+
+      setNetworkLimiterEnabled: (enabled) =>
+        set({ networkLimiterEnabled: enabled }),
 
       setMaxRamLimit: (limit) =>
         set({ maxRamLimit: limit }),
+
+      setRamLimiterEnabled: (enabled) => {
+        set({ ramLimiterEnabled: enabled });
+        window.electronAPI?.system?.setRamLimiterEnabled?.(enabled);
+      },
+
+      setRamHardLimit: (hard) => {
+        set({ ramHardLimit: hard });
+        window.electronAPI?.system?.setRamHardLimit?.(hard);
+      },
     }),
     {
       name: 'morrow-settings',
@@ -112,7 +134,10 @@ export const useSettingsStore = create<SettingsState>()(
         adblockEnabled: state.adblockEnabled,
         ramSnoozeTime: state.ramSnoozeTime,
         networkSpeedLimit: state.networkSpeedLimit,
+        networkLimiterEnabled: state.networkLimiterEnabled,
         maxRamLimit: state.maxRamLimit,
+        ramLimiterEnabled: state.ramLimiterEnabled,
+        ramHardLimit: state.ramHardLimit,
       }),
     }
   )

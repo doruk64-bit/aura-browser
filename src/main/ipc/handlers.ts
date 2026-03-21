@@ -610,22 +610,12 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   // ─── Performans ve Kaynak Yönetimi ───
   ipcMain.handle('system:set-network-limit', (_event, limitMbps: number) => {
-    const { session } = require('electron');
-    if (limitMbps === 0) {
-      session.defaultSession.disableNetworkEmulation();
-      console.log('[Network] Bandwidth throttling disabled');
-    } else {
-      const bps = (limitMbps * 1024 * 1024) / 8;
-      session.defaultSession.enableNetworkEmulation({
-        offline: false,
-        latency: 20, // 0 yerine ufak bir gecikme eklemek throttling'i aktif tutar.
-        downloadThroughput: bps,
-        uploadThroughput: bps,
-      });
-      console.log(`[Network] Bandwidth limited to ${limitMbps} Mbps (${bps} Bps)`);
+    const tm = getTabManager();
+    if (tm) {
+      tm.setNetworkSpeedLimit(limitMbps);
     }
-    // Sockets havuzunu ve cache bağlantılarını yenilemek için sayfayı reload et
-    getTabManager()?.reload();
+    // Sockets havuzunu ve cache bağlantılarını yenilemek için isteğe bağlı reload et
+    console.log(`[Network] applied CDP throttle limit: ${limitMbps} Mbps`);
   });
 
   ipcMain.handle('system:set-ram-snooze', (_event, minutes: number) => {
@@ -634,5 +624,48 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle('system:set-max-ram-limit', (_event, limitMb: number) => {
     getTabManager()?.setMaxRamLimit(limitMb);
+  });
+
+  ipcMain.handle('system:get-ram-usage', async () => {
+    const { app } = require('electron');
+    const metrics = app.getAppMetrics();
+    const totalWorkingSetKB = metrics.reduce((sum: number, m: any) => {
+      if (m.type !== 'Tab') return sum; // Farklı süreçleri (GPU, vb.) çıkar
+      
+      const ramKB = m.memory.privateBytes !== undefined 
+                    ? m.memory.privateBytes 
+                    : m.memory.workingSetSize;
+      return sum + ramKB;
+    }, 0);
+    return Math.floor(totalWorkingSetKB / 1024); // MB
+  });
+
+  let bytesThisSecond = 0;
+  let currentNetworkSpeedMbps = 0;
+
+  // webRequest headers overcounts parallel chunk loads on speedtest. Devre dışı bırakıldı.
+  /*
+  const { session } = require('electron');
+  session.defaultSession.webRequest.onHeadersReceived((details: any, callback: any) => {
+    if (details.responseHeaders) {
+      const contentLength = details.responseHeaders['content-length'] || details.responseHeaders['Content-Length'];
+      if (contentLength && contentLength[0]) {
+        bytesThisSecond += parseInt(contentLength[0], 10) || 0;
+      }
+    }
+    callback({});
+  });
+  */
+
+  ipcMain.handle('system:get-network-usage', () => {
+    return 0; // Şişme hatası nedeniyle statik 0 dönüyoruz
+  });
+
+  ipcMain.handle('system:set-ram-limiter-enabled', (_event, enabled: boolean) => {
+    getTabManager()?.setRamLimiterEnabled(enabled);
+  });
+
+  ipcMain.handle('system:set-ram-hard-limit', (_event, hard: boolean) => {
+    getTabManager()?.setRamHardLimit(hard);
   });
 }

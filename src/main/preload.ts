@@ -127,6 +127,10 @@ const electronAPI = {
     setNetworkLimit: (limit: number) => ipcRenderer.invoke('system:set-network-limit', limit),
     setRamSnooze: (minutes: number) => ipcRenderer.invoke('system:set-ram-snooze', minutes),
     setMaxRamLimit: (limit: number) => ipcRenderer.invoke('system:set-max-ram-limit', limit),
+    getRamUsage: () => ipcRenderer.invoke('system:get-ram-usage'),
+    setRamLimiterEnabled: (enabled: boolean) => ipcRenderer.invoke('system:set-ram-limiter-enabled', enabled),
+    setRamHardLimit: (hard: boolean) => ipcRenderer.invoke('system:set-ram-hard-limit', hard),
+    getNetworkUsage: () => ipcRenderer.invoke('system:get-network-usage'),
   },
   downloads: {
     get: () => ipcRenderer.invoke('downloads:get'),

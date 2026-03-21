@@ -14,14 +14,13 @@ import {
   SEARCH_ENGINES,
 } from '../../store/useSettingsStore';
 
-type SettingsCategory = 'appearance' | 'search' | 'startup' | 'privacy' | 'performance' | 'about';
+type SettingsCategory = 'appearance' | 'search' | 'startup' | 'privacy' | 'about';
 
 const CATEGORIES: { id: SettingsCategory; icon: string; label: string }[] = [
   { id: 'appearance', icon: '🎨', label: 'Görünüm' },
   { id: 'search', icon: '🔍', label: 'Arama Motoru' },
   { id: 'startup', icon: '🏠', label: 'Başlangıç' },
   { id: 'privacy', icon: '🛡️', label: 'Gizlilik' },
-  { id: 'performance', icon: '🚀', label: 'Performans' },
   { id: 'about', icon: 'ℹ️', label: 'Hakkında' },
 ];
 
@@ -197,16 +196,6 @@ export default function SettingsPage() {
               adblockEnabled={adblockEnabled}
               onToggleAdblock={handleToggleAdblock}
               onClearData={handleClearData}
-            />
-          )}
-          {activeCategory === 'performance' && (
-            <PerformanceSection
-              ramSnoozeTime={ramSnoozeTime}
-              setRamSnoozeTime={setRamSnoozeTime}
-              networkSpeedLimit={networkSpeedLimit}
-              setNetworkSpeedLimit={setNetworkSpeedLimit}
-              maxRamLimit={maxRamLimit}
-              setMaxRamLimit={setMaxRamLimit}
             />
           )}
           {activeCategory === 'about' && <AboutSection />}
@@ -679,7 +668,7 @@ function AboutSection() {
               Morrow Browser
             </h3>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-              Sürüm 1.3.1
+              Sürüm 1.3.3
             </p>
             <button
               onClick={() => window.electronAPI?.system?.checkUpdate()}
@@ -731,137 +720,6 @@ function AboutSection() {
           >
             Electron v33 · React v19 · Zustand v5
           </div>
-        </div>
-      </SettingCard>
-    </>
-  );
-}
-
-/* ─── Performans ─── */
-function PerformanceSection({
-  ramSnoozeTime,
-  setRamSnoozeTime,
-  networkSpeedLimit,
-  setNetworkSpeedLimit,
-  maxRamLimit,
-  setMaxRamLimit,
-}: {
-  ramSnoozeTime: number;
-  setRamSnoozeTime: (t: number) => void;
-  networkSpeedLimit: number;
-  setNetworkSpeedLimit: (l: number) => void;
-  maxRamLimit: number;
-  setMaxRamLimit: (Limit: number) => void;
-}) {
-  const handleMaxRamLimitChange = (limit: number) => {
-    setMaxRamLimit(limit);
-    window.electronAPI?.system?.setMaxRamLimit?.(limit);
-  };
-
-  const handleNetworkLimitChange = (limit: number) => {
-    setNetworkSpeedLimit(limit);
-    window.electronAPI?.system?.setNetworkLimit?.(limit);
-  };
-
-  const handleRamSnoozeChange = (minutes: number) => {
-    setRamSnoozeTime(minutes);
-    window.electronAPI?.system?.setRamSnooze?.(minutes);
-  };
-
-  return (
-    <>
-      <SectionTitle>🚀 Performans ve Kaynak Yönetimi</SectionTitle>
-
-      {/* 1. Toplam RAM Limiti */}
-      <SettingCard>
-        <SettingLabel 
-          title="1. Toplam RAM Limiti" 
-          subtitle="Tarayıcının kullanacağı maksimum RAM miktarı. Limit aşılırsa arka plandaki en eski sekmeler otomatik uyutulur." 
-        />
-        <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
-          {[0, 512, 1024, 2048, 3072].map((mb) => (
-            <motion.button
-              key={mb}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleMaxRamLimitChange(mb)}
-              style={{
-                padding: '10px 16px',
-                borderRadius: 'var(--radius-sm)',
-                border: maxRamLimit === mb ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                background: maxRamLimit === mb ? 'var(--accent-glow)' : 'var(--bg-tertiary)',
-                color: maxRamLimit === mb ? 'var(--accent)' : 'var(--text-primary)',
-                fontSize: '12px',
-                cursor: 'pointer',
-                flex: 1,
-                textAlign: 'center'
-              }}
-            >
-              {mb === 0 ? 'Sınırsız' : mb < 1024 ? `${mb} MB` : `${mb / 1024} GB`}
-            </motion.button>
-          ))}
-        </div>
-      </SettingCard>
-
-      {/* 2. İnternet Hızı Limitleme */}
-      <SettingCard>
-        <SettingLabel 
-          title="2. İnternet Hız Sınırlayıcı" 
-          subtitle="Tarayıcının maksimum indirme/yükleme hızını kısıtlar." 
-        />
-        <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
-          {[0, 1, 5, 10, 20].map((mbps) => (
-            <motion.button
-              key={mbps}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleNetworkLimitChange(mbps)}
-              style={{
-                padding: '10px 16px',
-                borderRadius: 'var(--radius-sm)',
-                border: networkSpeedLimit === mbps ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                background: networkSpeedLimit === mbps ? 'var(--accent-glow)' : 'var(--bg-tertiary)',
-                color: networkSpeedLimit === mbps ? 'var(--accent)' : 'var(--text-primary)',
-                fontSize: '12px',
-                cursor: 'pointer',
-                flex: 1,
-                textAlign: 'center'
-              }}
-            >
-              {mbps === 0 ? 'Sınırsız' : `${mbps} Mbps`}
-            </motion.button>
-          ))}
-        </div>
-      </SettingCard>
-
-      {/* 3. Sekme Uyutma (Tab Snoozing) */}
-      <SettingCard>
-        <SettingLabel 
-          title="3. Bellek Koruyucu (Sekme Uyutma)" 
-          subtitle="Arka planda kullanılmayan sekmeleri uyutarak anlık RAM tasarrufu sağlar." 
-        />
-        <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
-          {[0, 1, 5, 15, 30].map((m) => (
-            <motion.button
-              key={m}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleRamSnoozeChange(m)}
-              style={{
-                padding: '10px 16px',
-                borderRadius: 'var(--radius-sm)',
-                border: ramSnoozeTime === m ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                background: ramSnoozeTime === m ? 'var(--accent-glow)' : 'var(--bg-tertiary)',
-                color: ramSnoozeTime === m ? 'var(--accent)' : 'var(--text-primary)',
-                fontSize: '12px',
-                cursor: 'pointer',
-                flex: 1,
-                textAlign: 'center'
-              }}
-            >
-              {m === 0 ? 'Kapalı' : `${m} Dakika`}
-            </motion.button>
-          ))}
         </div>
       </SettingCard>
     </>
