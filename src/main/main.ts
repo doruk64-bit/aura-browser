@@ -41,9 +41,10 @@ app.commandLine.appendSwitch('disable-remote-module');
 
 // ─── Singleton kilidi (tek pencere) ───
 
-const gotLock = app.requestSingleInstanceLock();
+  // const gotLock = app.requestSingleInstanceLock();
+  const gotLock = true; // Hata tespiti için geçici olarak true yapıldı
 
-if (!gotLock) {
+  if (!gotLock) {
   app.quit();
 } else {
   app.on('second-instance', () => {
@@ -61,10 +62,11 @@ if (!gotLock) {
     adBlocker = new AdBlocker(session.defaultSession);
     
     windowManager = new WindowManager();
-    const mainWindow = windowManager.createMainWindow();
 
-    // IPC handler'larını kaydet
+    // IPC handler'larını pencere açılmadan önce kaydet (Race condition'ı önler)
     registerIPCHandlers(windowManager, adBlocker);
+
+    const mainWindow = windowManager.createMainWindow();
 
     // Otomatik güncellemeleri başlat
     import('./updater').then(({ setupAutoUpdater }) => setupAutoUpdater());

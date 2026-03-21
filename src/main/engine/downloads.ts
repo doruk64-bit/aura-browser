@@ -20,11 +20,11 @@ export interface DownloadInfo {
 }
 
 export class DownloadManager {
-  private mainWindow: BrowserWindow;
+  private windowManager: any; // circular dep'leri önlemek için any
   private activeDownloads: Map<string, DownloadItem> = new Map();
 
-  constructor(mainWindow: BrowserWindow) {
-    this.mainWindow = mainWindow;
+  constructor(windowManager: any) {
+    this.windowManager = windowManager;
     this.setupDownloadHandler();
   }
 
@@ -116,7 +116,10 @@ export class DownloadManager {
 
   private sendToRenderer(channel: string, data: unknown): void {
     try {
-      this.mainWindow.webContents.send(channel, data);
+      const win = this.windowManager.getMainWindow();
+      if (win && !win.isDestroyed()) {
+        win.webContents.send(channel, data);
+      }
     } catch {
       // Pencere kapatılmış olabilir
     }

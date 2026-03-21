@@ -36,7 +36,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   const historyManager = new HistoryManager();
   const bookmarkManager = new BookmarkManager();
   const findInPage = new FindInPage();
-  const downloadManager = new DownloadManager(windowManager.getMainWindow()!);
+  const downloadManager = new DownloadManager(windowManager);
 
   // ─── Geçmiş Kaydı Entegrasyonu ───
   const tm = getTabManager();
@@ -436,7 +436,8 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     });
   });
 
-  ipcMain.handle('downloads:get', () => downloadHistory);
+  // Dal 4 çakışmayı gidermek için yorum satırı yapıldı
+  // ipcMain.handle('downloads:get', () => downloadHistory);
 
   ipcMain.handle('downloads:action', (_event, { id, action }: { id: string, action: 'pause' | 'resume' | 'cancel' }) => {
     const item = activeDownloads.get(id);
@@ -449,12 +450,15 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     return true;
   });
 
+  // Dal 4 çakışmayı gidermek için yorum satırı yapıldı
+  /*
   ipcMain.handle('downloads:test', () => {
     const mainWin = windowManager.getMainWindow();
     if (mainWin) {
       mainWin.webContents.downloadURL('https://raw.githubusercontent.com/electron/electron/master/README.md');
     }
   });
+  */
 
   ipcMain.handle('app:show-main-menu', () => {
     const { Menu, app } = require('electron');
@@ -533,14 +537,57 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     });
   });
 
-  ipcMain.handle('adblock:toggle', () => {
-    return adBlocker?.toggle() ?? false;
+  ipcMain.handle('adblock:toggle', async () => {
+    const isEnabled = adBlocker?.toggle() ?? false;
+    const ublockId = 'cjpalhdlnbpafiamejdnhcphjbkeiagm';
+    
+    try {
+      if (isEnabled) {
+        console.log('[AdBlock] Activating AdBlock (uBlock Origin)');
+        await extensionManager.installCrx(ublockId);
+      } else {
+        console.log('[AdBlock] Deactivating AdBlock (uBlock Origin)');
+        await extensionManager.removeExtension(ublockId);
+      }
+    } catch (err) {
+      console.error('[AdBlock] Toggle extension action failed:', err);
+    }
+    
+    return isEnabled;
+  });
+
+  ipcMain.handle('adblock:set-status', async (_event, enabled: boolean) => {
+    if (!adBlocker) return;
+    
+    // Sadece durum değişirse aksiyon al (Performans için)
+    if (adBlocker.isEnabled() === enabled) return;
+
+    adBlocker.toggle(); // enabled'ı tersine çevirir. enable toggles state.
+    // Wait, toggle() just toggles. If we want to strictly set, we can create a setEnabled(enabled) in AdBlocker class or force toggle.
+    // Let's create a method setEnabled in AdBlocker or use toggle carefully.
+    // Or just if (adBlocker.isEnabled() !== enabled) adBlocker.toggle();
+    // Since we ALREADY checked that they differ, calling toggle() WILL set it to the desired `enabled` state!
+    
+    const ublockId = 'cjpalhdlnbpafiamejdnhcphjbkeiagm';
+    try {
+      if (enabled) {
+        console.log('[AdBlock] Sync Enable (uBlock Origin)');
+        await extensionManager.installCrx(ublockId);
+      } else {
+        console.log('[AdBlock] Sync Disable (uBlock Origin)');
+        await extensionManager.removeExtension(ublockId);
+      }
+    } catch (err) {
+      console.error('[AdBlock] Sync extension action failed:', err);
+    }
   });
 
   ipcMain.handle('adblock:status', () => {
     return adBlocker?.isEnabled() ?? false;
   });
 
+  // Dal 4 workspace çakışmalarını gidermek için yorum satırı yapıldı
+  /*
   ipcMain.handle('workspace:get-all', () => {
     return workspaceManager.getWorkspaces();
   });
@@ -570,6 +617,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   ipcMain.handle('workspace:remove', (_event, id: string) => {
     workspaceManager.removeWorkspace(id);
   });
+  */
 
   // ─── Eklentiler ───
 

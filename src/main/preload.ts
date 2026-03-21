@@ -147,6 +147,7 @@ const electronAPI = {
   adblock: {
     toggle: () => ipcRenderer.invoke('adblock:toggle'),
     getStatus: () => ipcRenderer.invoke('adblock:status'),
+    setStatus: (enabled: boolean) => ipcRenderer.invoke('adblock:set-status', enabled),
   },
   workspace: {
     getAll: () => ipcRenderer.invoke('workspace:get-all'),

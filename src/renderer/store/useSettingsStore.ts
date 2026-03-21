@@ -35,6 +35,9 @@ interface SettingsState {
   searchEngine: string;
   homepage: string;
 
+  // Güvenlik / Filtreleme
+  adblockEnabled: boolean;
+
   // Aksiyonlar
   toggleSidebar: () => void;
   setSidebarWidth: (width: number) => void;
@@ -42,6 +45,7 @@ interface SettingsState {
   setAccentColor: (color: string) => void;
   setSearchEngine: (engine: string) => void;
   setHomepage: (url: string) => void;
+  setAdblockEnabled: (enabled: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -53,6 +57,7 @@ export const useSettingsStore = create<SettingsState>()(
       accentColor: '#6366f1',
       searchEngine: 'google',
       homepage: 'about:blank',
+      adblockEnabled: true,
 
       toggleSidebar: () =>
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
@@ -71,6 +76,9 @@ export const useSettingsStore = create<SettingsState>()(
 
       setHomepage: (url) =>
         set({ homepage: url }),
+
+      setAdblockEnabled: (enabled) =>
+        set({ adblockEnabled: enabled }),
     }),
     {
       name: 'morrow-settings',
@@ -81,6 +89,7 @@ export const useSettingsStore = create<SettingsState>()(
         searchEngine: state.searchEngine,
         homepage: state.homepage,
         sidebarCollapsed: state.sidebarCollapsed,
+        adblockEnabled: state.adblockEnabled,
       }),
     }
   )

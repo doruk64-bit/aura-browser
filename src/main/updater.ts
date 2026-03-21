@@ -6,9 +6,52 @@
  */
 
 import { autoUpdater } from 'electron-updater';
-import { dialog } from 'electron';
+import { dialog, app } from 'electron';
+
+function checkCustomVersion(): void {
+  const https = require('https');
+  const path = require('path');
+  const fs = require('fs');
+
+  let localId = 1;
+  try {
+    const pkgPath = path.join(app.getAppPath(), 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    if (pkg.version_id) localId = pkg.version_id;
+  } catch (e) {
+    console.error('Local package.json read failed for version_id:', e);
+  }
+
+  const remoteUrl = 'https://raw.githubusercontent.com/bseester/morrow-browser/main/version.json';
+
+  https.get(remoteUrl, (res: any) => {
+    let data = '';
+    res.on('data', (chunk: any) => { data += chunk; });
+    res.on('end', () => {
+      try {
+        const remote = JSON.parse(data);
+        if (remote.latest_id && localId < remote.latest_id) {
+          dialog.showMessageBox({
+            type: 'warning',
+            buttons: ['Tamam'],
+            title: 'Sürüm Güncel Değil',
+            message: 'Morrow Browser güncel değil.',
+            detail: `En son Sürüm ID: ${remote.latest_id}\nMevcut Sürüm ID: ${localId}\n\nLütfen güncel sürümü edinmek için kontrol edin.`
+          });
+        }
+      } catch (e) {
+        // ignore or log
+      }
+    });
+  }).on('error', (err: any) => {
+    // ignore or log
+  });
+}
 
 export function setupAutoUpdater(): void {
+  // Özel Sürüm ID Kontrolü (Dev modda da çalışması için)
+  checkCustomVersion();
+
   // Geliştirme aşamasında otomatik güncellemeleri kapat (hata vermemesi için)
   if (process.env.NODE_ENV === 'development') {
     return;

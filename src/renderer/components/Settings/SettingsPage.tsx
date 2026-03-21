@@ -32,21 +32,17 @@ export default function SettingsPage() {
     accentColor, setAccentColor,
     searchEngine, setSearchEngine,
     homepage, setHomepage,
+    adblockEnabled, setAdblockEnabled,
   } = useSettingsStore();
 
   const [homepageInput, setHomepageInput] = useState(homepage);
-  const [adblockEnabled, setAdblockEnabled] = useState(true);
-
-  useEffect(() => {
-    window.electronAPI?.adblock?.getStatus().then(setAdblockEnabled);
-  }, []);
 
   const handleToggleAdblock = async () => {
     if (window.electronAPI?.adblock) {
       const newState = await window.electronAPI.adblock.toggle();
       if (newState !== undefined) setAdblockEnabled(newState);
     } else {
-      setAdblockEnabled((prev) => !prev);
+      setAdblockEnabled(!adblockEnabled);
     }
   };
 

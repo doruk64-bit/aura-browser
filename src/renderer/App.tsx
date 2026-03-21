@@ -16,6 +16,8 @@ import ChromeMenuOverlay from './components/TopBar/ChromeMenuOverlay';
 import { useIPC } from './hooks/useIPC';
 import { useKeyboard } from './hooks/useKeyboard';
 import { useTheme } from './hooks/useTheme';
+import { useSettingsStore } from './store/useSettingsStore';
+import { useEffect } from 'react';
 
 function App() {
   const [findVisible, setFindVisible] = useState(false);
@@ -31,6 +33,14 @@ function App() {
     onFind: () => setFindVisible(true),
     onEscape: () => setFindVisible(false),
   });
+
+  const { adblockEnabled } = useSettingsStore();
+
+  useEffect(() => {
+    if (window.electronAPI?.adblock?.setStatus) {
+      window.electronAPI.adblock.setStatus(adblockEnabled);
+    }
+  }, [adblockEnabled]);
 
   return (
     <Routes>
