@@ -141,3 +141,8 @@ export function setupAutoUpdater(): void {
     }
   }, 5000);
 }
+
+export async function handleCheckUpdate(): Promise<{ success: boolean; message: string }> {
+  checkCustomVersion(true);
+  return { success: true, message: '' };
+}
