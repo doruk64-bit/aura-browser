@@ -1,5 +1,9 @@
+# Morrow Browser V1.3.6 - Stabilizasyon ve Hata Giderme
+Genel arama önerileri optimizasyonları ve iç ayarlar performans geliştirmeleri uygulandı. Tüm mevcut istemcilere OTA güncellemesi dağıtıldı.
+
+---
+
 # Morrow Browser V1.3.5 - Omnibox & AdBlock Fixes
-Bu sürümde arama çubuğuna entegrasyonlar sağlanmış ve tarayıcının çekirdek özelliklerindeki bazı ufak pürüzler giderilmiştir.
 
 ### Yeni Özellikler & Değişiklikler
 - **Arama Çubuğu (Omnibox) Geçmiş Entegrasyonu**: Artık adres çubuğundan doğrudan kendi arama geçmişinizi anında tarayabilirsiniz. Bulunan geçmiş sonuçları `🕒` (saat) ikonuyla gösterilir ve eş zamanlı olarak web'den gelen sonuçlarla harmanlanır.
