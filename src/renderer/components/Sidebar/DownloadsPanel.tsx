@@ -152,9 +152,14 @@ export default function DownloadsPanel() {
                     <div style={{ 
                       width: '32px', height: '32px', borderRadius: '8px', 
                       background: 'rgba(255,255,255,0.03)', display: 'flex', 
-                      alignItems: 'center', justifyContent: 'center' 
+                      alignItems: 'center', justifyContent: 'center',
+                      overflow: 'hidden'
                     }}>
-                       <span style={{ fontSize: '18px' }}>📂</span>
+                       {item.icon ? (
+                         <img src={item.icon} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                       ) : (
+                         <span style={{ fontSize: '18px' }}>📂</span>
+                       )}
                     </div>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>

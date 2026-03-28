@@ -18,7 +18,7 @@ export function useIPC() {
 
     // Sekme listesi güncellemelerini dinle
     const unsubTabUpdate = api.tabs.onUpdate((data: any) => {
-      setTabs(data.tabs, data.activeTabId, data.activeWorkspaceId);
+      setTabs(data.tabs, data.activeTabId, data.activeWorkspaceId, data.groups);
     });
 
     // URL değişikliklerini dinle
@@ -43,7 +43,7 @@ export function useIPC() {
 
     // İlk sekme listesini al
     api.tabs.getList().then((data: any) => {
-      setTabs(data.tabs, data.activeTabId, data.activeWorkspaceId);
+      setTabs(data.tabs, data.activeTabId, data.activeWorkspaceId, data.groups);
     });
 
     // ─── Ayarları Main Process ile Senkronize Et ───

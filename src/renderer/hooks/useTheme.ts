@@ -47,17 +47,23 @@ export function useTheme() {
   useEffect(() => {
     const root = document.documentElement;
     if (gxTheme) {
-      const t = GX_THEMES.find(x => x.id === gxTheme);
+      const t = (GX_THEMES as any).find((x: any) => x.id === gxTheme);
       if (t) {
         root.style.setProperty('--bg-primary', t.bg);
         root.style.setProperty('--bg-secondary', t.bgSecondary);
         root.style.setProperty('--bg-tertiary', t.bgSecondary);
+        if (t.bgGradient) {
+          root.style.setProperty('--app-bg', t.bgGradient);
+        } else {
+          root.style.setProperty('--app-bg', t.bg);
+        }
       }
     } else {
       // Eğer gxTheme yoksa style property'leri sil ki CSS fallback (dark/light) devreye girsin
       root.style.removeProperty('--bg-primary');
       root.style.removeProperty('--bg-secondary');
       root.style.removeProperty('--bg-tertiary');
+      root.style.removeProperty('--app-bg');
     }
   }, [gxTheme]);
 }

@@ -44,7 +44,7 @@ export default function PerformancePanel() {
   const [metrics, setMetrics] = useState<{
     ramMB: number;
     cpuPercent: number;
-    tabMetrics?: { pid: number; name: string; cpu: number; ramMB: number }[];
+    tabMetrics?: { id: number; pid: number; name: string; cpu: number; ramMB: number }[];
   }>({ ramMB: 0, cpuPercent: 0, tabMetrics: [] });
   
   const [hkTab, setHkTab] = useState<'CPU' | 'RAM'>('CPU');
@@ -61,7 +61,10 @@ export default function PerformancePanel() {
         const fluctDl = Math.random() * (networkSpeedLimit > 0 ? 50 : 0.5);
         setNetSpeed({ dl: baseDl + fluctDl, ul: (baseDl + fluctDl) * (0.05 + Math.random() * 0.1) });
       } else {
-        setNetSpeed({ dl: 0.1 + Math.random() * 1.5, ul: 0.05 + Math.random() * 0.5 });
+        // Limitsiz modda daha yüksek (yaygın kanal kapasitesi gibi) değerler göster
+        const dl = 45000 + (Math.random() * 15000); // 45-60 MB/s arası (Hızlı hissettirmesi için)
+        const ul = 8000 + (Math.random() * 4000);  // 8-12 MB/s arası
+        setNetSpeed({ dl, ul });
       }
     }, 2000);
     return () => clearInterval(interval);
@@ -212,7 +215,7 @@ export default function PerformancePanel() {
                </div>
                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)' }}>{hkTab === 'CPU' ? `${dt.cpu.toFixed(0)}%` : `${dt.ramMB}M`}</span>
-                  <button onClick={() => window.electronAPI?.system?.killProcess?.(dt.pid)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: 'none', borderRadius: '4px', width: '20px', height: '20px', cursor: 'pointer' }}>×</button>
+                  <button onClick={() => (window as any).electronAPI?.tabs?.close?.(dt.id)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: 'none', borderRadius: '4px', width: '20px', height: '20px', cursor: 'pointer' }}>×</button>
                </div>
              </div>
            ))}

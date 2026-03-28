@@ -37,7 +37,9 @@ export class SiteOptimizer {
           hostname.includes('discord.com') || 
           hostname.includes('slack.com') ||
           hostname.includes('canva.com') ||
-          hostname.includes('github.com')) {
+          hostname.includes('github.com') ||
+          hostname.includes('epicgames.com') ||
+          hostname.includes('steampowered.com')) {
         return 'productivity';
       }
 
@@ -89,7 +91,8 @@ export class SiteOptimizer {
         break;
 
       default:
-        wc.setBackgroundThrottling(true);
+        // Varsayılan olarak aşırı kısıtlama yapmıyoruz (Performans için)
+        wc.setBackgroundThrottling(false);
         break;
     }
   }

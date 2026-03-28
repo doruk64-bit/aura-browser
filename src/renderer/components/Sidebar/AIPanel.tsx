@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, User, Bot, Trash2, ChevronDown, Wand2, MessageSquare } from 'lucide-react';
+import { Send, Sparkles, User, Bot, Trash2, ChevronDown, Wand2, MessageSquare, LogIn, LogOut } from 'lucide-react';
 import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 
@@ -18,7 +18,30 @@ export default function AIPanel() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
+  const [userInfo, setUserInfo] = useState<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const puter = (window as any).puter;
+      if (puter) {
+        const signedIn = await puter.auth.isSignedIn();
+        setIsSignedIn(signedIn);
+        if (signedIn) {
+          const user = await puter.auth.getUser();
+          setUserInfo(user);
+        }
+      } else {
+        setIsSignedIn(false);
+      }
+    };
+    checkAuth();
+
+    // Check auth periodically or on specific events if possible
+    const interval = setInterval(checkAuth, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -48,8 +71,38 @@ export default function AIPanel() {
     localStorage.setItem('ai-chat-history', JSON.stringify(msgs));
   };
 
+  const handleLogin = async () => {
+    try {
+      const puter = (window as any).puter;
+      if (puter) {
+        await puter.auth.signIn();
+        const signedIn = await puter.auth.isSignedIn();
+        setIsSignedIn(signedIn);
+        if (signedIn) {
+          const user = await puter.auth.getUser();
+          setUserInfo(user);
+        }
+      }
+    } catch (e) {
+      console.error('Login Error:', e);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const puter = (window as any).puter;
+      if (puter) {
+        await puter.auth.signOut();
+        setIsSignedIn(false);
+        setUserInfo(null);
+      }
+    } catch (e) {
+      console.error('Logout Error:', e);
+    }
+  };
+
   const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+    if (!input.trim() || isTyping || !isSignedIn) return;
 
     const newMessage: Message = {
       role: 'user',
@@ -98,7 +151,6 @@ export default function AIPanel() {
         aiPrompt = `${systemPrompt}\n\nKullanıcı: ${input}`;
       }
 
-      const assistantMsgId = Date.now();
       const initialAssistantMsg: Message = {
         role: 'assistant',
         content: '',
@@ -106,8 +158,12 @@ export default function AIPanel() {
       };
       setMessages(prev => [...prev, initialAssistantMsg]);
 
-      // @ts-ignore
-      const response = await window.puter.ai.chat(aiPrompt, {
+      const ai = (window as any).puter?.ai;
+      if (!ai) {
+        throw new Error('Puter AI not initialized');
+      }
+
+      const response = await ai.chat(aiPrompt, {
         model: 'gpt-4o-mini',
         stream: true
       });
@@ -174,6 +230,46 @@ export default function AIPanel() {
     saveHistory(defaultMsg);
   };
 
+  // ─── Render Authentication Check ───
+  if (isSignedIn === false) {
+    return (
+      <div style={{
+        height: '100%', display: 'flex', flexDirection: 'column', 
+        alignItems: 'center', justifyContent: 'center', padding: '40px 20px',
+        textAlign: 'center', background: 'transparent'
+      }}>
+        <div style={{
+          width: '72px', height: '72px', borderRadius: '22px',
+          background: 'linear-gradient(135deg, var(--accent), #7c3aed)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: '24px', boxShadow: '0 12px 32px var(--accent-glow)'
+        }}>
+          <Sparkles size={36} color="white" />
+        </div>
+        <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '12px' }}>Morrow AI</h2>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '32px' }}>
+          Gelişmiş AI asistanına erişmek ve tarayıcıyı sesli/yazılı komutlarla yönetmek için ücretsiz bir Puter hesabı ile giriş yapmalısın.
+        </p>
+        <motion.button
+          whileHover={{ scale: 1.05, boxShadow: '0 10px 25px var(--accent-glow)' }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleLogin}
+          style={{
+            padding: '14px 28px', borderRadius: '16px', border: 'none',
+            background: 'var(--accent)', color: 'white', fontWeight: 600,
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px'
+          }}
+        >
+          <LogIn size={20} />
+          <span>Puter ile Giriş Yap</span>
+        </motion.button>
+        <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px' }}>
+          Puter.js v2 tabanlı güvenli bir şebeke kullanılır.
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -205,21 +301,38 @@ export default function AIPanel() {
           </div>
           <div>
             <h2 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Morrow AI</h2>
-            <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Premium Assistant</span>
+            <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              {userInfo ? userInfo.username : 'Assistant'}
+            </span>
           </div>
         </div>
-        <button 
-          onClick={clearChat}
-          style={{ 
-            background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', 
-            borderRadius: '8px', padding: '6px', color: 'var(--text-secondary)',
-            cursor: 'pointer', transition: 'all 0.2s'
-          }}
-          className="hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-          title="Temizle"
-        >
-          <Trash2 size={14} />
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {isSignedIn && (
+            <button 
+              onClick={handleLogout}
+              style={{
+                background: 'transparent', border: 'none', color: 'var(--text-muted)',
+                cursor: 'pointer', padding: '6px'
+              }}
+              className="hover:text-red-400"
+              title="Çıkış Yap"
+            >
+              <LogOut size={14} />
+            </button>
+          )}
+          <button 
+            onClick={clearChat}
+            style={{ 
+              background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', 
+              borderRadius: '8px', padding: '6px', color: 'var(--text-secondary)',
+              cursor: 'pointer', transition: 'all 0.2s'
+            }}
+            className="hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+            title="Temizle"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
       </div>
 
       {/* ─── Messages ─── */}
@@ -251,6 +364,7 @@ export default function AIPanel() {
                 width: '100%'
               }}
             >
+              {/* Message Header */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -264,7 +378,7 @@ export default function AIPanel() {
                   </div>
                 )}
                 <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                  {msg.role === 'user' ? 'Siz' : 'Morrow AI'} • {msg.timestamp}
+                  {msg.role === 'user' ? (userInfo?.username || 'Siz') : 'Morrow AI'} • {msg.timestamp}
                 </span>
                 {msg.role === 'user' && (
                   <div style={{ width: '20px', height: '20px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -273,6 +387,7 @@ export default function AIPanel() {
                 )}
               </div>
 
+              {/* Bubble */}
               <div style={{
                 maxWidth: '92%',
                 padding: '12px 16px',
@@ -332,7 +447,8 @@ export default function AIPanel() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder="Fikirlerinizi buraya yazın..."
+              placeholder={isSignedIn ? "AI'ya bir şey yazın..." : "Sohbet etmek için giriş yapın"}
+              disabled={!isSignedIn}
               style={{
                 flex: 1,
                 background: 'transparent',
@@ -348,15 +464,15 @@ export default function AIPanel() {
               whileHover={{ scale: 1.05, boxShadow: '0 0 15px var(--accent-glow)' }}
               whileTap={{ scale: 0.95 }}
               onClick={handleSend}
-              disabled={!input.trim() || isTyping}
+              disabled={!input.trim() || isTyping || !isSignedIn}
               style={{
-                background: input.trim() ? 'var(--accent)' : 'var(--text-muted)',
+                background: input.trim() && isSignedIn ? 'var(--accent)' : 'var(--text-muted)',
                 border: 'none',
                 borderRadius: '16px',
                 width: '40px', height: '40px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: 'white',
-                cursor: input.trim() ? 'pointer' : 'default',
+                cursor: (input.trim() && isSignedIn) ? 'pointer' : 'default',
                 transition: 'all 0.2s'
               }}
             >

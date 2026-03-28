@@ -126,6 +126,7 @@ export class TabManager {
       fs.appendFileSync(logPath, `\n[${new Date().toISOString()}] createTab called with url="${url}" workspaceId="${workspaceId}"\n`);
     } catch { }
 
+    const effectiveWorkspaceId = workspaceId || this.activeWorkspace;
     const tabId = ++this.tabCounter;
     this.tabLastAccessed.set(tabId, Date.now());
 
@@ -144,7 +145,7 @@ export class TabManager {
     });
 
     this.tabs.set(tabId, view);
-    this.tabWorkspaces.set(tabId, workspaceId);
+    this.tabWorkspaces.set(tabId, effectiveWorkspaceId);
     this.tabOrder.push(tabId);
 
     // Navigasyon olaylarını dinle
@@ -152,11 +153,6 @@ export class TabManager {
 
     // Pencereye ekle (henüz görünmez)
     this.mainWindow.contentView.addChildView(view);
-
-    // Ağ sınırını uygula (eğer aktifse)
-    if (this.networkSpeedLimitMbps > 0) {
-      this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
-    }
 
     // URL'ye git
     if (url !== 'about:blank') {
@@ -296,10 +292,6 @@ export class TabManager {
       this.snoozedTabs.delete(tabId);
       this.attachWebContentsListeners(tabId, view.webContents);
       this.mainWindow.contentView.addChildView(view);
-
-      if (this.networkSpeedLimitMbps > 0) {
-        this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
-      }
 
       view.webContents.loadURL(url);
     }
@@ -573,28 +565,6 @@ export class TabManager {
    */
   private attachWebContentsListeners(tabId: number, wc: WebContents): void {
     console.log(`[TabManager] attachWebContentsListeners for tab ${tabId}`);
-
-    // Navigasyon bittiğinde sınırı tekrar uygula (Bazı siteler navigasyonla resetleyebilir)
-    wc.on('did-navigate', () => {
-      if (this.networkSpeedLimitMbps > 0) {
-        const view = this.tabs.get(tabId);
-        if (view) this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
-      }
-    });
-
-    wc.on('dom-ready', () => {
-      if (this.networkSpeedLimitMbps > 0) {
-        const view = this.tabs.get(tabId);
-        if (view) this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
-      }
-    });
-
-    wc.on('did-frame-finish-load', (_event: any, isMainFrame: boolean) => {
-      if (isMainFrame && this.networkSpeedLimitMbps > 0) {
-        const view = this.tabs.get(tabId);
-        if (view) this.applyNetworkLimitToView(view, this.networkSpeedLimitMbps);
-      }
-    });
 
     wc.on('did-fail-load', (_event: any, errorCode: number, errorDescription: string, validatedURL: string, isMainFrame: boolean) => {
       if (isMainFrame && errorCode !== -3) {
@@ -935,7 +905,12 @@ export class TabManager {
   }
 
   private notifyTabUpdate(): void {
-    this.sendToRenderer(IPC_CHANNELS.TAB_LIST_UPDATED, this.getTabList());
+    this.sendToRenderer(IPC_CHANNELS.TAB_UPDATE, {
+      tabs: this.getTabList(),
+      activeTabId: this.activeTabId,
+      activeWorkspaceId: this.activeWorkspace,
+      groups: Array.from(this.tabGroups.values())
+    });
   }
 
   private sendToRenderer(channel: string, ...args: any[]): void {
@@ -1021,50 +996,42 @@ export class TabManager {
     this.notifyTabUpdate();
   }
 
-  // ─── Network Limiter ───
+  // ─── Network Limiter (CDP-Based) ───
 
   setNetworkSpeedLimit(limitMbps: number): void {
     this.networkSpeedLimitMbps = limitMbps;
 
-    // Mevcut tüm sekmelere uygula
-    for (const [id, view] of this.tabs) {
-      this.applyNetworkLimitToView(view, limitMbps);
-    }
-  }
-
-  private applyNetworkLimitToView(view: WebContentsView, limitMbps: number): void {
-    const wc = view.webContents;
-    const url = wc.getURL();
-
-    // File logging for verification
     try {
-      const logPath = path.join(app.getPath('userData'), 'network_log.txt');
-      const logMsg = `\n[${new Date().toISOString()}] Limit Request: ${limitMbps} Mbps, View URL: ${url}\n`;
-      fs.appendFileSync(logPath, logMsg);
-    } catch { }
+      // Her iki oturum bölümünü de al (Standart ve Gizli) + Varsayılan Oturum
+      const sessions = [
+        session.defaultSession,
+        session.fromPartition('persist:bseester'),
+        session.fromPartition('in-memory:incognito')
+      ];
 
-    try {
       if (limitMbps <= 0) {
-        wc.debugger.detach();
-        return;
+        // Sınırlayıcıyı tamamen devre dışı bırak
+        sessions.forEach(s => s.disableNetworkEmulation());
+        console.log(`[NetLimiter] Network emulation DISABLED for all sessions`);
+      } else {
+        // Native session-based throttling uygula (Standard Mbps = 10^6 bps)
+        const bytesPerSecond = Math.floor((limitMbps * 1000 * 1000) / 8);
+        const config = {
+          offline: false,
+          latency: 20, // Daha doğal bir ağ gecikmesi (100ms yerine 20ms)
+          downloadThroughput: bytesPerSecond,
+          uploadThroughput: Math.floor(bytesPerSecond / 4)
+        };
+
+        sessions.forEach(s => s.enableNetworkEmulation(config));
+        
+        console.log(`[NetLimiter] Native session-based limit set to ${limitMbps} Mbps (for all sessions)`);
       }
-
-      if (!wc.debugger.isAttached()) {
-        wc.debugger.attach('1.1');
-      }
-
-      const bytesPerSecond = (limitMbps * 1024 * 1024) / 8;
-
-      wc.debugger.sendCommand('Network.emulateNetworkConditions', {
-        offline: false,
-        latency: 20,
-        downloadThroughput: bytesPerSecond,
-        uploadThroughput: bytesPerSecond,
-      });
-    } catch (e) {
-      console.error('[TabManager] Failed to apply network limit:', e);
+    } catch (err) {
+      console.error('[NetLimiter] Failed to apply native session limit:', err);
     }
   }
+
 
   // ─── Tab Management API ───
 
@@ -1148,5 +1115,9 @@ export class TabManager {
       return view.webContents.getZoomFactor();
     }
     return 1.0;
+  }
+
+  getGroups(): TabGroupInfo[] {
+    return Array.from(this.tabGroups.values());
   }
 }

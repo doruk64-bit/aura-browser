@@ -12,6 +12,30 @@ import Omnibox from './Omnibox';
 import ChromeMenu from './ChromeMenu';
 
 export default function TopBar() {
+  const platform = window.electronAPI?.platform ?? 'win32';
+
+  const LogoIcon = () => (
+    <div style={{
+      width: '18px', height: '18px', borderRadius: '5px',
+      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+      </svg>
+    </div>
+  );
+
+  const LogoText = () => (
+    <span style={{
+      fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.5)',
+      letterSpacing: '0.5px', whiteSpace: 'nowrap',
+    }}>
+      Morrow Browser
+    </span>
+  );
+
   return (
     <div
       className="no-select"
@@ -32,35 +56,39 @@ export default function TopBar() {
           height: '40px',
           display: 'flex',
           alignItems: 'center',
-          paddingLeft: '12px',
+          justifyContent: 'space-between', // Her iki uca yay
         }}
       >
-        {/* Morrow Browser Logo + Title */}
-        <div className="no-drag" style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          marginRight: '8px', flexShrink: 0,
-        }}>
-          <div style={{
-            width: '18px', height: '18px', borderRadius: '5px',
-            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-            </svg>
-          </div>
-          <span style={{
-            fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.5)',
-            letterSpacing: '0.5px', whiteSpace: 'nowrap',
-          }}>
-            Morrow Browser
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%', flex: 1, overflow: 'hidden' }}>
+          <TrafficLights />
+          
+          {/* Logo + Title (Windows: Left) */}
+          {platform !== 'darwin' && (
+            <div className="no-drag" style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              marginLeft: '12px', marginRight: '8px', flexShrink: 0,
+            }}>
+              <LogoIcon />
+              <LogoText />
+            </div>
+          )}
+
+          <TabStrip />
         </div>
 
-        <TrafficLights />
-        <TabStrip />
-        <WindowControls />
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%', flexShrink: 0 }}>
+          {/* Logo + Title (Mac: Right) */}
+          {platform === 'darwin' && (
+            <div className="no-drag" style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              marginRight: '12px', flexShrink: 0,
+            }}>
+              <LogoIcon />
+              <LogoText />
+            </div>
+          )}
+          <WindowControls />
+        </div>
       </div>
 
       {/* Satır 2: Navigasyon + Omnibox + Menü */}

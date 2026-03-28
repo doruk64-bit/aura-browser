@@ -20,40 +20,44 @@ export const ACCENT_PRESETS = [
 // Opera GX tarzı tam temalar (Kullanıcı İsteği)
 export const GX_THEMES = [
   {
-    id: 'pink-orange',
-    name: 'Pembe Turuncu',
-    emoji: '🌸',
-    accent: '#ec4899', // Pembe yapı
-    bg: '#1a0a0f',
-    bgSecondary: '#251016',
-    preview: 'linear-gradient(135deg, #ec4899 0%, #f97316 100%)', // Pembe -> Turuncu
+    id: 'aurora',
+    name: 'Aurora',
+    emoji: '✨',
+    accent: '#a78bfa',
+    bg: '#0a0a1a',
+    bgSecondary: '#12122b',
+    preview: 'linear-gradient(135deg, #4f46e5 0%, #a78bfa 50%, #34d399 100%)',
+    bgGradient: 'radial-gradient(circle at 15% 35%, rgba(52, 211, 153, 0.25), transparent 50%), radial-gradient(circle at 85% 65%, rgba(167, 139, 250, 0.25), transparent 50%), radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.15), transparent 80%), #0a0a1a',
   },
   {
-    id: 'blue-turquoise',
-    name: 'Mavi Turkuaz',
+    id: 'horizon',
+    name: 'Horizon',
+    emoji: '🌌',
+    accent: '#fbbf24',
+    bg: '#050510',
+    bgSecondary: '#0d0d26',
+    preview: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #fbbf24 100%)',
+    bgGradient: 'radial-gradient(circle at bottom, rgba(251, 191, 36, 0.12), transparent 70%), radial-gradient(circle at 75% 15%, rgba(49, 46, 129, 0.4), transparent 80%), #050510',
+  },
+  {
+    id: 'flow',
+    name: 'Flow',
     emoji: '🌊',
-    accent: '#3b82f6', // Mavi
-    bg: '#0a101a',
-    bgSecondary: '#101826',
-    preview: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)', // Mavi -> Turkuaz (Camgöbeği)
+    accent: '#f43f5e',
+    bg: '#0d0216',
+    bgSecondary: '#1a052e',
+    preview: 'linear-gradient(135deg, #f43f5e 0%, #8b5cf6 50%, #f97316 100%)',
+    bgGradient: 'radial-gradient(circle at 10% 20%, rgba(244, 63, 94, 0.3), transparent 60%), radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.2), transparent 60%), radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 80%), #0d0216',
   },
   {
-    id: 'blue-green',
-    name: 'Mavi Yeşil',
-    emoji: '🍃',
-    accent: '#3b82f6', // Mavi
-    bg: '#0a1210',
-    bgSecondary: '#101c18',
-    preview: 'linear-gradient(135deg, #3b82f6 0%, #22c55e 100%)', // Mavi -> Yeşil
-  },
-  {
-    id: 'purple-cyan',
-    name: 'Mor Camgöbeği',
-    emoji: '🔮',
-    accent: '#a855f7', // Mor
-    bg: '#100a1a',
-    bgSecondary: '#181026',
-    preview: 'linear-gradient(135deg, #a855f7 0%, #06b6d4 100%)', // Mor -> Camgöbeği
+    id: 'mystic',
+    name: 'Mystic',
+    emoji: '🌲',
+    accent: '#10b981',
+    bg: '#08100a',
+    bgSecondary: '#121c15',
+    preview: 'linear-gradient(135deg, #064e3b 0%, #10b981 60%, #a7f3d0 100%)',
+    bgGradient: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12), transparent 80%), radial-gradient(circle at 25% 75%, rgba(4, 120, 87, 0.2), transparent 60%), #08100a',
   },
 ] as const;
 
@@ -72,7 +76,7 @@ interface SettingsState {
   sidebarWidth: number;
   theme: 'dark' | 'light';
   accentColor: string;
-  gxTheme: string; // GX tema id, boşsa GX tema uygulanmaz
+  gxTheme: GXThemeId | ''; // GX tema id, boşsa GX tema uygulanmaz
 
   // Arama & Başlangıç
   searchEngine: string;
@@ -96,7 +100,7 @@ interface SettingsState {
   setSidebarWidth: (width: number) => void;
   setTheme: (theme: 'dark' | 'light') => void;
   setAccentColor: (color: string) => void;
-  setGxTheme: (id: string) => void;
+  setGxTheme: (id: GXThemeId | '') => void;
   setSearchEngine: (engine: string) => void;
   setHomepage: (url: string) => void;
   setAdblockEnabled: (enabled: boolean) => void;

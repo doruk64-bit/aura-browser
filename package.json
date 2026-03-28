@@ -1,7 +1,7 @@
 {
   "name": "morrow-browser",
-  "version": "1.4.0-beta",
-  "version_id": 6,
+  "version": "1.4.0",
+  "version_id": 7,
   "description": "Morrow Browser - Chromium tabanlı modern masaüstü web tarayıcısı",
   "main": "dist/main/main.js",
   "author": "bseester",

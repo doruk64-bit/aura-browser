@@ -42,7 +42,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       if (!tm) return { ramMB: 0, cpuPercent: 0, tabMetrics: [] };
 
       const activeTabs = tm.getTabList();
-      const tabMetrics: { pid: number, name: string, cpu: number, ramMB: number }[] = [];
+      const tabMetrics: { id: number, pid: number, name: string, cpu: number, ramMB: number }[] = [];
       
       let totalRamKB = 0;
       let totalCpu = 0;
@@ -67,6 +67,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
         if (foundMetric) {
           const ramKB = foundMetric.memory.privateBytes || foundMetric.memory.workingSetSize || 0;
           tabMetrics.push({
+            id: tab.id, // Sekme ID'sini ekledik
             pid,
             name: tab.title || new URL(tab.url).hostname || 'Sekme',
             cpu: Math.floor(foundMetric.cpu.percentCPUUsage),
@@ -160,7 +161,8 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   const { session } = require('electron');
   const { getDatabase } = require('../database/db');
 
-  session.defaultSession.on('will-download', (event: any, item: Electron.DownloadItem, wc: any) => {
+  // Ortak indirme işleyici fonksiyonu
+  const handleDownload = async (event: any, item: Electron.DownloadItem, wc: any) => {
     const id = Date.now().toString();
     const filename = item.getFilename();
     const url = item.getURL();
@@ -178,45 +180,77 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       state: 'progressing',
       startedAt,
       savePath: '',
+      icon: null, // İkonu asenkron alacağız
     };
 
+    // İkonu al
+    const updateIcon = async (path?: string) => {
+      try {
+        const icon = await app.getFileIcon(path || filename, { size: 'normal' });
+        data.icon = icon.toDataURL();
+        windowManager.getMainWindow()?.webContents.send('downloads:progress', data);
+      } catch (e) {
+        // İkon alınamazsa sessizce devam et
+      }
+    };
+
+    // İlk ikon alımı (dosya adı uzantısına göre)
+    updateIcon();
+
     // DB'ye kaydet
-    const db = getDatabase();
-    const dbDownloads = db.getDownloads();
-    dbDownloads.unshift(data);
-    db.setDownloads(dbDownloads);
+    try {
+      const db = getDatabase();
+      const dbDownloads = db.getDownloads();
+      dbDownloads.unshift(data);
+      db.setDownloads(dbDownloads);
 
-    windowManager.getMainWindow()?.webContents.send('downloads:start', data);
+      windowManager.getMainWindow()?.webContents.send('downloads:start', data);
 
-    item.on('updated', (_e: any, state: 'progressing' | 'interrupted') => {
-      if (state === 'interrupted') {
-        data.state = 'interrupted';
-      } else if (state === 'progressing') {
-        data.receivedBytes = item.getReceivedBytes();
-        data.state = 'progressing';
-        const ratio = totalBytes > 0 ? data.receivedBytes / totalBytes : -1;
-        windowManager.getMainWindow()?.setProgressBar(ratio);
-      }
-      windowManager.getMainWindow()?.webContents.send('downloads:progress', data);
-    });
+      item.on('updated', (_e: any, state: 'progressing' | 'interrupted') => {
+        if (state === 'interrupted') {
+          data.state = 'interrupted';
+        } else if (state === 'progressing') {
+          data.receivedBytes = item.getReceivedBytes();
+          data.state = 'progressing';
+          const ratio = totalBytes > 0 ? data.receivedBytes / totalBytes : -1;
+          windowManager.getMainWindow()?.setProgressBar(ratio);
+          
+          // Eğer savePath yeni belirlendiyse ikonu güncelle (daha doğru ikon için)
+          if (!data.savePath && item.getSavePath()) {
+            data.savePath = item.getSavePath();
+            updateIcon(data.savePath);
+          }
+        }
+        windowManager.getMainWindow()?.webContents.send('downloads:progress', data);
+      });
 
-    item.once('done', (_e: any, state: 'completed' | 'cancelled' | 'interrupted') => {
-      activeDownloads.delete(id);
-      data.state = state;
-      if (state === 'completed') {
-        data.receivedBytes = totalBytes;
-        data.savePath = item.getSavePath();
-      }
-      // DB'yi güncelle
-      const db2 = getDatabase();
-      const all = db2.getDownloads();
-      const idx = all.findIndex((d: any) => d.id === id);
-      if (idx >= 0) { all[idx] = data; db2.setDownloads(all); }
+      item.once('done', (_e: any, state: 'completed' | 'cancelled' | 'interrupted') => {
+        activeDownloads.delete(id);
+        data.state = state;
+        if (state === 'completed') {
+          data.receivedBytes = totalBytes;
+          data.savePath = item.getSavePath();
+          updateIcon(data.savePath); // Final ikon (mesela .exe'nin kendi ikonu)
+        }
+        
+        // DB'yi güncelle
+        const db2 = getDatabase();
+        const all = db2.getDownloads();
+        const idx = all.findIndex((d: any) => d.id === id);
+        if (idx >= 0) { all[idx] = data; db2.setDownloads(all); }
 
-      windowManager.getMainWindow()?.setProgressBar(-1);
-      windowManager.getMainWindow()?.webContents.send('downloads:complete', data);
-    });
-  });
+        windowManager.getMainWindow()?.setProgressBar(-1);
+        windowManager.getMainWindow()?.webContents.send('downloads:complete', data);
+      });
+    } catch (err) {
+      console.error('[Downloads] Error initializing download:', err);
+    }
+  };
+
+  // Tüm oturum bölümleri için dinleyiciyi bağla
+  session.defaultSession.on('will-download', handleDownload);
+  session.fromPartition('persist:bseester').on('will-download', handleDownload);
+  session.fromPartition('in-memory:incognito').on('will-download', handleDownload);
 
   // DB'den geçmiş indirmeleri ve aktif oturum indirmelerini döndür
   ipcMain.handle('downloads:get', () => {
@@ -266,16 +300,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   
   // ─── Sekme Yönetimi ───
 
-  ipcMain.handle(IPC_CHANNELS.TAB_CREATE, (_event, url?: string) => {
-    console.log('[DEBUG] TAB_CREATE called from sender:', _event.sender.getURL());
-    const tabManager = getTabManager();
-    if (!tabManager) {
-      console.log('[DEBUG] TAB_CREATE ABORT: tabManager is null');
-      return null;
-    }
-    const tabId = tabManager.createTab(url || 'about:blank');
-    return tabId;
-  });
 
   ipcMain.handle(IPC_CHANNELS.TAB_TOGGLE_PIP, async () => {
     const wc = getTabManager()?.getActiveWebContents();
@@ -305,6 +329,13 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     }
   });
 
+  ipcMain.handle(IPC_CHANNELS.TAB_CREATE, (_event, url?: string, workspaceId?: string) => {
+    console.log(`[IPC] TAB_CREATE: url=${url}, workspaceId=${workspaceId}`);
+    const tm = getTabManager();
+    if (!tm) return null;
+    return tm.createTab(url || 'about:blank', workspaceId);
+  });
+
   ipcMain.handle(IPC_CHANNELS.TAB_CLOSE, (_event, tabId: number) => {
     const tabManager = getTabManager();
     if (!tabManager) return;
@@ -323,6 +354,8 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     return {
       tabs: tabManager.getTabList(),
       activeTabId: tabManager.getActiveTabId(),
+      activeWorkspaceId: tabManager.activeWorkspace,
+      groups: tabManager.getGroups(),
     };
   });
 

@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore, SEARCH_ENGINES } from '../../store/useSettingsStore';
-import { Star, MonitorPlay } from 'lucide-react';
+import { Star, MonitorPlay, Sparkles } from 'lucide-react';
 
 export default function Omnibox() {
   const [inputValue, setInputValue] = useState('');
@@ -294,8 +294,33 @@ export default function Omnibox() {
           </motion.button>
         )}
 
-        {/* Bar Butonları (PiP ve diğerleri) */}
+        {/* Bar Butonları (AI, PiP ve diğerleri) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          {/* AI Sparkle Butonu */}
+          <motion.button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.electronAPI?.sidebar?.togglePanel('ai');
+            }}
+            whileHover={{ scale: 1.15, color: 'var(--accent)' }}
+            whileTap={{ scale: 0.9 }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+              padding: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'color var(--transition-fast)',
+            }}
+            title="Morrow AI'yı Aç"
+          >
+            <Sparkles size={15} />
+          </motion.button>
+
           {/* Picture-in-Picture (PiP) Butonu */}
           <motion.button
             type="button"

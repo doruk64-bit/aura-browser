@@ -24,6 +24,7 @@ import {
   ACCENT_PRESETS,
   SEARCH_ENGINES,
   GX_THEMES,
+  GXThemeId,
 } from '../../store/useSettingsStore';
 import ExtensionsPanel from '../Sidebar/ExtensionsPanel';
 
@@ -398,8 +399,8 @@ function AppearanceSection({
   setTheme: (t: 'dark' | 'light') => void;
   accentColor: string;
   setAccentColor: (c: string) => void;
-  gxTheme: string;
-  setGxTheme: (id: string) => void;
+  gxTheme: GXThemeId | '';
+  setGxTheme: (id: GXThemeId | '') => void;
   tabGroupingEnabled: boolean;
   setTabGroupingEnabled: (b: boolean) => void;
   sidebarPerformanceEnabled: boolean;
@@ -407,7 +408,7 @@ function AppearanceSection({
   sidebarCleanerEnabled: boolean;
   setSidebarCleanerEnabled: (b: boolean) => void;
 }) {
-  const applyGxTheme = (id: string) => {
+  const applyGxTheme = (id: GXThemeId | '') => {
     const t = GX_THEMES.find(x => x.id === id);
     if (!t) { setGxTheme(''); return; }
     setGxTheme(id);
@@ -427,65 +428,96 @@ function AppearanceSection({
       {/* Renkli Temalar */}
       <SettingCard>
         <SettingLabel title="Renkli Temalar" subtitle="Özel renk animasyonlu tema paketleri" />
+      <SettingCard>
+        <SettingLabel title="Premium Temalar" subtitle="Canlı renk geçişleri ve özel atmosferik temalar" />
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-            gap: '10px',
-            marginTop: '16px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+            gap: '16px',
+            marginTop: '20px',
           }}
         >
-          {/* Normal mod */}
+          {/* Varsayılan Tema */}
           <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => { setGxTheme(''); }}
+            whileHover={{ y: -5, boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => { setGxTheme(''); setAccentColor('#6366f1'); }}
             style={{
-              borderRadius: 'var(--radius-md)',
-              border: gxTheme === '' ? '2px solid var(--accent)' : '2px solid var(--border-subtle)',
-              background: 'linear-gradient(135deg, #0a0a0f 50%, #6366f1 100%)',
+              borderRadius: '24px',
+              border: gxTheme === '' ? '2px solid var(--accent)' : '1px solid rgba(255,255,255,0.1)',
+              background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%)',
               cursor: 'pointer',
               padding: '0',
               overflow: 'hidden',
-              height: '72px',
+              height: '140px',
               position: 'relative',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: gxTheme === '' ? '0 0 20px rgba(99, 102, 241, 0.4)' : 'none',
             }}
           >
-            <div style={{ position: 'absolute', bottom: 6, left: 8, textAlign: 'left' }}>
-              <div style={{ fontSize: '16px' }}>🔵</div>
-              <div style={{ fontSize: '10px', color: '#fff', fontWeight: 600, marginTop: '2px' }}>Varsayılan</div>
-            </div>
+             <div style={{ position: 'absolute', inset: 0, opacity: 0.3, background: 'radial-gradient(circle at 70% 30%, #6366f1 0%, transparent 70%)' }} />
+             <div style={{ position: 'absolute', bottom: 16, left: 16, textAlign: 'left' }}>
+                <span style={{ fontSize: '24px' }}>🌑</span>
+                <div style={{ fontSize: '14px', color: '#fff', fontWeight: 700, marginTop: '4px', letterSpacing: '-0.3px' }}>Varsayılan</div>
+             </div>
           </motion.button>
 
           {GX_THEMES.map((t) => (
             <motion.button
               key={t.id}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
+              whileHover={{ y: -5, boxShadow: `0 10px 30px ${t.accent}40` }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => applyGxTheme(t.id)}
               style={{
-                borderRadius: 'var(--radius-md)',
-                border: gxTheme === t.id ? `2px solid ${t.accent}` : '2px solid var(--border-subtle)',
+                borderRadius: '24px',
+                border: gxTheme === t.id ? `2px solid ${t.accent}` : '1px solid rgba(255,255,255,0.1)',
                 background: t.preview,
                 cursor: 'pointer',
                 padding: '0',
                 overflow: 'hidden',
-                height: '72px',
+                height: '140px',
                 position: 'relative',
-                boxShadow: gxTheme === t.id ? `0 0 12px ${t.accent}60` : 'none',
-                transition: 'box-shadow 0.2s',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: gxTheme === t.id ? `0 0 20px ${t.accent}60` : 'none',
               }}
             >
-              <div style={{ position: 'absolute', bottom: 6, left: 8, textAlign: 'left' }}>
-                <div style={{ fontSize: '16px' }}>{t.emoji}</div>
-                <div style={{ fontSize: '10px', color: '#fff', fontWeight: 600, marginTop: '2px', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{t.name}</div>
+              {/* İç Gölge ve Parıltı */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%)' }} />
+              
+              <div style={{ position: 'absolute', bottom: 16, left: 16, textAlign: 'left' }}>
+                <span style={{ fontSize: '24px' }}>{t.emoji}</span>
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#fff', 
+                  fontWeight: 700, 
+                  marginTop: '4px', 
+                  letterSpacing: '-0.3px',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                }}>
+                  {t.name}
+                </div>
               </div>
+              
               {gxTheme === t.id && (
-                <div style={{ position: 'absolute', top: 6, right: 6, width: 14, height: 14, borderRadius: '50%', background: t.accent, boxShadow: `0 0 6px ${t.accent}` }} />
+                <motion.div 
+                  layoutId="selected-theme-glow"
+                  style={{ 
+                    position: 'absolute', 
+                    top: 12, 
+                    right: 12, 
+                    width: 10, 
+                    height: 10, 
+                    borderRadius: '50%', 
+                    background: '#fff', 
+                    boxShadow: `0 0 15px 5px ${t.accent}` 
+                  }} 
+                />
               )}
             </motion.button>
           ))}
         </div>
+      </SettingCard>
       </SettingCard>
 
       {/* Tema Seçimi (Aydınlık/Karanlık) */}

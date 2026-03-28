@@ -90,6 +90,23 @@ if (!gotLock) {
     // ─── Chrome Web Store Spoofing (Global System User Agent) ───
     const CHROME_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
     app.userAgentFallback = CHROME_USER_AGENT;
+    
+    // Oturum Bazlı User Agent ve Kalıcılık Zorlaması
+    const persistentSession = session.fromPartition('persist:bseester');
+    persistentSession.setUserAgent(CHROME_USER_AGENT);
+    session.defaultSession.setUserAgent(CHROME_USER_AGENT);
+
+    // Uygulama kapanırken verileri diske yazmayı zorla (Giriş bilgilerinin korunması için kritik)
+    app.on('before-quit', async () => {
+      try {
+        await Promise.all([
+          persistentSession.flushStorageData(),
+          session.defaultSession.flushStorageData()
+        ]);
+      } catch (e) {
+        console.error('Session flush error:', e);
+      }
+    });
 
     // ─── Yerleşik Yazım Denetimi (Native Spellchecker) ───
     session.defaultSession.setSpellCheckerEnabled(true);

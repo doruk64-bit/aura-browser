@@ -1,0 +1,1 @@
+const { app, session } = require('electron'); app.whenReady().then(() => { console.log(typeof session.defaultSession.enableNetworkEmulation); console.log(typeof session.defaultSession.setNetworkConditions); app.quit(); });
