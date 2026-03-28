@@ -1,10 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Plus, 
+  Monitor, 
+  ShieldAlert, 
+  Star, 
+  History, 
+  Download, 
+  Key, 
+  Printer, 
+  Trash2, 
+  Settings, 
+  LogOut,
+  Maximize,
+  Minus,
+  User,
+  Zap,
+  RefreshCw
+} from 'lucide-react';
 import { useTabStore } from '../../store/useTabStore';
 
 export default function ChromeMenuOverlay() {
   const [zoom, setZoom] = useState(100);
+  const [turboEnabled, setTurboEnabled] = useState(false);
+  const [deepCleaning, setDeepCleaning] = useState(false);
+
+  useEffect(() => {
+    window.electronAPI.tabs.getZoomFactor().then((factor: number) => {
+      setZoom(Math.round(factor * 100));
+    });
+  }, []);
 
   const closeMenu = () => {
     window.electronAPI?.system?.closeChromeMenu();
@@ -43,14 +69,19 @@ export default function ChromeMenuOverlay() {
   const handleZoomIn = () => {
     const newZoom = Math.min(zoom + 10, 200);
     setZoom(newZoom);
+    window.electronAPI.tabs.setZoomFactor(newZoom / 100);
   };
 
   const handleZoomOut = () => {
     const newZoom = Math.max(zoom - 10, 50);
     setZoom(newZoom);
+    window.electronAPI.tabs.setZoomFactor(newZoom / 100);
   };
 
-  const handleZoomReset = () => setZoom(100);
+  const handleZoomReset = () => {
+    setZoom(100);
+    window.electronAPI.tabs.setZoomFactor(1.0);
+  };
 
   const handleFullScreen = () => {
     window.electronAPI?.window.maximize();
@@ -72,76 +103,143 @@ export default function ChromeMenuOverlay() {
     closeMenu();
   };
 
+  const handleTurboToggle = async () => {
+    const newState = !turboEnabled;
+    setTurboEnabled(newState);
+    await window.electronAPI?.system?.setTurboMode?.(newState);
+  };
+
+  const handleDeepClean = async () => {
+    setDeepCleaning(true);
+    const res = await window.electronAPI?.system?.deepClean?.();
+    setTimeout(() => {
+      setDeepCleaning(false);
+      if (res?.success) {
+        // İsteğe bağlı: UI'da bir bildirim gösterilebilir
+      }
+    }, 1500);
+  };
+
   const handleQuit = () => {
     window.electronAPI?.window.close();
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', overflow: 'hidden', padding: '4px' }}>
+    <div style={{ width: '100%', height: '100%', overflow: 'hidden', padding: '4px', backgroundColor: 'transparent' }}>
       <AnimatePresence>
         <motion.div
-          initial={{ opacity: 0, y: -8, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -8, scale: 0.96 }}
-          transition={{ duration: 0.15 }}
-          className="glass-strong"
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           style={{
             width: '100%',
             height: '100%',
-            borderRadius: 'var(--radius-md)',
-            padding: '6px 0',
-            boxShadow: '0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px var(--border-subtle)',
+            borderRadius: '18px',
+            padding: '12px 0',
+            boxShadow: '0 30px 70px rgba(0,0,0,0.7), 0 0 0 1px rgba(139, 92, 246, 0.35)',
             overflowY: 'auto',
-            background: 'rgba(23, 23, 23, 0.85)', // More transparent premium dark
-            backdropFilter: 'blur(16px)',
+            background: 'rgba(12, 10, 24, 0.82)', 
+            backdropFilter: 'blur(20px) saturate(160%)',
+            border: '1px solid rgba(139, 92, 246, 0.4)',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {/* ─── Profil Kartı ─── */}
           <div
             style={{
-              padding: '14px 16px',
+              padding: '14px 20px',
               display: 'flex',
               alignItems: 'center',
-              gap: '12px',
-              borderBottom: '1px solid var(--border-subtle)',
-              marginBottom: '4px',
+              gap: '14px',
+              borderBottom: '1px solid rgba(139, 92, 246, 0.18)',
+              background: 'linear-gradient(to right, rgba(139, 92, 246, 0.12), transparent)',
             }}
           >
             <div
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))',
+                width: '42px',
+                height: '42px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '16px',
                 flexShrink: 0,
+                boxShadow: '0 6px 16px rgba(139, 92, 246, 0.45)',
               }}
             >
-              👤
+              <User color="#fff" size={22} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
-                Kullanıcı
-              </span>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                Oturum açılmadı
-              </span>
+            <div style={{ flex: 1 }}>
+              <div style={{ color: '#fff', fontSize: '15px', fontWeight: 750 }}>Pro Kullanıcı</div>
+              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 500 }}>Morrow Engine v1.3.4</div>
             </div>
           </div>
 
-          <MenuItem icon="➕" label="Yeni Sekme" shortcut="Ctrl+T" onClick={handleNewTab} />
-          <MenuItem icon="🪟" label="Yeni Pencere" shortcut="Ctrl+N" onClick={handleNewWindow} />
-          <MenuItem icon="🕵️" label="Yeni Gizli Pencere" shortcut="Ctrl+Shift+N" onClick={handleNewIncognito} />
+          {/* ─── MORROW ENGINE PRO ─── */}
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(139, 92, 246, 0.12)' }}>
+            <div style={{ 
+              background: 'rgba(255, 255, 255, 0.04)', 
+              borderRadius: '14px', 
+              padding: '10px 14px',
+              border: '1px solid rgba(139, 92, 246, 0.2)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Zap size={16} color={turboEnabled ? "#8b5cf6" : "rgba(255,255,255,0.4)"} />
+                  <span style={{ color: '#fff', fontSize: '13px', fontWeight: 700 }}>Turbo Şarj</span>
+                </div>
+                <div 
+                  onClick={handleTurboToggle}
+                  style={{
+                    width: '36px', height: '18px', borderRadius: '10px',
+                    background: turboEnabled ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
+                    position: 'relative', cursor: 'pointer', transition: 'all 0.3s'
+                  }}
+                >
+                  <motion.div 
+                    animate={{ x: turboEnabled ? 18 : 2 }}
+                    style={{ 
+                      width: '14px', height: '14px', borderRadius: '50%', background: '#fff',
+                      position: 'absolute', top: '2px', boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
+                    }} 
+                  />
+                </div>
+              </div>
+              
+              <motion.button
+                onClick={handleDeepClean}
+                disabled={deepCleaning}
+                whileHover={{ background: 'rgba(139, 92, 246, 0.18)' }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  width: '100%',
+                  display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
+                  padding: '8px', background: 'rgba(139, 92, 246, 0.08)',
+                  border: '1px solid rgba(139, 92, 246, 0.25)', borderRadius: '10px',
+                  color: '#fff', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }}
+              >
+                <RefreshCw size={14} className={deepCleaning ? "animate-spin" : ""} style={{ animation: deepCleaning ? 'spin 1.5s linear infinite' : 'none' }} />
+                {deepCleaning ? 'Temizleniyor...' : 'Derin Bellek Temizliği'}
+              </motion.button>
+            </div>
+          </div>
+
+          <MenuItem icon={<Plus size={16} />} label="Yeni Sekme" shortcut="Ctrl+T" onClick={handleNewTab} />
+          <MenuItem icon={<Monitor size={16} />} label="Yeni Pencere" shortcut="Ctrl+N" onClick={handleNewWindow} />
+          <MenuItem icon={<ShieldAlert size={16} />} label="Yeni Gizli Pencere" shortcut="Ctrl+Shift+N" onClick={handleNewIncognito} />
 
           <MenuDivider />
 
-          <MenuItem icon="⭐" label="Yer İmleri" onClick={handleBookmarks} />
-          <MenuItem icon="🕐" label="Geçmiş" shortcut="Ctrl+H" onClick={handleHistory} />
-          <MenuItem icon="📥" label="İndirmeler" shortcut="Ctrl+J" onClick={handleDownloads} />
-          <MenuItem icon="🔑" label="Şifreler" onClick={closeMenu} />
+          <MenuItem icon={<Star size={16} />} label="Yer İmleri" onClick={handleBookmarks} />
+          <MenuItem icon={<History size={16} />} label="Geçmiş" shortcut="Ctrl+H" onClick={handleHistory} />
+          <MenuItem icon={<Download size={16} />} label="İndirmeler" shortcut="Ctrl+J" onClick={handleDownloads} />
+          <MenuItem icon={<Key size={16} />} label="Şifreler" onClick={closeMenu} />
 
           <MenuDivider />
 
@@ -150,58 +248,58 @@ export default function ChromeMenuOverlay() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              padding: '4px 12px',
-              gap: '4px',
+              padding: '8px 16px',
+              gap: '8px',
+              marginTop: '4px',
             }}
           >
-            <span style={{ fontSize: '13px', marginRight: 'auto', color: 'var(--text-secondary)', paddingLeft: '4px' }}>
-              🔍 Yakınlaştır
+            <span style={{ fontSize: '13px', marginRight: 'auto', color: 'rgba(255,255,255,0.45)', paddingLeft: '8px', fontWeight: 500 }}>
+              Yakınlaştır
             </span>
-            <ZoomButton label="−" onClick={handleZoomOut} />
+            <ZoomButton icon={<Minus size={15} />} onClick={handleZoomOut} />
             <span
               style={{
                 fontSize: '12px',
-                color: 'var(--text-primary)',
-                minWidth: '40px',
+                color: '#fff',
+                minWidth: '42px',
                 textAlign: 'center',
-                fontWeight: 500,
+                fontWeight: 600,
               }}
             >
               {zoom}%
             </span>
-            <ZoomButton label="+" onClick={handleZoomIn} />
+            <ZoomButton icon={<Plus size={15} />} onClick={handleZoomIn} />
             <motion.button
               onClick={handleFullScreen}
               whileHover={{ background: 'rgba(255,255,255,0.08)' }}
               style={{
                 width: '28px',
                 height: '28px',
-                borderRadius: 'var(--radius-sm)',
+                borderRadius: '8px',
                 border: 'none',
                 background: 'transparent',
-                color: 'var(--text-muted)',
+                color: 'rgba(255,255,255,0.45)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '11px',
                 marginLeft: '4px',
               }}
               title="Tam Ekran"
             >
-              ⛶
+              <Maximize size={15} />
             </motion.button>
           </div>
 
           <MenuDivider />
 
-          <MenuItem icon="🖨️" label="Yazdır" shortcut="Ctrl+P" onClick={handlePrint} />
-          <MenuItem icon="🧹" label="Tarama Verilerini Sil" shortcut="Ctrl+Shift+Del" onClick={handleClearData} />
+          <MenuItem icon={<Printer size={16} />} label="Yazdır" shortcut="Ctrl+P" onClick={handlePrint} />
+          <MenuItem icon={<Trash2 size={16} />} label="Verileri Temizle" shortcut="Ctrl+Shift+Del" onClick={handleClearData} />
 
           <MenuDivider />
 
-          <MenuItem icon="⚙️" label="Ayarlar" onClick={handleSettings} />
-          <MenuItem icon="🚪" label="Çıkış" onClick={handleQuit} />
+          <MenuItem icon={<Settings size={16} />} label="Ayarlar" onClick={handleSettings} />
+          <MenuItem icon={<LogOut size={16} />} label="Çıkış" danger onClick={handleQuit} />
         </motion.div>
       </AnimatePresence>
     </div>
@@ -212,26 +310,30 @@ function MenuItem({ icon, label, shortcut, onClick, danger }: any) {
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ background: 'rgba(255,255,255,0.06)' }}
+      whileHover={{ background: 'rgba(139, 92, 246, 0.1)', x: 4 }}
+      whileTap={{ scale: 0.98 }}
       style={{
-        width: '100%',
-        padding: '8px 16px',
+        width: 'calc(100% - 24px)',
+        margin: '3px 12px',
+        padding: '10px 14px',
         background: 'transparent',
         border: 'none',
+        borderRadius: '12px',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
-        fontSize: '13px',
-        color: danger ? 'var(--danger)' : 'var(--text-primary)',
+        gap: '14px',
+        fontSize: '13.5px',
+        color: danger ? 'var(--danger)' : 'rgba(255,255,255,0.9)',
         textAlign: 'left',
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: "'Inter', sans-serif",
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
-      <span style={{ fontSize: '14px', width: '20px', textAlign: 'center', flexShrink: 0 }}>
+      <span style={{ color: danger ? 'var(--danger)' : 'var(--accent)', opacity: 0.95, display: 'flex' }}>
         {icon}
       </span>
-      <span style={{ flex: 1 }}>{label}</span>
+      <span style={{ flex: 1, fontWeight: 500 }}>{label}</span>
       {shortcut && (
         <span
           style={{
@@ -252,35 +354,34 @@ function MenuDivider() {
     <div
       style={{
         height: '1px',
-        background: 'var(--border-subtle)',
-        margin: '4px 12px',
+        background: 'rgba(139, 92, 246, 0.18)',
+        margin: '8px 20px',
       }}
     />
   );
 }
 
-function ZoomButton({ label, onClick }: any) {
+function ZoomButton({ icon, onClick }: any) {
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ background: 'rgba(255,255,255,0.1)' }}
+      whileHover={{ background: 'rgba(139, 92, 246, 0.18)', scale: 1.08 }}
       whileTap={{ scale: 0.9 }}
       style={{
-        width: '28px',
-        height: '28px',
-        borderRadius: 'var(--radius-sm)',
-        border: '1px solid var(--border-subtle)',
-        background: 'transparent',
-        color: 'var(--text-primary)',
+        width: '32px',
+        height: '32px',
+        borderRadius: '10px',
+        border: '1px solid rgba(139, 92, 246, 0.25)',
+        background: 'rgba(255, 255, 255, 0.05)',
+        color: '#fff',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '14px',
-        fontWeight: 600,
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
-      {label}
+      {icon}
     </motion.button>
   );
 }

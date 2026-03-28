@@ -19,12 +19,18 @@ let windowManager: WindowManager;
 // GPU hızlandırma (WebGL, CSS animasyonları) ve Performans Bayrakları
 app.commandLine.appendSwitch('enable-gpu-rasterization');
 app.commandLine.appendSwitch('enable-zero-copy');
-app.commandLine.appendSwitch('enable-smooth-scrolling'); // Yumuşak kaydırma
-app.commandLine.appendSwitch('enable-oop-rasterization'); // Süreç dışı rasterization
-app.commandLine.appendSwitch('disable-quic'); // QUIC throttling'i baypas edebilir, devre dışı bırakıyoruz.
+app.commandLine.appendSwitch('enable-smooth-scrolling');
+app.commandLine.appendSwitch('enable-oop-rasterization');
+app.commandLine.appendSwitch('disable-quic');
+
+// Ekstra GPU ve Video Optimizasyonları
+app.commandLine.appendSwitch('enable-accelerated-video-decode');
+app.commandLine.appendSwitch('enable-gpu-memory-buffer-video-frames');
+app.commandLine.appendSwitch('ignore-gpu-blocklist'); // Eski GPU'larda bile donanım hızlandırmayı zorlar
+app.commandLine.appendSwitch('enable-vulkan'); // Desteklenen donanımlarda Vulkan rendering
 
 // Global Medya Kontrolleri ve Donanım Video Kod Çözücü
-app.commandLine.appendSwitch('enable-features', 'HardwareMediaKeyHandling,VaapiVideoDecoder');
+app.commandLine.appendSwitch('enable-features', 'HardwareMediaKeyHandling,VaapiVideoDecoder,CanvasOopRasterization');
 
 // Widevine CDM DRM (Netflix, Spotify vb. için)
 // Not: Gerçek dağıtımda Widevine dosyalarının proje ile paketlenmesi veya indirilmesi gerekir.

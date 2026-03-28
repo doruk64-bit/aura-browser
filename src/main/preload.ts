@@ -32,6 +32,10 @@ const electronAPI = {
     togglePip: () => ipcRenderer.invoke(IPC_CHANNELS.TAB_TOGGLE_PIP),
     executeJavaScript: (script: string, tabId?: number) =>
       ipcRenderer.invoke(IPC_CHANNELS.TAB_EXECUTE_JS, script, tabId),
+    getZoomFactor: (tabId?: number) =>
+      ipcRenderer.invoke(IPC_CHANNELS.TAB_GET_ZOOM_LEVEL, tabId),
+    setZoomFactor: (factor: number, tabId?: number) =>
+      ipcRenderer.invoke(IPC_CHANNELS.TAB_SET_ZOOM_LEVEL, factor, tabId),
     onUpdate: (callback: (data: unknown) => void) => {
       const listener = (_event: Electron.IpcRendererEvent, data: unknown) => callback(data);
       ipcRenderer.on(IPC_CHANNELS.TAB_UPDATE, listener);
@@ -151,6 +155,8 @@ const electronAPI = {
     setRamHardLimit: (hard: boolean) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_RAM_HARD_LIMIT, hard),
     setMaxRamLimit: (limitMb: number) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_MAX_RAM_LIMIT, limitMb),
     setRamSnoozeTime: (minutes: number) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_RAM_SNOOZE_TIME, minutes),
+    setTurboMode: (enabled: boolean) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_TURBO_MODE, enabled),
+    deepClean: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_DEEP_CLEAN),
     setNetworkLimit: (limitMbps: number) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_NETWORK_LIMIT, limitMbps),
     checkUpdate: () => ipcRenderer.invoke(IPC_CHANNELS.APP_CHECK_UPDATE),
     getCacheSize: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_CACHE_SIZE),

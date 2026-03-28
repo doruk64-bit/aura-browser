@@ -15,10 +15,11 @@ export interface HistoryEntry {
 
 export class HistoryManager {
   addVisit(url: string, title: string): void {
-    const fs = require('fs');
-    const logPath = 'C:\\Users\\bseester\\tarayıcı\\nav_log.txt';
+    const path = require('path');
+    const { app } = require('electron');
+    const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
     try {
-      fs.appendFileSync(logPath, `[${new Date().toISOString()}] addVisit: url="${url}" title="${title}"\n`);
+      require('fs').appendFileSync(logPath, `[${new Date().toISOString()}] addVisit: url="${url}" title="${title}"\n`);
     } catch {}
 
     if (!url || url === 'about:blank') return;

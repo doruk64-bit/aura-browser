@@ -17,6 +17,8 @@ export const IPC_CHANNELS = {
   TAB_GROUP_COLLAPSE: 'tab:group-collapse',
   TAB_TOGGLE_PIP: 'tab:toggle-pip',
   TAB_EXECUTE_JS: 'tab:execute-js',
+  TAB_GET_ZOOM_LEVEL: 'tab:get-zoom-level',
+  TAB_SET_ZOOM_LEVEL: 'tab:set-zoom-level',
 
   // ─── Navigasyon ───
   NAV_GO: 'nav:go',
@@ -74,6 +76,8 @@ export const IPC_CHANNELS = {
   SYSTEM_SET_RAM_SNOOZE_TIME: 'system:set-ram-snooze-time',
   SYSTEM_SET_MAX_RAM_LIMIT: 'system:set-max-ram-limit',
   SYSTEM_SET_NETWORK_LIMIT: 'system:set-network-limit',
+  SYSTEM_SET_TURBO_MODE: 'system:set-turbo-mode',
+  SYSTEM_DEEP_CLEAN: 'system:deep-clean',
   APP_CHECK_UPDATE: 'app:check-update',
 
   // ─── Temizleyici (Cleaner) ───
@@ -82,6 +86,10 @@ export const IPC_CHANNELS = {
   SYSTEM_GET_COOKIES_COUNT: 'system:get-cookies-count',
   SYSTEM_CLEAR_COOKIES: 'system:clear-cookies',
   DOWNLOADS_CLEAR_HISTORY: 'downloads:clear-history',
+  
+  // Custom Additions
+  NAV_FAVICON_UPDATED: 'nav:favicon-updated',
+  TAB_LIST_UPDATED: 'tab:list-updated',
 } as const;
 
 /** Tüm kanal isimlerinin tipi */

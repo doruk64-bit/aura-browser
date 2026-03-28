@@ -83,8 +83,10 @@ class ExtensionManager {
 
       console.log('[ExtensionManager] Eklenti yüklendi:', loaded.name);
       
-      const fsLog = require('fs');
-      try { fsLog.appendFileSync('C:\\Users\\bseester\\tarayıcı\\nav_log.txt', `\n[${new Date().toISOString()}] [ExtensionManager] Eklenti yüklendi: ${loaded.name} (${loaded.id})\n`); } catch {}
+      try {
+        const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
+        require('fs').appendFileSync(logPath, `\n[${new Date().toISOString()}] [ExtensionManager] Eklenti yüklendi: ${loaded.name} (${loaded.id})\n`);
+      } catch {}
 
       return loaded;
     } catch (error) {

@@ -6,6 +6,7 @@
 
 import { useEffect } from 'react';
 import { useTabStore } from '../store/useTabStore';
+import { useSettingsStore } from '../store/useSettingsStore';
 
 interface UseKeyboardProps {
   onFind: () => void;
@@ -13,8 +14,27 @@ interface UseKeyboardProps {
 }
 
 export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
+  const { panicShortcut } = useSettingsStore();
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Helper function to check custom shortcut
+      const checkShortcut = (shortcutStr: string, event: KeyboardEvent) => {
+        if (!shortcutStr) return false;
+        const keys = shortcutStr.toLowerCase().split('+');
+        const hasCtrl = keys.includes('control') || keys.includes('ctrl') || keys.includes('cmd');
+        const hasShift = keys.includes('shift');
+        const hasAlt = keys.includes('alt');
+        const mainKey = keys.find(k => !['control', 'ctrl', 'cmd', 'shift', 'alt'].includes(k));
+
+        const ctrlMatch = (event.ctrlKey || event.metaKey) === (hasCtrl);
+        const shiftMatch = event.shiftKey === hasShift;
+        const altMatch = event.altKey === hasAlt;
+        const keyMatch = event.key.toLowerCase() === mainKey;
+
+        return ctrlMatch && shiftMatch && altMatch && keyMatch;
+      };
+
       // Ctrl+F veya Cmd+F
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
         e.preventDefault();
@@ -47,8 +67,8 @@ export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
         window.electronAPI?.system?.newIncognitoWindow();
       }
 
-      // Ctrl+Shift+X (Panic Button)
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
+      // Panic Button (Custom Shortcut)
+      if (checkShortcut(panicShortcut, e)) {
         e.preventDefault();
         window.electronAPI?.tabs.panic();
       }

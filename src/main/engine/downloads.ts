@@ -2,7 +2,7 @@
  * Downloads — İndirme yöneticisi (JSON Storage)
  */
 
-import { BrowserWindow, session, type DownloadItem } from 'electron';
+import { BrowserWindow, session, app, type DownloadItem } from 'electron';
 import { IPC_CHANNELS } from '../ipc/channels';
 import { getDatabase } from '../database/db';
 
@@ -29,11 +29,11 @@ export class DownloadManager {
   }
 
   private setupDownloadHandler(): void {
-    const fs = require('fs');
-    const logPath = 'C:\\Users\\bseester\\tarayıcı\\nav_log.txt';
+    const path = require('path');
+    const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
     const handler = (_event: any, item: DownloadItem) => {
       try {
-        fs.appendFileSync(logPath, `\n[${new Date().toISOString()}] will-download fired: url=${item.getURL()} name=${item.getFilename()}\n`);
+        require('fs').appendFileSync(logPath, `\n[${new Date().toISOString()}] will-download fired: url=${item.getURL()} name=${item.getFilename()}\n`);
       } catch {}
       this.handleDownload(item);
     };

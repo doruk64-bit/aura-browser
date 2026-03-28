@@ -59,7 +59,7 @@ export class WindowManager {
 
     // Pencere kapatıldığında temizle
     this.mainWindow.on('closed', () => {
-      this.tabManager?.destroyAll();
+      this.tabManager?.closeAllTabs();
       this.tabManager = null;
       this.mainWindow = null;
     });

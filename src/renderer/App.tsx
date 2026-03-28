@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import WebViewArea from './components/WebViewArea/WebViewArea';
 import FindBar from './components/FindBar/FindBar';
 import SettingsPage from './components/Settings/SettingsPage';
+import PerformanceOverlay from './components/PerformanceOverlay';
 import ChromeMenuOverlay from './components/TopBar/ChromeMenuOverlay';
 import { useTabStore } from './store/useTabStore';
 import { useIPC } from './hooks/useIPC';

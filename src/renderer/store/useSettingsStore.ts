@@ -89,6 +89,7 @@ interface SettingsState {
   maxRamLimit: number; // 0 = Sınırsız, MB cinsinden
   ramLimiterEnabled: boolean;
   ramHardLimit: boolean;
+  panicShortcut: string; // "Control+Shift+X"
 
   // Aksiyonlar
   toggleSidebar: () => void;
@@ -108,6 +109,7 @@ interface SettingsState {
   setMaxRamLimit: (limit: number) => void;
   setRamLimiterEnabled: (enabled: boolean) => void;
   setRamHardLimit: (hard: boolean) => void;
+  setPanicShortcut: (shortcut: string) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -130,6 +132,7 @@ export const useSettingsStore = create<SettingsState>()(
       maxRamLimit: 0,
       ramLimiterEnabled: false,
       ramHardLimit: false,
+      panicShortcut: 'Control+Shift+X',
 
       toggleSidebar: () =>
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
@@ -145,8 +148,11 @@ export const useSettingsStore = create<SettingsState>()(
 
       setGxTheme: (id) => set({ gxTheme: id }),
 
-      setSearchEngine: (engine) =>
-        set({ searchEngine: engine }),
+      setSearchEngine: (engine) => {
+        set({ searchEngine: engine });
+        const engineConfig = SEARCH_ENGINES.find(e => e.value === engine) || SEARCH_ENGINES[0];
+        (window as any).electronAPI?.system?.setSearchEngineUrl?.(engineConfig.url);
+      },
 
       setHomepage: (url) =>
         set({ homepage: url }),
@@ -191,6 +197,8 @@ export const useSettingsStore = create<SettingsState>()(
         set({ ramHardLimit: hard });
         (window as any).electronAPI?.system?.setRamHardLimit?.(hard);
       },
+
+      setPanicShortcut: (shortcut) => set({ panicShortcut: shortcut }),
     }),
     {
       name: 'morrow-settings',
@@ -212,6 +220,7 @@ export const useSettingsStore = create<SettingsState>()(
         maxRamLimit: state.maxRamLimit,
         ramLimiterEnabled: state.ramLimiterEnabled,
         ramHardLimit: state.ramHardLimit,
+        panicShortcut: state.panicShortcut,
       }),
     }
   )

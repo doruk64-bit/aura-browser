@@ -8,6 +8,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { 
+  Palette, 
+  Zap, 
+  Search, 
+  Home, 
+  Shield, 
+  Keyboard, 
+  Puzzle, 
+  Info,
+  ChevronLeft
+} from 'lucide-react';
 import {
   useSettingsStore,
   ACCENT_PRESETS,
@@ -16,15 +27,17 @@ import {
 } from '../../store/useSettingsStore';
 import ExtensionsPanel from '../Sidebar/ExtensionsPanel';
 
-type SettingsCategory = 'appearance' | 'search' | 'startup' | 'privacy' | 'extensions' | 'about';
+type SettingsCategory = 'appearance' | 'performance' | 'search' | 'startup' | 'privacy' | 'shortcuts' | 'extensions' | 'about';
 
-const CATEGORIES: { id: SettingsCategory; icon: string; label: string }[] = [
-  { id: 'appearance', icon: '🎨', label: 'Görünüm' },
-  { id: 'search', icon: '🔍', label: 'Arama Motoru' },
-  { id: 'startup', icon: '🏠', label: 'Başlangıç' },
-  { id: 'privacy', icon: '🛡️', label: 'Gizlilik' },
-  { id: 'extensions', icon: '🧩', label: 'Eklentiler' },
-  { id: 'about', icon: 'ℹ️', label: 'Hakkında' },
+const CATEGORIES: { id: SettingsCategory; icon: any; label: string }[] = [
+  { id: 'appearance', icon: Palette, label: 'Görünüm' },
+  { id: 'performance', icon: Zap, label: 'Performans' },
+  { id: 'search', icon: Search, label: 'Arama Motoru' },
+  { id: 'startup', icon: Home, label: 'Başlangıç' },
+  { id: 'privacy', icon: Shield, label: 'Gizlilik' },
+  { id: 'shortcuts', icon: Keyboard, label: 'Kısayollar' },
+  { id: 'extensions', icon: Puzzle, label: 'Eklentiler' },
+  { id: 'about', icon: Info, label: 'Hakkında' },
 ];
 
 export default function SettingsPage() {
@@ -39,6 +52,7 @@ export default function SettingsPage() {
     tabGroupingEnabled, setTabGroupingEnabled,
     sidebarPerformanceEnabled, setSidebarPerformanceEnabled,
     sidebarCleanerEnabled, setSidebarCleanerEnabled,
+    panicShortcut, setPanicShortcut,
   } = useSettingsStore();
 
   const [homepageInput, setHomepageInput] = useState(homepage);
@@ -77,89 +91,113 @@ export default function SettingsPage() {
         overflow: 'hidden',
       }}
     >
-      {/* ─── Sol Menü ─── */}
+      {/* ─── Sol Menü (Premium Glass Sidebar) ─── */}
       <div
         style={{
-          width: '260px',
+          width: '280px',
           height: '100%',
-          background: 'var(--bg-secondary)',
-          borderRight: '1px solid var(--border-subtle)',
+          background: 'rgba(12, 10, 24, 0.45)', // Cam arkası efekti
+          backdropFilter: 'blur(30px) saturate(180%)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           flexDirection: 'column',
-          padding: '16px 0',
+          padding: '24px 0',
           flexShrink: 0,
+          boxShadow: '10px 0 30px rgba(0,0,0,0.15)',
+          zIndex: 10,
         }}
       >
         {/* Geri Butonu + Başlık */}
-        <div style={{ padding: '0 20px', marginBottom: '24px' }}>
+        <div style={{ padding: '0 24px', marginBottom: '32px' }}>
           <motion.button
             onClick={() => navigate('/')}
-            whileHover={{ x: -3 }}
+            whileHover={{ x: -2, background: 'rgba(255,255,255,0.08)' }}
             style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--accent)',
+              background: 'rgba(255,255,255,0.05)',
+              color: 'var(--text-secondary)',
               cursor: 'pointer',
-              fontSize: '14px',
-              display: 'flex',
+              fontSize: '12px',
+              fontWeight: 600,
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '8px 0',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              marginBottom: '16px',
               fontFamily: 'Inter, sans-serif',
+              border: '1px solid rgba(255,255,255,0.05)',
+              transition: 'all 0.2s',
             }}
           >
-            ← Geri
+            <ChevronLeft size={14} /> Geri Dön
           </motion.button>
+          
           <h1
             style={{
-              fontSize: '22px',
-              fontWeight: 700,
+              fontSize: '24px',
+              fontWeight: 800,
               color: 'var(--text-primary)',
-              marginTop: '8px',
+              letterSpacing: '-0.5px',
+              margin: 0,
+              background: 'linear-gradient(135deg, #fff 0%, #a78bfa 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
-            ⚙️ Ayarlar
+            Ayarlar
           </h1>
         </div>
 
         {/* Kategori Listesi */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '0 8px' }}>
-          {CATEGORIES.map((cat) => (
-            <motion.button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              whileHover={{ background: 'rgba(255,255,255,0.06)' }}
-              style={{
-                padding: '10px 16px',
-                background:
-                  activeCategory === cat.id
-                    ? 'var(--accent-glow)'
-                    : 'transparent',
-                border: 'none',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                color:
-                  activeCategory === cat.id
-                    ? 'var(--accent)'
-                    : 'var(--text-secondary)',
-                fontSize: '13px',
-                fontWeight: activeCategory === cat.id ? 600 : 400,
-                textAlign: 'left',
-                fontFamily: 'Inter, sans-serif',
-                transition: 'all 150ms ease',
-                borderLeft:
-                  activeCategory === cat.id
-                    ? '3px solid var(--accent)'
-                    : '3px solid transparent',
-              }}
-            >
-              <span style={{ fontSize: '16px' }}>{cat.icon}</span>
-              {cat.label}
-            </motion.button>
-          ))}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '0 12px' }}>
+          {CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            const isActive = activeCategory === cat.id;
+
+            return (
+              <motion.button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                whileHover={{ background: 'rgba(255,255,255,0.06)', x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  padding: '12px 16px',
+                  background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+                  borderRadius: '14px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                  fontSize: '14px',
+                  fontWeight: isActive ? 600 : 500,
+                  textAlign: 'left',
+                  fontFamily: 'Inter, sans-serif',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  border: isActive ? '1px solid rgba(139, 92, 246, 0.3)' : '1px solid transparent',
+                }}
+              >
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                <span style={{ flex: 1 }}>{cat.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-indicator"
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      width: '4px',
+                      height: '4px',
+                      background: 'var(--accent)',
+                      borderRadius: '50%',
+                      boxShadow: '0 0 10px var(--accent)',
+                    }}
+                  />
+                )}
+              </motion.button>
+            );
+          })}
         </nav>
       </div>
 
@@ -168,15 +206,16 @@ export default function SettingsPage() {
         style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '32px 48px',
+          padding: '40px 60px',
+          background: 'radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 40%)',
         }}
       >
         <motion.div
           key={activeCategory}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          style={{ maxWidth: '640px' }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          style={{ maxWidth: '800px' }}
         >
           {activeCategory === 'appearance' && (
             <AppearanceSection
@@ -193,6 +232,9 @@ export default function SettingsPage() {
               sidebarCleanerEnabled={sidebarCleanerEnabled}
               setSidebarCleanerEnabled={setSidebarCleanerEnabled}
             />
+          )}
+          {activeCategory === 'performance' && (
+            <PerformanceSection />
           )}
           {activeCategory === 'search' && (
             <SearchSection
@@ -214,9 +256,16 @@ export default function SettingsPage() {
               onClearData={handleClearData}
             />
           )}
+
+          {activeCategory === 'shortcuts' && (
+            <ShortcutsSection
+              panicShortcut={panicShortcut}
+              setPanicShortcut={setPanicShortcut}
+            />
+          )}
           {activeCategory === 'extensions' && (
             <>
-              <SectionTitle>🧩 Eklentiler</SectionTitle>
+              <SectionTitle icon={Puzzle}>Eklentiler</SectionTitle>
               <SettingCard><ExtensionsPanel /></SettingCard>
             </>
           )}
@@ -231,30 +280,47 @@ export default function SettingsPage() {
 /*                   BÖLÜMLER                      */
 /* ═══════════════════════════════════════════════ */
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionTitle({ icon: Icon, children }: { icon: any; children: React.ReactNode }) {
   return (
-    <h2
-      style={{
-        fontSize: '18px',
-        fontWeight: 700,
-        color: 'var(--text-primary)',
-        marginBottom: '24px',
-      }}
-    >
-      {children}
-    </h2>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
+      <div style={{ 
+        width: '40px', 
+        height: '40px', 
+        borderRadius: '12px', 
+        background: 'rgba(139, 92, 246, 0.1)', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        color: 'var(--accent)',
+        border: '1px solid rgba(139, 92, 246, 0.2)'
+      }}>
+        <Icon size={24} />
+      </div>
+      <h2
+        style={{
+          fontSize: '24px',
+          fontWeight: 800,
+          color: 'var(--text-primary)',
+          letterSpacing: '-0.5px',
+        }}
+      >
+        {children}
+      </h2>
+    </div>
   );
 }
 
-function SettingCard({ children }: { children: React.ReactNode }) {
+function SettingCard({ children, noPadding }: { children: React.ReactNode, noPadding?: boolean }) {
   return (
     <div
       style={{
-        padding: '20px',
-        background: 'var(--bg-secondary)',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-md)',
+        padding: noPadding ? '0' : '24px',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid rgba(255, 255, 255, 0.06)',
+        borderRadius: '20px',
         marginBottom: '16px',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+        overflow: 'hidden',
       }}
     >
       {children}
@@ -265,11 +331,11 @@ function SettingCard({ children }: { children: React.ReactNode }) {
 function SettingLabel({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)' }}>
+      <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>
         {title}
       </span>
       {subtitle && (
-        <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{subtitle}</span>
+        <span style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{subtitle}</span>
       )}
     </div>
   );
@@ -356,7 +422,7 @@ function AppearanceSection({
 
   return (
     <>
-      <SectionTitle>🎨 Görünüm</SectionTitle>
+      <SectionTitle icon={Palette}>Görünüm</SectionTitle>
 
       {/* Renkli Temalar */}
       <SettingCard>
@@ -429,32 +495,42 @@ function AppearanceSection({
           {(['dark', 'light'] as const).map((t) => (
             <motion.button
               key={t}
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setTheme(t)}
               style={{
                 flex: 1,
-                padding: '16px',
-                borderRadius: 'var(--radius-md)',
-                border:
-                  theme === t
-                    ? '2px solid var(--accent)'
-                    : '2px solid var(--border-subtle)',
-                background: t === 'dark' ? '#0a0a0f' : '#f5f5f7',
+                padding: '24px',
+                borderRadius: '20px',
+                background: t === 'dark' ? 'rgba(10, 10, 15, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+                backdropFilter: 'blur(10px)',
+                border: theme === t ? '2px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '8px',
-                transition: 'border-color 200ms ease',
+                gap: '12px',
+                transition: 'all 0.3s ease',
               }}
             >
-              <span style={{ fontSize: '28px' }}>{t === 'dark' ? '🌙' : '☀️'}</span>
+              <div style={{ 
+                width: '48px', 
+                height: '48px', 
+                borderRadius: '50%', 
+                background: theme === t ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: theme === t ? '#fff' : 'var(--text-secondary)',
+                transition: 'all 0.3s'
+              }}>
+                {t === 'dark' ? <Shield size={24} /> : <Home size={24} />}
+              </div>
               <span
                 style={{
-                  fontSize: '12px',
+                  fontSize: '14px',
                   fontWeight: 600,
-                  color: t === 'dark' ? '#e8e8ed' : '#1a1a2e',
+                  color: 'var(--text-primary)',
                 }}
               >
                 {t === 'dark' ? 'Karanlık' : 'Aydınlık'}
@@ -527,6 +603,124 @@ function AppearanceSection({
   );
 }
 
+/* ─── Performans ─── */
+function PerformanceSection() {
+  const {
+    ramLimiterEnabled, setRamLimiterEnabled,
+    maxRamLimit, setMaxRamLimit,
+    ramHardLimit, setRamHardLimit,
+    networkLimiterEnabled, setNetworkLimiterEnabled,
+    networkSpeedLimit, setNetworkSpeedLimit,
+    ramSnoozeTime, setRamSnoozeTime,
+  } = useSettingsStore();
+
+  return (
+    <>
+      <SectionTitle icon={Zap}>Performans ve Kaynak Yönetimi</SectionTitle>
+
+      {/* RAM Limitleyici */}
+      <SettingCard>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: ramLimiterEnabled ? '20px' : '0' }}>
+          <SettingLabel 
+            title="RAM Limitleyici" 
+            subtitle="Tarayıcının kullanabileceği maksimum bellek miktarını sınırlar" 
+          />
+          <ToggleSwitch enabled={ramLimiterEnabled} onToggle={() => setRamLimiterEnabled(!ramLimiterEnabled)} />
+        </div>
+
+        {ramLimiterEnabled && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} style={{ overflow: 'hidden' }}>
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Maksimum RAM</span>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)' }}>{maxRamLimit === 0 ? 'Sınırsız' : `${(maxRamLimit / 1024).toFixed(1)} GB`}</span>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="16384" 
+                step="512" 
+                value={maxRamLimit} 
+                onChange={(e) => setMaxRamLimit(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--accent)', cursor: 'pointer', marginBottom: '16px' }}
+              />
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px' }}>
+                <SettingLabel 
+                   title="Katı Sınır (Hard Limit)" 
+                   subtitle="RAM sınırı aşıldığında sekmeleri agresif bir şekilde uyutur" 
+                />
+                <ToggleSwitch enabled={ramHardLimit} onToggle={() => setRamHardLimit(!ramHardLimit)} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </SettingCard>
+
+      {/* Ağ Sınırlayıcı */}
+      <SettingCard>
+       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: networkLimiterEnabled ? '20px' : '0' }}>
+          <SettingLabel 
+            title="Ağ Sınırlayıcı" 
+            subtitle="İndirme ve yükleme hızını belirlediğiniz değerde sabitler" 
+          />
+          <ToggleSwitch enabled={networkLimiterEnabled} onToggle={() => setNetworkLimiterEnabled(!networkLimiterEnabled)} />
+        </div>
+
+        {networkLimiterEnabled && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} style={{ overflow: 'hidden' }}>
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Maksimum Hız</span>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)' }}>{networkSpeedLimit === 0 ? 'Sınırsız' : `${networkSpeedLimit} Mbps`}</span>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="1000" 
+                step="10" 
+                value={networkSpeedLimit} 
+                onChange={(e) => setNetworkSpeedLimit(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--accent)', cursor: 'pointer' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </SettingCard>
+
+      {/* RAM Snooze / Tab Sleep */}
+      <SettingCard>
+        <SettingLabel 
+          title="Otomatik Sekme Askıya Alma (RAM Snooze)" 
+          subtitle="Boştaki sekmeleri belirli bir süre sonra uyku moduna alarak RAM tasarrufu sağlar" 
+        />
+        <div style={{ marginTop: '16px' }}>
+          <select 
+            value={ramSnoozeTime} 
+            onChange={(e) => setRamSnoozeTime(Number(e.target.value))}
+            style={{ 
+              width: '100%', 
+              padding: '10px', 
+              background: 'rgba(255,255,255,0.05)', 
+              border: '1px solid var(--border-subtle)', 
+              borderRadius: '8px', 
+              color: '#fff', 
+              outline: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <option value={0} style={{ background: '#1a1a2e' }}>Kapalı</option>
+            <option value={5} style={{ background: '#1a1a2e' }}>5 Dakika Sonra</option>
+            <option value={15} style={{ background: '#1a1a2e' }}>15 Dakika Sonra</option>
+            <option value={30} style={{ background: '#1a1a2e' }}>30 Dakika Sonra</option>
+            <option value={60} style={{ background: '#1a1a2e' }}>1 Saat Sonra</option>
+          </select>
+        </div>
+      </SettingCard>
+    </>
+  );
+}
+
 /* ─── Arama Motoru ─── */
 function SearchSection({
   searchEngine,
@@ -537,7 +731,7 @@ function SearchSection({
 }) {
   return (
     <>
-      <SectionTitle>🔍 Arama Motoru</SectionTitle>
+      <SectionTitle icon={Search}>Arama Motoru</SectionTitle>
       <SettingCard>
         <SettingLabel
           title="Varsayılan Arama Motoru"
@@ -598,7 +792,7 @@ function StartupSection({
 }) {
   return (
     <>
-      <SectionTitle>🏠 Başlangıç</SectionTitle>
+      <SectionTitle icon={Home}>Başlangıç</SectionTitle>
       <SettingCard>
         <SettingLabel title="Ana Sayfa" subtitle="Tarayıcı açıldığında gösterilecek sayfa" />
         <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
@@ -661,7 +855,7 @@ function PrivacySection({
 }) {
   return (
     <>
-      <SectionTitle>🛡️ Gizlilik ve Güvenlik</SectionTitle>
+      <SectionTitle icon={Shield}>Gizlilik ve Güvenlik</SectionTitle>
 
       {/* AdBlock */}
       <SettingCard>
@@ -687,20 +881,21 @@ function PrivacySection({
           subtitle="Geçmiş, çerezler ve önbellek temizlenir"
         />
         <motion.button
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.02, background: 'rgba(239, 68, 68, 0.2)' }}
           whileTap={{ scale: 0.98 }}
           onClick={onClearData}
           style={{
             marginTop: '16px',
-            padding: '10px 20px',
-            background: 'var(--danger)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 'var(--radius-sm)',
+            padding: '12px 24px',
+            background: 'rgba(239, 68, 68, 0.1)',
+            color: '#ef4444',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            borderRadius: '12px',
             cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 600,
+            fontSize: '14px',
+            fontWeight: 700,
             fontFamily: 'Inter, sans-serif',
+            transition: 'all 0.2s',
           }}
         >
           Tarama Verilerini Sil
@@ -744,6 +939,95 @@ function PrivacySection({
 }
 
 /* ─── Hakkında ─── */
+/* ─── Kısayollar ─── */
+function ShortcutsSection({
+  panicShortcut,
+  setPanicShortcut,
+}: {
+  panicShortcut: string;
+  setPanicShortcut: (s: string) => void;
+}) {
+  const [isRecording, setIsRecording] = useState(false);
+
+  useEffect(() => {
+    if (!isRecording) return;
+
+    const handleKey = (e: KeyboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const combo = [];
+      if (e.ctrlKey || e.metaKey) combo.push('Control');
+      if (e.shiftKey) combo.push('Shift');
+      if (e.altKey) combo.push('Alt');
+      
+      const key = e.key.toUpperCase();
+      if (!['CONTROL', 'SHIFT', 'ALT', 'META'].includes(key)) {
+        combo.push(key);
+        setPanicShortcut(combo.join('+'));
+        setIsRecording(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKey, true);
+    return () => window.removeEventListener('keydown', handleKey, true);
+  }, [isRecording, setPanicShortcut]);
+
+  return (
+    <>
+      <SectionTitle icon={Keyboard}>Kısayollar</SectionTitle>
+      
+      <SettingCard>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <SettingLabel 
+            title="Panic Butonu (Tümünü Kapat)" 
+            subtitle="Belirlediğiniz tuşlara bastığınızda tüm sekmeler anında kapanır ve boş bir sayfa açılır." 
+          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ 
+              padding: '8px 14px', 
+              background: 'rgba(255,255,255,0.05)', 
+              borderRadius: '8px', 
+              color: 'var(--accent)',
+              fontSize: '13px',
+              fontFamily: 'monospace',
+              fontWeight: 600,
+              minWidth: '100px',
+              textAlign: 'center',
+              border: '1px solid var(--border-subtle)'
+            }}>
+              {isRecording ? 'Tuşlara Basın...' : panicShortcut.replace('Control', 'Ctrl')}
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsRecording(!isRecording)}
+              style={{
+                padding: '8px 16px',
+                background: isRecording ? 'var(--danger)' : 'var(--accent)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: 600
+              }}
+            >
+              {isRecording ? 'İptal' : 'Değiştir'}
+            </motion.button>
+          </div>
+        </div>
+      </SettingCard>
+
+      <div style={{ padding: '0 8px', marginTop: '12px' }}>
+         <p style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+           * Kısayol kaydederken CTRL, SHIFT gibi yardımcı tuşları ve bir harf tuşunu birlikte kullanmanız önerilir.
+         </p>
+      </div>
+    </>
+  );
+}
+
 function AboutSection() {
   const [version, setVersion] = useState<string>('...loading');
   const [checking, setChecking] = useState(false);
@@ -764,7 +1048,7 @@ function AboutSection() {
 
   return (
     <>
-      <SectionTitle>ℹ️ Hakkında</SectionTitle>
+      <SectionTitle icon={Info}>Hakkında</SectionTitle>
       <SettingCard>
         <div
           style={{
@@ -777,18 +1061,20 @@ function AboutSection() {
         >
           <div
             style={{
-              width: '72px',
-              height: '72px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))',
+              width: '80px',
+              height: '80px',
+              borderRadius: '24px',
+              background: 'linear-gradient(135deg, var(--accent), #a78bfa)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '32px',
-              boxShadow: '0 4px 20px var(--accent-glow)',
+              color: '#fff',
+              fontSize: '40px',
+              boxShadow: '0 10px 30px rgba(139, 92, 246, 0.4)',
+              transform: 'rotate(-5deg)',
             }}
           >
-            🌐
+            <Info size={44} strokeWidth={2.5} />
           </div>
           <div style={{ textAlign: 'center' }}>
             <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>

@@ -7,6 +7,7 @@
 
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
+import { MoreVertical } from 'lucide-react';
 
 export default function ChromeMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -14,7 +15,7 @@ export default function ChromeMenu() {
   const handleClick = () => {
     const rect = menuRef.current?.getBoundingClientRect();
     if (rect) {
-      const x = window.screenX + rect.right - 280;
+      const x = window.screenX + rect.right - 320;
       const y = window.screenY + rect.bottom + 4;
       window.electronAPI?.system?.toggleChromeMenu({ x, y });
     }
@@ -25,12 +26,12 @@ export default function ChromeMenu() {
       {/* ⋮ Butonu */}
       <motion.button
         onClick={handleClick}
-        whileHover={{ background: 'rgba(255,255,255,0.08)' }}
+        whileHover={{ background: 'rgba(255,255,255,0.08)', scale: 1.05 }}
         whileTap={{ scale: 0.92 }}
         style={{
           width: '32px',
           height: '32px',
-          borderRadius: 'var(--radius-sm)',
+          borderRadius: '10px',
           border: 'none',
           background: 'transparent',
           color: 'var(--text-secondary)',
@@ -41,10 +42,11 @@ export default function ChromeMenu() {
           fontSize: '16px',
           padding: 0,
           flexShrink: 0,
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         title="Ana Menü"
       >
-        ⋮
+        <MoreVertical size={18} strokeWidth={2.5} />
       </motion.button>
     </div>
   );

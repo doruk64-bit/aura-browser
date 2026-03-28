@@ -36,62 +36,52 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   
   // ─── 1. Performans & Sistem Limitleri (ÖNCELİKLİ) ───
   ipcMain.handle(IPC_CHANNELS.SYSTEM_GET_PERFORMANCE_METRICS, () => {
-    const { app, webContents } = require('electron');
     try {
       const metrics = app.getAppMetrics();
-      
-      const wcList = webContents.getAllWebContents();
+      const tm = getTabManager();
+      if (!tm) return { ramMB: 0, cpuPercent: 0, tabMetrics: [] };
+
+      const activeTabs = tm.getTabList();
       const tabMetrics: { pid: number, name: string, cpu: number, ramMB: number }[] = [];
       
-      for (const wc of wcList) {
-        const url = wc.getURL();
-        // Sadece "http" veya "https" ile başlayan, ya da aktif navigasyonu olan sayfaları al
-        if (url && (url.startsWith('http') || url.startsWith('file'))) {
-          const pid = wc.getOSProcessId();
-          let name = wc.getTitle();
-          if (!name || name === 'Yeni Sekme' || name === 'Morrow Browser') {
-            try { 
-              const host = new URL(url).hostname;
-              if (host) name = host;
-            } catch {}
-          }
-          if (!name) name = 'Sekme';
+      let totalRamKB = 0;
+      let totalCpu = 0;
 
-          const foundMetric = metrics.find((m: any) => m.pid === pid);
-          let cpu = 0;
-          let ramMB = 0;
-          
-          if (foundMetric) {
-            cpu = foundMetric.cpu.percentCPUUsage || 0;
-            const ramKB = (foundMetric.memory as any).privateBytes !== undefined 
-                        ? (foundMetric.memory as any).privateBytes 
-                        : foundMetric.memory.workingSetSize;
-            ramMB = Math.floor((ramKB || 0) / 1024);
-          }
+      // Tüm süreçler için hızlı bir PID haritası çıkar
+      const metricsMap = new Map<number, any>();
+      for (const m of metrics) {
+        metricsMap.set(m.pid, m);
+        totalCpu += m.cpu.percentCPUUsage;
+        const pMem = m.memory.privateBytes || m.memory.workingSetSize || 0;
+        totalRamKB += pMem;
+      }
 
-          // Dublicate PİD eklemeyi önle
-          if (!tabMetrics.find(t => t.pid === pid)) {
-            tabMetrics.push({ pid, name, cpu, ramMB });
-          }
+      // Sadece aktif sekmeler için detaylı veri topla
+      for (const tab of activeTabs) {
+        const view = tm.getTab(tab.id);
+        if (!view) continue;
+
+        const pid = view.webContents.getOSProcessId();
+        const foundMetric = metricsMap.get(pid);
+        
+        if (foundMetric) {
+          const ramKB = foundMetric.memory.privateBytes || foundMetric.memory.workingSetSize || 0;
+          tabMetrics.push({
+            pid,
+            name: tab.title || new URL(tab.url).hostname || 'Sekme',
+            cpu: Math.floor(foundMetric.cpu.percentCPUUsage),
+            ramMB: Math.floor(ramKB / 1024)
+          });
         }
       }
-      
-      const totalWorkingSetKB = metrics.reduce((sum: number, m: any) => {
-        if (m.type !== 'Tab') return sum;
-        const ramKB = (m.memory as any).privateBytes !== undefined 
-                      ? (m.memory as any).privateBytes 
-                      : m.memory.workingSetSize;
-        return sum + ramKB;
-      }, 0);
-      
-      const cpuUsage = metrics.reduce((sum: number, m: any) => sum + m.cpu.percentCPUUsage, 0);
 
       return {
-        ramMB: Math.floor(totalWorkingSetKB / 1024),
-        cpuPercent: Math.floor(cpuUsage),
+        ramMB: Math.floor(totalRamKB / 1024),
+        cpuPercent: Math.floor(totalCpu),
         tabMetrics
       };
     } catch (e) {
+      console.error('[Performance] Metric collection error:', e);
       return { ramMB: 0, cpuPercent: 0, tabMetrics: [] };
     }
   });
@@ -122,11 +112,47 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     getTabManager()?.setRamSnoozeTime(minutes);
   });
 
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_SET_TURBO_MODE, (_event, enabled: boolean) => {
+    getTabManager()?.setTurboModeEnabled(enabled);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_DEEP_CLEAN, async () => {
+    try {
+      const { session } = require('electron');
+      // 1. Cache temizliği
+      await session.defaultSession.clearCache();
+      await session.defaultSession.clearHostResolverCache();
+      await session.defaultSession.clearStorageData({
+        storages: ['shader_cache', 'filesystem', 'indexdb', 'websql']
+      });
+      
+      // 2. TabManager'a tüm sekmeleri optimize etmesini söyle
+      getTabManager()?.setTurboModeEnabled(true); // Temizlik sonrası kısa süreli boost
+      setTimeout(() => getTabManager()?.setTurboModeEnabled(false), 2000); // 2 saniye sonra normale dön
+      
+      return { success: true, message: 'Morrow Engine: Derin temizlik tamamlandı!' };
+    } catch (e) {
+      console.error('Deep clean failed:', e);
+      return { success: false, message: 'Temizlik sırasında hata oluştu.' };
+    }
+  });
+
   ipcMain.handle(IPC_CHANNELS.SYSTEM_SET_NETWORK_LIMIT, (_event, limitMbps: number) => {
-    console.log(`[IPC] SYSTEM_SET_NETWORK_LIMIT: ${limitMbps}`);
-    const tm = getTabManager();
-    if (!tm) console.error('[IPC] TabManager is NOT initialized!');
-    tm?.setNetworkSpeedLimit(limitMbps);
+    try {
+      console.log(`[IPC] SYSTEM_SET_NETWORK_LIMIT: ${limitMbps}`);
+      const tm = getTabManager();
+      if (!tm) {
+        console.warn('[IPC] TabManager is NOT initialized yet!');
+        return;
+      }
+      tm.setNetworkSpeedLimit(limitMbps);
+    } catch (e) {
+      console.error('[IPC] Network limit error:', e);
+    }
+  });
+
+  ipcMain.handle('system:set-search-engine-url', (_event, url: string) => {
+    getTabManager()?.setSearchEngineUrl(url);
   });
 
   // ─── 2. İndirme Yönetimi (ÖNCELİKLİ) ───
@@ -304,6 +330,14 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     getTabManager()?.reorderTabs(activeId, overId);
   });
 
+  ipcMain.handle(IPC_CHANNELS.TAB_GET_ZOOM_LEVEL, (_event, tabId?: number) => {
+    return getTabManager()?.getZoomFactor(tabId || 0) || 1.0;
+  });
+
+  ipcMain.handle(IPC_CHANNELS.TAB_SET_ZOOM_LEVEL, (_event, factor: number, tabId?: number) => {
+    getTabManager()?.setZoomFactor(tabId || 0, factor);
+  });
+
   // ─── Sekme Grupları (Yeni Özellik) ───
   ipcMain.handle(IPC_CHANNELS.TAB_GROUP_CREATE, (_event, tabIds: number[], title?: string, color?: string) => {
     getTabManager()?.createTabGroup(tabIds, title, color);
@@ -454,11 +488,11 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   });
 
   ipcMain.handle(IPC_CHANNELS.HISTORY_GET, (_event, limit?: number) => {
-    const fs = require('fs');
-    const logPath = 'C:\\Users\\bseester\\tarayıcı\\nav_log.txt';
+    const path = require('path');
+    const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
     const items = historyManager.getHistory(limit || 100);
     try {
-      fs.appendFileSync(logPath, `\n[${new Date().toISOString()}] HISTORY_GET: count=${items.length}\n`);
+      require('fs').appendFileSync(logPath, `\n[${new Date().toISOString()}] HISTORY_GET: count=${items.length}\n`);
     } catch {}
     return items;
   });
@@ -552,29 +586,43 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   let menuOverlayWin: Electron.BrowserWindow | null = null;
 
   ipcMain.handle('app:toggle-chrome-menu', (_event, bounds: { x: number, y: number }) => {
-    if (menuOverlayWin) {
-      menuOverlayWin.close();
-      menuOverlayWin = null;
+    const x = Math.floor(bounds.x);
+    const y = Math.floor(bounds.y);
+    
+    if (menuOverlayWin && !menuOverlayWin.isDestroyed()) {
+      if (menuOverlayWin.isVisible()) {
+        menuOverlayWin.hide();
+      } else {
+        menuOverlayWin.setOpacity(0);
+        menuOverlayWin.setPosition(x, y);
+        menuOverlayWin.show();
+        setTimeout(() => {
+          if (menuOverlayWin && !menuOverlayWin.isDestroyed()) {
+            menuOverlayWin.setOpacity(1);
+          }
+        }, 30);
+      }
       return;
     }
+
     const { BrowserWindow } = require('electron');
     const path = require('path');
-    const mainWin = windowManager.getMainWindow();
-    if (!mainWin) return;
     
-    menuOverlayWin = new BrowserWindow({
-      width: 280,
-      height: 520,
-      x: Math.floor(bounds.x),
-      y: Math.floor(bounds.y),
+    const win = new BrowserWindow({
+      width: 330,
+      height: 610,
+      x: x,
+      y: y,
       frame: false,
       transparent: true,
       backgroundColor: '#00000000',
-      hasShadow: false, // Bazı sistemlerde shadow siyah kutu yapabiliyor, kapatalım
+      hasShadow: false, 
       resizable: false,
       alwaysOnTop: true,
       skipTaskbar: true,
-      parent: mainWin,
+      focusable: true,
+      thickFrame: false,
+      show: false,
       webPreferences: {
         preload: path.join(__dirname, '../preload.js'),
         contextIsolation: true,
@@ -583,6 +631,9 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       }
     });
 
+    menuOverlayWin = win;
+    win.setBackgroundColor('#00000000');
+
     const { app: electronApp } = require('electron');
     const isDev = process.env.NODE_ENV === 'development' || !electronApp.isPackaged;
     
@@ -590,21 +641,29 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       ? 'http://localhost:5173/#/chromemenu-overlay' 
       : `file://${path.join(__dirname, '..', '..', 'renderer', 'index.html')}#/chromemenu-overlay`;
     
-    menuOverlayWin?.loadURL(url);
+    win.loadURL(url);
 
-    menuOverlayWin?.on('blur', () => {
-      if (menuOverlayWin && !menuOverlayWin.isDestroyed()) {
-        menuOverlayWin.close();
-        menuOverlayWin = null;
+    win.once('ready-to-show', () => {
+      if (!win.isDestroyed()) {
+        win.setOpacity(0);
+        win.show();
+        setTimeout(() => {
+          if (!win.isDestroyed()) win.setOpacity(1);
+        }, 50);
+      }
+    });
+
+    win.on('blur', () => {
+      if (!win.isDestroyed()) {
+        win.hide();
       }
     });
   });
 
   ipcMain.handle('app:close-chrome-menu', () => {
     console.log('[DEBUG] app:close-chrome-menu called');
-    if (menuOverlayWin) {
-      menuOverlayWin.close();
-      menuOverlayWin = null;
+    if (menuOverlayWin && !menuOverlayWin.isDestroyed()) {
+      menuOverlayWin.hide();
     }
   });
 

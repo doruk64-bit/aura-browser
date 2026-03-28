@@ -254,7 +254,7 @@ export default function Omnibox() {
               color: 'var(--text-muted)',
               cursor: 'pointer',
               fontSize: '14px',
-              padding: 0,
+              padding: '0 4px',
               display: 'flex',
               alignItems: 'center',
             }}
@@ -263,49 +263,50 @@ export default function Omnibox() {
           </motion.button>
         )}
 
-        {/* Bar Butonları (Star & AI) */}
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {/* Yer İmi (Yıldız) Butonu */}
-          {activeTab?.url && activeTab.url !== 'about:blank' && activeTab.url !== 'morrow://newtab' && (
-            <motion.button
-              type="button"
-              onClick={handleBookmarkToggle}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: isBookmarked ? 'var(--accent)' : 'var(--text-muted)',
-                cursor: 'pointer',
-                fontSize: '16px',
-                padding: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'color var(--transition-fast)',
-              }}
-              title={isBookmarked ? 'Yer imini kaldır' : 'Yer imlerine ekle'}
-            >
-              <Star 
-                size={16} 
-                fill={isBookmarked ? 'var(--accent)' : 'none'} 
-                color={isBookmarked ? 'var(--accent)' : 'var(--text-muted)'} 
-              />
-            </motion.button>
-          )}
+        {/* Yer İmi (Yıldız) Butonu — Input'un içinde sağ tarafta */}
+        {activeTab?.url && activeTab.url !== 'about:blank' && activeTab.url !== 'morrow://newtab' && (
+          <motion.button
+            type="button"
+            onClick={handleBookmarkToggle}
+            whileHover={{ scale: 1.2, color: isBookmarked ? 'var(--accent)' : '#fff' }}
+            whileTap={{ scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: isBookmarked ? 'var(--accent)' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '6px',
+              transition: 'color 0.2s ease',
+              marginRight: '4px',
+            }}
+            title={isBookmarked ? 'Yer imini kaldır' : 'Yer imlerine ekle'}
+          >
+            <Star 
+              size={17} 
+              fill={isBookmarked ? 'var(--accent)' : 'none'} 
+              strokeWidth={isBookmarked ? 2 : 2.5}
+            />
+          </motion.button>
+        )}
 
+        {/* Bar Butonları (PiP ve diğerleri) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {/* Picture-in-Picture (PiP) Butonu */}
           <motion.button
             type="button"
             onClick={() => window.electronAPI?.tabs.togglePip()}
-            whileHover={{ scale: 1.15 }}
+            whileHover={{ scale: 1.15, color: 'var(--text-primary)' }}
             whileTap={{ scale: 0.9 }}
             style={{
               background: 'none',
               border: 'none',
               color: 'var(--text-muted)',
               cursor: 'pointer',
-              fontSize: '16px',
               padding: '4px',
               display: 'flex',
               alignItems: 'center',
@@ -314,30 +315,7 @@ export default function Omnibox() {
             }}
             title="Resim İçinde Resim (PiP) Modu"
           >
-            <MonitorPlay size={16} color="var(--text-muted)" />
-          </motion.button>
-
-          {/* AI Modu Button - Bar içine yerleştirildi */}
-          <motion.button
-            type="button"
-            onClick={() => window.electronAPI?.sidebar.togglePanel('ai')}
-            whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.08)' }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.15))',
-              border: '1px solid rgba(139, 92, 246, 0.3)',
-              borderRadius: '14px',
-              padding: '3px 10px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              color: '#a78bfa',
-              fontSize: '11px',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            <span>✨ AI</span>
+            <MonitorPlay size={15} />
           </motion.button>
         </div>
       </motion.div>
