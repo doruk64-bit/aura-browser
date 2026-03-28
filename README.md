@@ -1,10 +1,26 @@
-# Morrow Browser 🚀 (v1.4.0-beta)
+# Morrow Browser 🚀 (v1.4.0)
 
-**Morrow Browser**, Electron, React ve TypeScript ile geliştirilmiş; hız, modern estetik (Glassmorphism) ve üst düzey performans optimizasyonu odaklı bir masaüstü internet tarayıcısıdır.
+**Morrow Browser**, Electron, React ve TypeScript ile geliştirilmiş; hız, modern estetik (**Glassmorphism**) ve üst düzey performans optimizasyonu odaklı yeni nesil bir masaüstü internet tarayıcısıdır.
+
+---
+
+## 📸 Görünüm (Screenshots)
+
+<p align="center">
+  <img src="resources/screenshots/app_main.png" width="100%" alt="Morrow Browser Ana Görünüm" />
+</p>
+
+<p align="center">
+  <img src="resources/screenshots/morrow_ai.png" width="48%" alt="Morrow AI" />
+  <img src="resources/screenshots/performance_panel.png" width="48%" alt="Performans Paneli" />
+</p>
+
+---
 
 ## ✨ Öne Çıkan Özellikler
 
 - 🏎️ **Morrow Engine Pro:** Turbo Şarj modu, Derin Bellek Temizliği ve Site Bazlı Optimizasyon ile en hızlı Chromium deneyimi.
+- 📡 **Native Network Limiter:** Yerleşik oturum emülasyonu ile %100 istikrarlı internet hızı kısıtlama (v1.4.0 Yeniliği).
 - 🗂️ **Gelişmiş Çalışma Alanları (Workspaces):** Sekmeleri iş ve kişisel hayatına göre ayır, her alan için bağımsız yer imlerine sahip ol.
 - 🎨 **Premium Glassmorphism:** Derin blur efektleri, Lucide ikon setleri ve özelleştirilebilir "GX" tarzı temalar.
 - 🛡️ **Gömülü AdBlock & Güvenlik:** Reklamları ağ katmanında engelleyen ve tracker'ları temizleyen dahili koruma sistemi.
@@ -26,27 +42,28 @@ Projeyi yerelde çalıştırmak için:
 
 ## 📦 Paketleme (Production / Setup)
 
-Uygulamayı bir `.exe` (Windows) olarak paketlemek için:
+Uygulamayı paketlemek için:
 
 ```bash
+# Windows
 npm run package:win
+
+# macOS
+npm run package:mac
 ```
 
 ---
 
-## 🔧 Sürüm Notları: v1.4.0-beta
+## 🔧 Sürüm Notları: v1.4.0
 
-Bu sürümle birlikte tarayıcı mimarisi **Aura**'dan **Morrow**'a evrilmiştir:
-
-### 🚀 1. Morrow Engine Pro Lansmanı
+### 🚀 1. Morrow Engine Pro Geliştirmeleri
+- **Native Ağ Sınırlayıcı:** Debugger bağımlılığı kaldırıldı, yerleşik Electron emülasyonu ile daha düşük gecikme ve tam istikrar sağlandı.
 - **Turbo Şarj Modu:** Aktif sekmeye CPU/GPU önceliği vererek takılmaların önüne geçer.
-- **Side Optimizer:** YouTube (Video), Figma (Productivity) gibi siteler için özel donanım profilleri uygular.
-- **Derin Temizlik:** Tek tıkla Shader, DNS ve V8 motoru önbelleğini temizler.
 
 ### 🎨 2. Arayüz ve Tasarım Dilinin Yenilenmesi
+- **Mac Uyumluluğu:** macOS platformunda başlık ve logo sağ tarafa taşınarak sistem arayüzüyle tam uyum sağlandı.
 - **Modern Ayarlar Sayfası:** Tüm ayarlar sayfası Lucide ikonları ve premium cam tasarımıyla baştan yazıldı.
-- **Gelişmiş ⋮ Menüsü:** Morrow Engine kontrolleri (Turbo & Clean) doğrudan ana menüye entegre edildi.
-- **Lucide İkon Seti:** Eski emojiler yerine tüm navigasyon sistemine modern vektör ikonlar yerleştirildi.
+- **Lucide İkon Seti:** Tüm navigasyon sistemine modern vektör ikonlar yerleştirildi.
 
 ### 🛡️ 3. Performans ve Stabilite
 - **Hard RAM Limit:** Sistem belleği kritik seviyeye ulaştığında arka plan sekmelerini agresif bir şekilde uyutur.
