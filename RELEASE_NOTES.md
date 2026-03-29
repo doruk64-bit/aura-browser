@@ -1,3 +1,19 @@
+# Morrow Browser V1.4.1 - Automated Background Update System
+Bu sürümle birlikte Morrow Browser, manuel güncelleme zahmetini tamamen ortadan kaldırarak sektör standartlarında bir "Tek Tıkla Otomatik Güncelleme" deneyimine kavuştu.
+
+### Yeni Özellikler & Değişiklikler
+- **Tam Otomatik Arka Plan İndirme**: Yeni bir sürüm yayınlandığında, GitHub sayfasına gitmenize gerek kalmadan tarayıcı içinden indirme başlatılır.
+- **Sessiz Kurulum (Silent Install)**: Windows kullanıcıları için indirme biter bitmez kurulum arka planda (`/S` moduyla) sessizce başlar ve Morrow kendini otomatik yeniler.
+- **Canlı İlerleme Göstergesi (TopBar Update Bar)**: İndirme işlemi başladığında üst çubuğun (TopBar) hemen altında şık, Morrow pembesi bir ilerleme çubuğu ve yüzde göstergesi belirir.
+- **Akıllı Varlık Keşfi (Smarter Asset Discovery)**: GitHub API üzerinden platformunuza en uygun yükleme dosyasını (.exe veya .dmg) otomatik olarak saptayan gelişmiş bir eşleşme mantığı devreye alındı.
+- **Robust Hata Yönetimi**: Windows dosya sistemi kilitleme (EBUSY) ve API erişim sorunlarına (Rate Limit/404) karşı dayanıklı bir altyapı kuruldu.
+
+### Hata Düzeltmeleri
+- **Update Redirection Fix**: Güncelleme butonuna basıldığında dosya bulunamayıp GitHub'a fırlatma sorunu giderildi; artık indirme doğrudan tarayıcı içinde başlıyor.
+- **Dosya Kilidi (EBUSY)**: İndirilen dosyanın henüz kapanmadan çalıştırılmaya çalışılması sonucu oluşan çakışma giderildi.
+
+---
+
 # Morrow Browser V1.4.0 - Network Limiter & Mac UI Update
 Bu sürümde ağ sınırlayıcı sistemi tamamen yenilenerek yerleşik Electron oturum emülasyonuna geçilmiş ve macOS kullanıcıları için arayüz yerleşimi optimize edilmiştir.
 

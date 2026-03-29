@@ -173,8 +173,7 @@ export default function ChromeMenuOverlay() {
               <User color="#fff" size={22} />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ color: '#fff', fontSize: '15px', fontWeight: 750 }}>Pro Kullanıcı</div>
-              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 500 }}>Morrow Engine v1.3.4</div>
+              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 500 }}>Morrow Engine v1.4.1</div>
             </div>
           </div>
 

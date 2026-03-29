@@ -492,7 +492,7 @@ export default function AIPanel() {
              border: '1px solid var(--border-subtle)'
            }}>
              <Wand2 size={12} color="var(--accent)" />
-             <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600 }}>Morrow AI v1.2 • Enhanced Experience</span>
+             <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600 }}>Morrow AI v1.4.1 • Enhanced Experience</span>
            </div>
         </div>
       </div>

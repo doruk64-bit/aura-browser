@@ -1,4 +1,4 @@
-# Morrow Browser 🚀 (v1.4.0)
+# Morrow Browser 🚀 (v1.4.1)
 
 **Morrow Browser**, Electron, React ve TypeScript ile geliştirilmiş; hız, modern estetik (**Glassmorphism**) ve üst düzey performans optimizasyonu odaklı yeni nesil bir masaüstü internet tarayıcısıdır.
 
@@ -21,6 +21,7 @@
 
 - 🏎️ **Morrow Engine Pro:** Turbo Şarj modu, Derin Bellek Temizliği ve Site Bazlı Optimizasyon ile en hızlı Chromium deneyimi.
 - 📡 **Native Network Limiter:** Yerleşik oturum emülasyonu ile %100 istikrarlı internet hızı kısıtlama (v1.4.0 Yeniliği).
+- 🛰️ **Otomatik Sessiz Güncelleme:** Yeni sürümleri arka planda indirip kuran, tek tıkla güncelleme sistemi (v1.4.1 Yeniliği).
 - 🗂️ **Gelişmiş Çalışma Alanları (Workspaces):** Sekmeleri iş ve kişisel hayatına göre ayır, her alan için bağımsız yer imlerine sahip ol.
 - 🎨 **Premium Glassmorphism:** Derin blur efektleri, Lucide ikon setleri ve özelleştirilebilir "GX" tarzı temalar.
 - 🛡️ **Gömülü AdBlock & Güvenlik:** Reklamları ağ katmanında engelleyen ve tracker'ları temizleyen dahili koruma sistemi.
@@ -54,7 +55,10 @@ npm run package:mac
 
 ---
 
-## 🔧 Sürüm Notları: v1.4.0
+## 🔧 Sürüm Notları: v1.4.1
+- **Otomatik Güncelleme:** GitHub API tabanlı sessiz indirme ve kurulum altyapısı.
+- **TopBar Progress Bar:** Güncelleme ilerlemesini gösteren canlı görsel bar.
+- **EBUSY Fix:** Windows dosya sistemi çakışmaları giderildi.
 
 ### 🚀 1. Morrow Engine Pro Geliştirmeleri
 - **Native Ağ Sınırlayıcı:** Debugger bağımlılığı kaldırıldı, yerleşik Electron emülasyonu ile daha düşük gecikme ve tam istikrar sağlandı.
