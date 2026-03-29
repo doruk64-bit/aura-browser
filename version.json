@@ -1,5 +1,5 @@
 {
-  "latest_id": 7,
-  "version": "1.4.0",
-  "notes": "Morrow Browser v1.4.0 - Network Limiter (Daha Kararli Native Emulation) ve macOS Arayuz Iyileştirmesi."
+  "latest_id": 8,
+  "version": "1.4.1",
+  "notes": "v1.4.1 - Otomatik arka plan güncelleme ve sessiz kurulum (Sessizce yükle ve kur)."
 }

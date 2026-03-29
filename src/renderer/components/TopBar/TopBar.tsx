@@ -11,8 +11,31 @@ import NavigationButtons from './NavigationButtons';
 import Omnibox from './Omnibox';
 import ChromeMenu from './ChromeMenu';
 
+import { useState, useEffect } from 'react';
+
 export default function TopBar() {
+  const [updateInfo, setUpdateInfo] = useState<{ progress: number, version: string } | null>(null);
   const platform = window.electronAPI?.platform ?? 'win32';
+
+  useEffect(() => {
+    const unsubStarted = window.electronAPI?.system.onUpdateStarted((data) => {
+      setUpdateInfo({ progress: 0, version: data.version });
+    });
+
+    const unsubProgress = window.electronAPI?.system.onUpdateProgress((data) => {
+      setUpdateInfo({ progress: data.progress, version: data.version });
+    });
+
+    const unsubError = window.electronAPI?.system.onUpdateError(() => {
+      setUpdateInfo(null);
+    });
+
+    return () => {
+      unsubStarted?.();
+      unsubProgress?.();
+      unsubError?.();
+    };
+  }, []);
 
   const LogoIcon = () => (
     <div style={{
@@ -105,6 +128,37 @@ export default function TopBar() {
         <Omnibox />
         <ChromeMenu />
       </div>
+
+      {/* İndirme İlerleme Çubuğu (Sadece güncelleme varsa görünür) */}
+      {updateInfo && (
+        <div style={{
+          height: '2px',
+          width: '100%',
+          background: 'rgba(255,255,255,0.05)',
+          overflow: 'hidden',
+          position: 'relative'
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${updateInfo.progress}%`,
+            background: 'linear-gradient(90deg, #8b5cf6, #ec4899)',
+            boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)',
+            transition: 'width 0.3s ease'
+          }} />
+          <div style={{
+            position: 'absolute',
+            right: '12px',
+            top: '-18px',
+            fontSize: '9px',
+            fontWeight: 700,
+            color: '#ec4899',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}>
+            Güncelleniyor v{updateInfo.version} %{updateInfo.progress}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

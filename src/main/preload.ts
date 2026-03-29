@@ -163,6 +163,21 @@ const electronAPI = {
     clearCache: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_CLEAR_CACHE),
     getCookiesCount: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_COOKIES_COUNT),
     clearCookies: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_CLEAR_COOKIES),
+    onUpdateStarted: (callback: (data: { version: string }) => void) => {
+      const listener = (_e: any, data: any) => callback(data);
+      ipcRenderer.on('update:started', listener);
+      return () => ipcRenderer.removeListener('update:started', listener);
+    },
+    onUpdateProgress: (callback: (data: { progress: number, version: string }) => void) => {
+      const listener = (_e: any, data: any) => callback(data);
+      ipcRenderer.on('update:progress', listener);
+      return () => ipcRenderer.removeListener('update:progress', listener);
+    },
+    onUpdateError: (callback: (data: { message: string }) => void) => {
+      const listener = (_e: any, data: any) => callback(data);
+      ipcRenderer.on('update:error', listener);
+      return () => ipcRenderer.removeListener('update:error', listener);
+    },
   },
   downloads: {
     get: () => ipcRenderer.invoke('downloads:get'),
