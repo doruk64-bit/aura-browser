@@ -14,6 +14,10 @@ import { AdBlocker } from './engine/adblocker';
 export let adBlocker: AdBlocker | null = null;
 let windowManager: WindowManager;
 
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.morrow.browser');
+}
+
 // ─── Donanım Optimizasyonları ───
 
 // GPU hızlandırma (WebGL, CSS animasyonları) ve Performans Bayrakları
@@ -53,12 +57,20 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
   app.quit();
 } else {
-  app.on('second-instance', () => {
-    // Kullanıcı ikinci bir örnek açmaya çalışırsa mevcut pencereyi öne getir
-    const win = windowManager.getMainWindow();
+  // macOS: Protokol üzerinden URL açıldığında
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    handleArgv([url]);
+  });
+
+  app.on('second-instance', (event, argv) => {
+    // Kullanıcı ikinci bir örnek açmaya çalışırsa (örneğin bir linke tıklayarak)
+    // mevcut pencereyi öne getir ve URL'yi işle
+    const win = windowManager?.getMainWindow();
     if (win) {
       if (win.isMinimized()) win.restore();
       win.focus();
+      handleArgv(argv);
     }
   });
 
@@ -156,6 +168,18 @@ if (!gotLock) {
         windowManager.createMainWindow();
       }
     });
+
+    // Ana pencere yüklenince başlangıç argümanlarını işle (Örn: Link tıklanarak açıldıysa)
+    const mw = windowManager.getMainWindow();
+    if (mw) {
+      if (mw.webContents.isLoading()) {
+        mw.webContents.once('did-finish-load', () => {
+          handleArgv(process.argv);
+        });
+      } else {
+        handleArgv(process.argv);
+      }
+    }
   });
 
   // ─── Pencere Kapatma Davranışı ───
@@ -166,4 +190,47 @@ if (!gotLock) {
       app.quit();
     }
   });
+}
+
+/**
+ * Komut satırı argümanlarını (argv) tarayarak URL'leri bulur ve yeni sekmede açar.
+ * Windows'ta link tıklanınca veya bir dosyaya çift tıklanınca tetiklenir.
+ */
+function handleArgv(argv: string[]) {
+  // Eğer windowManager henüz hazır değilse işlemi erteleyebiliriz
+  if (!windowManager) return;
+  
+  const tabManager = windowManager.getTabManager();
+  if (!tabManager) return;
+
+  // 1. URL'leri bul (http:// veya https:// ile başlayan)
+  let url = argv.find(arg => arg.startsWith('http://') || arg.startsWith('https://'));
+  
+  // 2. Eğer URL yoksa, yerel bir .html dosyası mı diye bak
+  if (!url) {
+    const filePath = argv.find(arg => 
+      arg.toLowerCase().endsWith('.html') || 
+      arg.toLowerCase().endsWith('.htm') || 
+      arg.toLowerCase().endsWith('.shtml')
+    );
+    
+    if (filePath) {
+      // Dosya yolunu file:// protokolüne çevir
+      url = filePath.startsWith('file://') ? filePath : `file:///${path.resolve(filePath).replace(/\\/g, '/')}`;
+    }
+  }
+
+  if (url) {
+    console.log(`[Main] Opening argument: ${url}`);
+    
+    // Eğer ana pencere zaten açıksa onu öne getir
+    const win = windowManager.getMainWindow();
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+
+    // Yeni sekmede aç
+    tabManager.createTab(url);
+  }
 }

@@ -1,7 +1,7 @@
 {
   "name": "morrow-browser",
-  "version": "1.4.1",
-  "version_id": 8,
+  "version": "1.4.2",
+  "version_id": 9,
   "description": "Morrow Browser - Chromium tabanlı modern masaüstü web tarayıcısı",
   "main": "dist/main/main.js",
   "author": "bseester",
@@ -20,6 +20,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@supabase/supabase-js": "^2.100.1",
     "electron-updater": "^6.8.3",
     "framer-motion": "^12.0.0",
     "lucide-react": "^0.577.0",
@@ -27,6 +28,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.13.1",
     "unzipper": "^0.12.3",
+    "ws": "^8.20.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

@@ -28,7 +28,8 @@ const electronAPI = {
     showContextMenu: (tabId: number, isPinned: boolean) =>
       ipcRenderer.invoke('tab:show-context-menu', tabId, isPinned),
     closeAll: () => ipcRenderer.invoke('tabs:close-all'),
-    panic: () => ipcRenderer.invoke('tabs:panic'),
+    panic: (url?: string) => ipcRenderer.invoke('tabs:panic', url),
+
     togglePip: () => ipcRenderer.invoke(IPC_CHANNELS.TAB_TOGGLE_PIP),
     executeJavaScript: (script: string, tabId?: number) =>
       ipcRenderer.invoke(IPC_CHANNELS.TAB_EXECUTE_JS, script, tabId),
@@ -141,6 +142,27 @@ const electronAPI = {
     toggleChromeMenu: (bounds: { x: number, y: number }) => ipcRenderer.invoke('app:toggle-chrome-menu', bounds),
     closeChromeMenu: () => ipcRenderer.invoke('app:close-chrome-menu'),
     getSuggestions: (query: string) => ipcRenderer.invoke('app:get-suggestions', query),
+    setPanicSettings: (shortcut: string, url: string) => ipcRenderer.invoke('system:set-panic-settings', shortcut, url),
+    getSavedPasswords: () => ipcRenderer.invoke('password:get-all'),
+    deleteSavedPassword: (id: string) => ipcRenderer.invoke('password:delete', id),
+    confirmSavePassword: (origin: string, username: string, pass: string) => ipcRenderer.invoke('password:confirm-save', origin, username, pass),
+    onPasswordPrompt: (callback: (data: { origin: string, username: string, password: string }) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, data: any) => callback(data);
+      ipcRenderer.on('password:prompt-save', listener);
+      return () => ipcRenderer.removeListener('password:prompt-save', listener);
+    },
+    onPasswordPromptData: (callback: (data: any) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, data: any) => callback(data);
+      ipcRenderer.on('password:prompt-data', listener);
+      return () => ipcRenderer.removeListener('password:prompt-data', listener);
+    },
+    onPasswordPromptResolved: (callback: () => void) => {
+      const listener = () => callback();
+      ipcRenderer.on('password:prompt-resolved', listener);
+      return () => ipcRenderer.removeListener('password:prompt-resolved', listener);
+    },
+    togglePasswordPrompt: (bounds: { x: number, y: number, data: any }) => ipcRenderer.invoke('password:toggle-prompt', bounds),
+    closePasswordPrompt: (resolved?: boolean) => ipcRenderer.invoke('password:close-prompt', resolved),
     navigateMainRouter: (path: string) => ipcRenderer.invoke('system:navigate-router', path),
     setRouteState: (route: string) => ipcRenderer.invoke('system:set-route-state', route),
     onNavigateMainRouter: (callback: (path: string) => void) => {
@@ -178,6 +200,8 @@ const electronAPI = {
       ipcRenderer.on('update:error', listener);
       return () => ipcRenderer.removeListener('update:error', listener);
     },
+    isDefaultBrowser: () => ipcRenderer.invoke('system:is-default-browser'),
+    setAsDefaultBrowser: () => ipcRenderer.invoke('system:set-as-default-browser'),
   },
   downloads: {
     get: () => ipcRenderer.invoke('downloads:get'),

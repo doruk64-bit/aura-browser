@@ -67,11 +67,19 @@ export class TabManager {
   private turboModeEnabled: boolean = false;
   private snoozeInterval: NodeJS.Timeout | null = null;
   private searchEngineUrl: string = 'https://www.google.com/search?q=';
+  private panicShortcut: string = '';
+  private panicUrl: string = '';
 
   constructor(mainWindow: BrowserWindow, isIncognito: boolean = false) {
     this.mainWindow = mainWindow;
     this.isIncognito = isIncognito;
     this.startSnoozeTimer();
+  }
+
+  public setPanicSettings(shortcut: string, url: string): void {
+    this.panicShortcut = shortcut;
+    this.panicUrl = url;
+    console.log(`[Panic] Settings updated: ${shortcut} -> ${url}`);
   }
 
   public setTurboModeEnabled(enabled: boolean): void {
@@ -141,6 +149,7 @@ export class TabManager {
         webviewTag: false,
         partition,
         plugins: true,
+        preload: path.join(__dirname, '..', 'webview-preload.js'),
       },
     });
 
@@ -285,6 +294,7 @@ export class TabManager {
           webviewTag: false,
           partition,
           plugins: true,
+          preload: path.join(__dirname, '..', 'webview-preload.js'),
         },
       });
 
@@ -565,6 +575,28 @@ export class TabManager {
    */
   private attachWebContentsListeners(tabId: number, wc: WebContents): void {
     console.log(`[TabManager] attachWebContentsListeners for tab ${tabId}`);
+
+    // Panic Shortcut'ı webview içinde de yakala (Main process listener)
+    wc.on('before-input-event', (event, input) => {
+      if (input.type === 'keyDown' && this.panicShortcut) {
+        const keys = this.panicShortcut.toLowerCase().split('+');
+        const hasCtrl = keys.includes('control') || keys.includes('ctrl') || keys.includes('cmd');
+        const hasShift = keys.includes('shift');
+        const hasAlt = keys.includes('alt');
+        const mainKey = keys.find(k => !['control', 'ctrl', 'cmd', 'shift', 'alt'].includes(k));
+
+        const ctrlMatch = (input.control || input.meta) === hasCtrl;
+        const shiftMatch = input.shift === hasShift;
+        const altMatch = input.alt === hasAlt;
+        const keyMatch = input.key.toLowerCase() === mainKey;
+
+        if (ctrlMatch && shiftMatch && altMatch && keyMatch) {
+          event.preventDefault();
+          console.log(`[Panic] Triggered by shortcut: ${this.panicShortcut}`);
+          this.panic(this.panicUrl);
+        }
+      }
+    });
 
     wc.on('did-fail-load', (_event: any, errorCode: number, errorDescription: string, validatedURL: string, isMainFrame: boolean) => {
       if (isMainFrame && errorCode !== -3) {
@@ -1045,12 +1077,27 @@ export class TabManager {
     console.log(`[TabManager] Search engine updated: ${url}`);
   }
 
-  panic(): void {
-    // Tüm sekmeleri kapat
-    const ids = Array.from(this.tabs.keys());
-    for (const id of ids) this.closeTab(id);
-    // about:blank aç
-    this.createTab('about:blank');
+  panic(url?: string): void {
+    console.log(`[Panic] System activated. Target URL: ${url}`);
+    
+    // Tüm sekmeleri (aktif ve uyutulmuş) kapat
+    // Dizi kopyalamak önemli çünkü kapatırken liste değişiyor
+    const allTabIds = [...this.tabOrder];
+    for (const id of allTabIds) {
+      try {
+        this.closeTab(id);
+      } catch (err) {
+        console.error(`[Panic] Failed to close tab ${id}:`, err);
+      }
+    }
+    
+    // Her şeyi tamamen sıfırla
+    this.tabs.clear();
+    this.snoozedTabs.clear();
+    this.tabOrder = [];
+    
+    // Belirlenen URL veya varsayılan (about:blank) aç
+    this.createTab(url || 'about:blank');
   }
 
   closeAllTabs(): void {

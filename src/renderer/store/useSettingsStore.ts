@@ -94,6 +94,8 @@ interface SettingsState {
   ramLimiterEnabled: boolean;
   ramHardLimit: boolean;
   panicShortcut: string; // "Control+Shift+X"
+  panicUrl: string; // Panic anında açılacak URL
+
 
   // Aksiyonlar
   toggleSidebar: () => void;
@@ -114,7 +116,9 @@ interface SettingsState {
   setRamLimiterEnabled: (enabled: boolean) => void;
   setRamHardLimit: (hard: boolean) => void;
   setPanicShortcut: (shortcut: string) => void;
+  setPanicUrl: (url: string) => void;
 }
+
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
@@ -137,6 +141,8 @@ export const useSettingsStore = create<SettingsState>()(
       ramLimiterEnabled: false,
       ramHardLimit: false,
       panicShortcut: 'Control+Shift+X',
+      panicUrl: 'https://www.google.com',
+
 
       toggleSidebar: () =>
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
@@ -202,8 +208,18 @@ export const useSettingsStore = create<SettingsState>()(
         (window as any).electronAPI?.system?.setRamHardLimit?.(hard);
       },
 
-      setPanicShortcut: (shortcut) => set({ panicShortcut: shortcut }),
+      setPanicShortcut: (shortcut) => {
+        set({ panicShortcut: shortcut });
+        const { panicUrl } = useSettingsStore.getState();
+        (window as any).electronAPI?.system?.setPanicSettings?.(shortcut, panicUrl);
+      },
+      setPanicUrl: (url) => {
+        set({ panicUrl: url });
+        const { panicShortcut } = useSettingsStore.getState();
+        (window as any).electronAPI?.system?.setPanicSettings?.(panicShortcut, url);
+      },
     }),
+
     {
       name: 'morrow-settings',
       // Sadece kalıcı olması gereken alanları seç
@@ -225,7 +241,9 @@ export const useSettingsStore = create<SettingsState>()(
         ramLimiterEnabled: state.ramLimiterEnabled,
         ramHardLimit: state.ramHardLimit,
         panicShortcut: state.panicShortcut,
+        panicUrl: state.panicUrl,
       }),
+
     }
   )
 );

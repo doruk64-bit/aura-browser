@@ -15,6 +15,7 @@ export interface DatabaseSchema {
   downloads: any[];
   workspaces: any[];
   pinnedTabs: any[];
+  passwords: any[];
 }
 
 const defaultSchema: DatabaseSchema = {
@@ -27,6 +28,7 @@ const defaultSchema: DatabaseSchema = {
     { id: 'dev', name: 'Yazılım', icon: '💻' },
   ],
   pinnedTabs: [],
+  passwords: [],
 };
 
 class JSONDatabase {
@@ -111,6 +113,15 @@ class JSONDatabase {
 
   setPinnedTabs(tabs: any[]) {
     this.data.pinnedTabs = tabs;
+    this.saveData();
+  }
+
+  getPasswords() {
+    return this.data.passwords || [];
+  }
+
+  setPasswords(passwords: any[]) {
+    this.data.passwords = passwords;
     this.saveData();
   }
 }

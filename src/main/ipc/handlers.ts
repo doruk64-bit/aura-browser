@@ -15,7 +15,8 @@ import { AdBlocker } from '../engine/adblocker';
 import { DownloadManager } from '../engine/downloads';
 import { workspaceManager } from '../engine/workspace';
 import { getExtensionManager } from '../engine/extensions';
-import { app } from 'electron';
+import { app, shell } from 'electron';
+import { execSync } from 'child_process';
 
 const windowManagers = new Map<number, any>();
 let activeWindowManager: any = null;
@@ -154,6 +155,153 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle('system:set-search-engine-url', (_event, url: string) => {
     getTabManager()?.setSearchEngineUrl(url);
+  });
+  
+  ipcMain.handle('system:set-panic-settings', (_event, shortcut: string, url: string) => {
+    getTabManager()?.setPanicSettings(shortcut, url);
+  });
+
+  ipcMain.handle('system:is-default-browser', () => {
+    try {
+      // Artık sadece çok temel bir kontrol yapıyoruz. Güvenilmez Registry okumalarını kaldırdık.
+      // Her durumda kullanıcının ayarlar sayfasından butona tekrar basmasına izin vereceğiz.
+      return app.isDefaultProtocolClient('http');
+    } catch (err) {
+      return false;
+    }
+  });
+
+  // Windows için Tarayıcı Tescili (StartMenuInternet & RegisteredApplications)
+  function registerAsWindowsBrowser() {
+    if (process.platform !== 'win32') return;
+    
+    const { writeFileSync, unlinkSync } = require('fs');
+    const { join } = require('path');
+    const tmp = require('os').tmpdir();
+    
+    const exePath = app.getPath('exe');
+    const isDev = !app.isPackaged;
+    // Geliştirme aşamasındayken appPath geçerli, pakette boş
+    const appPath = isDev ? app.getAppPath() : '';
+    const appName = 'Morrow Browser';
+    const progId = isDev ? 'MorrowHTML.Dev' : 'MorrowHTML'; 
+    
+    console.log(`[DefaultBrowser] Registering: name=${appName}, progId=${progId}, isDev=${isDev}`);
+
+    const script = `
+      $ErrorActionPreference = "SilentlyContinue"
+      $exePath = "${exePath.replace(/\\/g, '\\\\')}"
+      $appName = "${appName}"
+      $progId = "${progId}"
+      $appPath = "${appPath.replace(/\\/g, '\\\\')}"
+      $isDev = ${isDev ? '$true' : '$false'}
+
+      # Komut satırı argümanlarını hazırla
+      $openCommand = if ($isDev) { "\\"\$exePath\\" \\"\$appPath\\" \\"%1\\"" } else { "\\"\$exePath\\" \\"%1\\"" }
+      $iconString = "\$exePath,0"
+
+      # 1. Temel ProgId Tanımlaması (Classes\\MorrowHTML)
+      $classPath = "HKCU:\\Software\\Classes\\$progId"
+      New-Item -Path $classPath -Force | Out-Null
+      Set-ItemProperty -Path $classPath -Name "(Default)" -Value "$appName HTML Document"
+      Set-ItemProperty -Path $classPath -Name "URL Protocol" -Value "" -PropertyType String
+
+      # Open Command
+      $cmdPath = "$classPath\\shell\\open\\command"
+      New-Item -Path $cmdPath -Force | Out-Null
+      Set-ItemProperty -Path $cmdPath -Name "(Default)" -Value $openCommand
+
+      # Application Details
+      $appInfoPath = "$classPath\\Application"
+      New-Item -Path $appInfoPath -Force | Out-Null
+      Set-ItemProperty -Path $appInfoPath -Name "ApplicationName" -Value $appName
+      Set-ItemProperty -Path $appInfoPath -Name "ApplicationIcon" -Value $iconString
+      Set-ItemProperty -Path $appInfoPath -Name "ApplicationDescription" -Value "Morrow Browser - Modern Web Experience"
+
+      # 2. Capabilities (Windows Ayarları için En Kritik Bölüm)
+      $clientPath = "HKCU:\\Software\\Clients\\StartMenuInternet\\$appName"
+      New-Item -Path $clientPath -Force | Out-Null
+      Set-ItemProperty -Path $clientPath -Name "(Default)" -Value $appName
+
+      $capPath = "$clientPath\\Capabilities"
+      New-Item -Path $capPath -Force | Out-Null
+      Set-ItemProperty -Path $capPath -Name "ApplicationName" -Value $appName
+      Set-ItemProperty -Path $capPath -Name "ApplicationIcon" -Value $iconString
+      Set-ItemProperty -Path $capPath -Name "ApplicationDescription" -Value "Morrow Browser - Modern Web"
+
+      # Desteklenen Protokoller
+      $urlAssoc = "$capPath\\URLAssociations"
+      New-Item -Path $urlAssoc -Force | Out-Null
+      Set-ItemProperty -Path $urlAssoc -Name "http" -Value $progId
+      Set-ItemProperty -Path $urlAssoc -Name "https" -Value $progId
+      Set-ItemProperty -Path $urlAssoc -Name "ftp" -Value $progId
+      Set-ItemProperty -Path $urlAssoc -Name "mailto" -Value $progId
+
+      # Desteklenen Dosya Uzantıları
+      $fileAssoc = "$capPath\\FileAssociations"
+      New-Item -Path $fileAssoc -Force | Out-Null
+      Set-ItemProperty -Path $fileAssoc -Name ".htm" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".html" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".shtml" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".xhtml" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".xht" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".pdf" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".webp" -Value $progId
+      Set-ItemProperty -Path $fileAssoc -Name ".svg" -Value $progId
+
+      # 3. Ayarlara Kayıt (RegisteredApplications)
+      $regAppPath = "HKCU:\\Software\\RegisteredApplications"
+      New-Item -Path $regAppPath -Force | Out-Null
+      Set-ItemProperty -Path $regAppPath -Name $appName -Value "Software\\Clients\\StartMenuInternet\\$appName\\Capabilities"
+
+      # Ekstra: Geçerli Kullanıcı için Local Machine eşdeğeri sınıfları da kaydet
+      $extHtmlPath = "HKCU:\\Software\\Classes\\.html\\OpenWithProgids"
+      New-Item -Path $extHtmlPath -Force | Out-Null
+      Set-ItemProperty -Path $extHtmlPath -Name $progId -Value "" -PropertyType String
+
+      $extHtmPath = "HKCU:\\Software\\Classes\\.htm\\OpenWithProgids"
+      New-Item -Path $extHtmPath -Force | Out-Null
+      Set-ItemProperty -Path $extHtmPath -Name $progId -Value "" -PropertyType String
+    `;
+
+    const scriptPath = join(tmp, `register_morrow_${Date.now()}.ps1`);
+    try {
+      writeFileSync(scriptPath, script, { encoding: 'utf16le' });
+      execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${scriptPath}"`, { windowsHide: true });
+      console.log('[DefaultBrowser] Robust registration flow completed');
+    } catch (err) {
+      console.error('[DefaultBrowser] Registration flow failed:', err);
+    } finally {
+      try { unlinkSync(scriptPath); } catch (e) {}
+    }
+  }
+
+  ipcMain.handle('system:set-as-default-browser', async () => {
+    const isWindows = process.platform === 'win32';
+    try {
+      if (isWindows) {
+        // Tescil scriptini baştan sona çalıştır
+        registerAsWindowsBrowser();
+      }
+
+      // 1. Electron API ile protocol client'ları kaydet (Windows alt yapısına yardımcı olur)
+      app.setAsDefaultProtocolClient('http');
+      app.setAsDefaultProtocolClient('https');
+
+      if (isWindows) {
+        const { shell } = require('electron');
+        const appName = encodeURIComponent('Morrow Browser');
+        try {
+          await shell.openExternal(`ms-settings:defaultapps?registeredApp=${appName}`);
+        } catch (e) {
+          await shell.openExternal('ms-settings:defaultapps');
+        }
+      }
+      return true;
+    } catch (err) {
+      console.error('[DefaultBrowser] Application set failed:', err);
+      return false;
+    }
   });
 
   // ─── 2. İndirme Yönetimi (ÖNCELİKLİ) ───
@@ -440,8 +588,9 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     getTabManager()?.closeAllTabs();
   });
 
-  ipcMain.handle('tabs:panic', () => {
-    getTabManager()?.panic();
+  ipcMain.handle('tabs:panic', (event, url) => {
+    getTabManager()?.panic(url);
+
   });
 
   // ─── Navigasyon ───
@@ -648,7 +797,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       y: y,
       frame: false,
       transparent: true,
-      backgroundColor: '#00000000',
       hasShadow: false, 
       resizable: false,
       alwaysOnTop: true,
@@ -665,7 +813,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     });
 
     menuOverlayWin = win;
-    win.setBackgroundColor('#00000000');
 
     const { app: electronApp } = require('electron');
     const isDev = process.env.NODE_ENV === 'development' || !electronApp.isPackaged;
@@ -697,6 +844,85 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     console.log('[DEBUG] app:close-chrome-menu called');
     if (menuOverlayWin && !menuOverlayWin.isDestroyed()) {
       menuOverlayWin.hide();
+    }
+  });
+
+  // ─── Password Prompt Overlay ───
+  let passwordPromptWin: any = null;
+  let currentPasswordData: any = null;
+
+  ipcMain.handle('password:toggle-prompt', (event, bounds: { x: number, y: number, data: any }) => {
+    try {
+      const path = require('path');
+      if (!passwordPromptWin || passwordPromptWin.isDestroyed()) {
+        const { BrowserWindow } = require('electron');
+        passwordPromptWin = new BrowserWindow({
+          width: 440,
+          height: 400,
+          frame: false,
+          transparent: true,
+          hasShadow: false, 
+          resizable: false,
+          alwaysOnTop: true,
+          skipTaskbar: true,
+          focusable: true,
+          thickFrame: false,
+          show: false,
+          webPreferences: {
+            preload: path.join(__dirname, '../preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: false
+          }
+        });
+
+        const { app: electronApp } = require('electron');
+        const isDev = process.env.NODE_ENV === 'development' || !electronApp.isPackaged;
+        
+        const url = isDev 
+          ? 'http://localhost:5173/#/password-prompt-overlay' 
+          : `file://${path.join(__dirname, '..', '..', 'renderer', 'index.html')}#/password-prompt-overlay`;
+        
+        passwordPromptWin.loadURL(url);
+
+        passwordPromptWin.on('blur', () => {
+          if (!passwordPromptWin?.isDestroyed()) {
+            passwordPromptWin?.hide();
+          }
+        });
+      }
+
+      currentPasswordData = bounds.data;
+      const x = Math.round(bounds.x);
+      const y = Math.round(bounds.y);
+
+      passwordPromptWin.setBounds({ x, y, width: 440, height: 400 });
+
+      if (passwordPromptWin.isVisible()) {
+        passwordPromptWin.hide();
+      } else {
+        passwordPromptWin.once('ready-to-show', () => {
+          if (!passwordPromptWin?.isDestroyed()) {
+             passwordPromptWin?.show();
+             passwordPromptWin?.webContents.send('password:prompt-data', currentPasswordData);
+          }
+        });
+        passwordPromptWin.show();
+        passwordPromptWin.webContents.send('password:prompt-data', currentPasswordData);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  });
+
+  ipcMain.handle('password:close-prompt', (event, resolved) => {
+    if (passwordPromptWin && !passwordPromptWin.isDestroyed()) {
+      passwordPromptWin.hide();
+    }
+    // Ana penceredeki Key ikonunu gizlemek için 'password:prompt-resolved' sinyali
+    if (resolved) {
+      const win = activeWindowManager ? activeWindowManager.getMainWindow() : windowManager.getMainWindow();
+      win?.webContents.send('password:prompt-resolved');
     }
   });
 
@@ -786,6 +1012,110 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
         activeWindowManager = windowManager; // Geri ana pencereye dön
       }
     });
+  });
+
+  // ─── Password Manager Handlers ───
+  // Site üzerinden gelen yakalama isteği, arayüze (topbar) onay (prompt) çıkarması için iletilir.
+  ipcMain.on('password:save', async (event, origin, username, password) => {
+    const win = activeWindowManager ? activeWindowManager.getMainWindow() : windowManager.getMainWindow();
+    if (!win) return;
+    try {
+      // Diyalog yerine arayüze pasla
+      win.webContents.send('password:prompt-save', { origin, username, password });
+    } catch (err) {
+      console.error('[PasswordManager] Sinyal Hatası:', err);
+    }
+  });
+
+  // Arayüz kullanıcı "Kaydet" dedikten sonra bu ucunu tetikler
+  ipcMain.handle('password:confirm-save', async (event, origin, username, password) => {
+    const { safeStorage } = require('electron');
+    try {
+      const pText = password == null ? '' : String(password);
+      const uText = username == null ? '' : String(username);
+      
+      let encrypted = pText; 
+      if (pText.length > 0 && safeStorage.isEncryptionAvailable()) {
+         encrypted = safeStorage.encryptString(pText).toString('base64');
+      } else if (pText.length > 0) {
+         encrypted = Buffer.from(pText).toString('base64'); // Basit yedek obfuskasyon
+      }
+
+      const { getDatabase } = require('../database/db');
+      const db = getDatabase();
+      const passwords = db.getPasswords();
+      
+      // Aynı origin ve username varsa güncelle
+      const existingIdx = passwords.findIndex((p: any) => p.origin === origin && p.username === uText);
+      if (existingIdx !== -1) {
+         passwords[existingIdx].encryptedPassword = encrypted;
+      } else {
+         passwords.push({ id: Date.now().toString(), origin, username: uText, encryptedPassword: encrypted });
+      }
+      db.setPasswords(passwords);
+      console.log(`[PasswordManager] Kaydedildi: ${origin}`);
+      return { success: true };
+    } catch (err) {
+      console.error('[PasswordManager] Kayıt Hatası:', err);
+      return { success: false, error: err };
+    }
+  });
+
+  ipcMain.handle('password:get', (event, origin) => {
+    const { safeStorage } = require('electron');
+    const { getDatabase } = require('../database/db');
+    const db = getDatabase();
+    
+    const rootOrigin = origin; // Tam origin örn: https://github.com
+    const passwords = db.getPasswords().filter((p: any) => p.origin === rootOrigin);
+    
+    const credentials = passwords.map((p: any) => {
+      let decrypted = '';
+      try {
+        if (safeStorage.isEncryptionAvailable()) {
+          decrypted = safeStorage.decryptString(Buffer.from(p.encryptedPassword, 'base64'));
+        } else {
+          decrypted = Buffer.from(p.encryptedPassword, 'base64').toString('utf8');
+        }
+      } catch (err) {
+        decrypted = p.encryptedPassword; 
+      }
+      return { id: p.id, username: p.username, password: decrypted };
+    });
+
+    return credentials;
+  });
+
+  ipcMain.handle('password:get-all', () => {
+    const { safeStorage } = require('electron');
+    const { getDatabase } = require('../database/db');
+    const db = getDatabase();
+    
+    const passwords = db.getPasswords();
+    
+    const credentials = passwords.map((p: any) => {
+      let decrypted = '';
+      try {
+        if (safeStorage.isEncryptionAvailable()) {
+          decrypted = safeStorage.decryptString(Buffer.from(p.encryptedPassword, 'base64'));
+        } else {
+          decrypted = Buffer.from(p.encryptedPassword, 'base64').toString('utf8');
+        }
+      } catch (err) {
+        decrypted = p.encryptedPassword; 
+      }
+      return { id: p.id, origin: p.origin, username: p.username, password: decrypted };
+    });
+
+    return credentials;
+  });
+
+  ipcMain.handle('password:delete', (event, id) => {
+    const { getDatabase } = require('../database/db');
+    const db = getDatabase();
+    const passwords = db.getPasswords();
+    db.setPasswords(passwords.filter((p: any) => p.id !== id));
+    return true;
   });
 
   ipcMain.handle('adblock:toggle', () => {

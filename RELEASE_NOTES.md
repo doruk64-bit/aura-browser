@@ -1,4 +1,23 @@
+# Morrow Browser V1.4.2 - Premium UI Güncellemesi & Arayüz Modernizasyonu
+
+Bu sürümle birlikte Morrow Browser'ın tüm katmanlı (overlay) bileşenleri premium glassmorphism tasarım diline kavuşturuldu ve varsayılan tarayıcı entegrasyonu güçlendirildi.
+
+### Yeni Özellikler & Değişiklikler
+- **Premium Glassmorphism Overlay'ler**: PasswordPromptOverlay ve ChromeMenuOverlay bileşenleri `rgba(15, 13, 25, 0.97)` arka plan ve `backdrop-filter: blur(20px)` ile tamamen yeniden tasarlandı.
+- **Framer Motion Animasyonları**: Şifre istemi popup'ına yumuşak giriş/çıkış animasyonları eklendi.
+- **Varsayılan Tarayıcı Entegrasyonu**: Morrow Browser'ı Windows'ta varsayılan tarayıcı olarak ayarlama için güvenilir, dosya tabanlı kayıt defteri sistemi iyileştirildi.
+- **Chrome Menüsü Okunabilirliği**: Üst menüdeki butonlar ve yazılar daha yüksek kontrast ve modern mor vurguyla güçlendirildi.
+- **Performans İyileştirmeleri**: Native oturum tabanlı ağ kısıtlama sistemi optimize edildi; ağır siteler (Epic, Steam) tam hızda çalışıyor.
+
+### Hata Düzeltmeleri
+- **Şeffaf Pencere Siyah Kutu**: Electron `transparent: true` pencerelerinde Windows'ta oluşan siyah arka plan sorunu giderildi.
+- **CSS İzolasyon**: Overlay pencerelerinde global CSS stillerinin baskın gelmesini önlemek için bileşen seviyesinde `!important` zorlaması uygulandı.
+- **HMR Güncelleme**: Ana süreç kodlarının sıcak yeniden yükleme davranışı düzeltildi.
+
+---
+
 # Morrow Browser V1.4.1 - Automated Background Update System
+
 Bu sürümle birlikte Morrow Browser, manuel güncelleme zahmetini tamamen ortadan kaldırarak sektör standartlarında bir "Tek Tıkla Otomatik Güncelleme" deneyimine kavuştu.
 
 ### Yeni Özellikler & Değişiklikler

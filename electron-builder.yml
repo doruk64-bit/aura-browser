@@ -41,3 +41,9 @@ publish:
   provider: github
   owner: bseester
   repo: morrow-browser
+
+protocols:
+  - name: Morrow Browser URL
+    schemes:
+      - http
+      - https

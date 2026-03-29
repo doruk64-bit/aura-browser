@@ -27,6 +27,15 @@ export default function ChromeMenuOverlay() {
   const [deepCleaning, setDeepCleaning] = useState(false);
 
   useEffect(() => {
+    const setTransparent = (el: HTMLElement | null) => {
+      if (!el) return;
+      el.style.setProperty('background', 'transparent', 'important');
+      el.style.setProperty('background-color', 'transparent', 'important');
+    };
+    setTransparent(document.documentElement);
+    setTransparent(document.body);
+    setTransparent(document.getElementById('root'));
+
     window.electronAPI.tabs.getZoomFactor().then((factor: number) => {
       setZoom(Math.round(factor * 100));
     });
@@ -139,7 +148,7 @@ export default function ChromeMenuOverlay() {
             padding: '12px 0',
             boxShadow: '0 30px 70px rgba(0,0,0,0.7), 0 0 0 1px rgba(139, 92, 246, 0.35)',
             overflowY: 'auto',
-            background: 'rgba(12, 10, 24, 0.82)', 
+            background: 'rgba(15, 13, 25, 0.97)', 
             backdropFilter: 'blur(20px) saturate(160%)',
             border: '1px solid rgba(139, 92, 246, 0.4)',
             display: 'flex',

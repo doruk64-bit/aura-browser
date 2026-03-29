@@ -14,7 +14,8 @@ interface UseKeyboardProps {
 }
 
 export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
-  const { panicShortcut } = useSettingsStore();
+  const { panicShortcut, panicUrl } = useSettingsStore();
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,12 +68,6 @@ export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
         window.electronAPI?.system?.newIncognitoWindow();
       }
 
-      // Panic Button (Custom Shortcut)
-      if (checkShortcut(panicShortcut, e)) {
-        e.preventDefault();
-        window.electronAPI?.tabs.panic();
-      }
-
       // Ctrl+P veya Cmd+P (Yazdır)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
         e.preventDefault();
@@ -101,5 +96,5 @@ export function useKeyboard({ onFind, onEscape }: UseKeyboardProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onFind, onEscape]);
+  }, [onFind, onEscape, panicShortcut, panicUrl]);
 }

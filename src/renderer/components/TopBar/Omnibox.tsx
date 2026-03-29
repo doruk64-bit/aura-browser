@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore, SEARCH_ENGINES } from '../../store/useSettingsStore';
-import { Star, MonitorPlay, Sparkles } from 'lucide-react';
+import { Star, MonitorPlay, Sparkles, Key } from 'lucide-react';
 
 export default function Omnibox() {
   const [inputValue, setInputValue] = useState('');
@@ -19,9 +19,32 @@ export default function Omnibox() {
   const [bookmarkId, setBookmarkId] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { tabs, activeTabId } = useTabStore();
+  const [passwordPrompt, setPasswordPrompt] = useState<{ origin: string, username: string, password: string } | null>(null);
+  const keyButtonRef = useRef<HTMLButtonElement>(null);
 
   // Aktif sekmenin URL'ini göster
   const activeTab = tabs.find((t) => t.id === activeTabId);
+
+  useEffect(() => {
+    // Yeni bir şifre yakalandığında Key ikonunu göster
+    const cleanup = window.electronAPI?.system?.onPasswordPrompt?.((data) => {
+      setPasswordPrompt(data);
+    });
+    return () => { cleanup?.(); };
+  }, []);
+
+  useEffect(() => {
+    // Kullanıcı Kaydet/Hayır dediğinde Key ikonunu temizle
+    const cleanup = window.electronAPI?.system?.onPasswordPromptResolved?.(() => {
+      setPasswordPrompt(null);
+    });
+    return () => { cleanup?.(); };
+  }, []);
+
+  // Sekme değiştiğinde prompt'ı kapat
+  useEffect(() => {
+    setPasswordPrompt(null);
+  }, [activeTab?.id]);
 
   useEffect(() => {
     if (!isFocused && activeTab) {
@@ -263,6 +286,48 @@ export default function Omnibox() {
           </motion.button>
         )}
 
+        {/* Şifre Kaydetme (Anahtar) Butonu */}
+        {passwordPrompt && (
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <motion.button
+              ref={keyButtonRef}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!keyButtonRef.current) return;
+                const rect = keyButtonRef.current.getBoundingClientRect();
+                const x = window.screenX + rect.right - 320;
+                const y = window.screenY + rect.bottom + 4;
+                window.electronAPI?.system?.togglePasswordPrompt?.({
+                  x,
+                  y,
+                  data: passwordPrompt
+                });
+              }}
+              whileHover={{ scale: 1.15, color: 'var(--accent)' }}
+              whileTap={{ scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-primary)',
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background var(--transition-fast)',
+                marginRight: '4px',
+              }}
+              title="Şifreyi Kaydet"
+            >
+              <Key size={16} />
+            </motion.button>
+          </div>
+        )}
+
         {/* Yer İmi (Yıldız) Butonu — Input'un içinde sağ tarafta */}
         {activeTab?.url && activeTab.url !== 'about:blank' && activeTab.url !== 'morrow://newtab' && (
           <motion.button
@@ -421,3 +486,5 @@ export default function Omnibox() {
     </form>
   );
 }
+
+// (PasswordSavePopup kaldırıldı - artık floating BrowserWindow kullanıyor)

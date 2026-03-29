@@ -20,10 +20,10 @@ import thumb3 from '../../assets/discover/thumb3.png';
 import thumb4 from '../../assets/discover/thumb4.png';
 
 const DISCOVER_ITEMS = [
-  { img: thumb1, label: 'Aurora' },
-  { img: thumb2, label: 'Horizon' },
-  { img: thumb3, label: 'Flow' },
-  { img: thumb4, label: 'Mystic' },
+  { img: thumb1, label: 'Aurora', url: 'https://www.nasa.gov/multimedia/imagegallery/index.html' },
+  { img: thumb2, label: 'Horizon', url: 'https://www.nationalgeographic.com/photography' },
+  { img: thumb3, label: 'Flow', url: 'https://www.behance.net/galleries/interaction' },
+  { img: thumb4, label: 'Mystic', url: 'https://www.artstation.com/channels/fantasy' },
 ];
 
 const DEFAULT_FAVORITES = [
@@ -247,6 +247,10 @@ export default function WebViewArea() {
                 <motion.div
                   key={i}
                   whileHover={{ scale: 1.05, y: -4 }}
+                  whileTap={{ scale: 0.95, opacity: 0.8 }}
+                  onClick={() => {
+                    if (item.url) window.electronAPI?.nav.go(item.url);
+                  }}
                   transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                   style={{
                     borderRadius: '10px',

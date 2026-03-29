@@ -10,6 +10,7 @@ import WindowControls from './WindowControls';
 import NavigationButtons from './NavigationButtons';
 import Omnibox from './Omnibox';
 import ChromeMenu from './ChromeMenu';
+import DefaultBrowserBanner from './DefaultBrowserBanner';
 
 import { useState, useEffect } from 'react';
 
@@ -128,6 +129,9 @@ export default function TopBar() {
         <Omnibox />
         <ChromeMenu />
       </div>
+
+      {/* Varsayılan Tarayıcı Uyarı Bandı */}
+      <DefaultBrowserBanner />
 
       {/* İndirme İlerleme Çubuğu (Sadece güncelleme varsa görünür) */}
       {updateInfo && (

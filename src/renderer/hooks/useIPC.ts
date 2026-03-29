@@ -61,6 +61,9 @@ export function useIPC() {
     api.system.setMaxRamLimit(settings.maxRamLimit);
     api.system.setRamHardLimit(settings.ramHardLimit);
     api.system.setRamSnoozeTime(settings.ramSnoozeTime);
+    
+    // Panic Ayarlarını Senkronize Et
+    api.system.setPanicSettings?.(settings.panicShortcut, settings.panicUrl);
 
     return () => {
       unsubTabUpdate();

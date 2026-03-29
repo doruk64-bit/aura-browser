@@ -1,5 +1,5 @@
 {
-  "latest_id": 8,
-  "version": "1.4.1",
-  "notes": "v1.4.1 - Otomatik arka plan güncelleme ve sessiz kurulum (Sessizce yükle ve kur)."
+  "latest_id": 9,
+  "version": "1.4.2",
+  "notes": "v1.4.2 - Premium Glassmorphism arayüz güncellemesi: PasswordPrompt & Chrome Menu yeniden tasarlandı, varsayılan tarayıcı entegrasyonu iyileştirildi."
 }

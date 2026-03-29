@@ -17,7 +17,11 @@ import {
   Keyboard, 
   Puzzle, 
   Info,
-  ChevronLeft
+  ChevronLeft,
+  Key,
+  Eye,
+  EyeOff,
+  Trash2
 } from 'lucide-react';
 import {
   useSettingsStore,
@@ -28,7 +32,7 @@ import {
 } from '../../store/useSettingsStore';
 import ExtensionsPanel from '../Sidebar/ExtensionsPanel';
 
-type SettingsCategory = 'appearance' | 'performance' | 'search' | 'startup' | 'privacy' | 'shortcuts' | 'extensions' | 'about';
+type SettingsCategory = 'appearance' | 'performance' | 'search' | 'startup' | 'privacy' | 'shortcuts' | 'passwords' | 'extensions' | 'about';
 
 const CATEGORIES: { id: SettingsCategory; icon: any; label: string }[] = [
   { id: 'appearance', icon: Palette, label: 'Görünüm' },
@@ -36,6 +40,7 @@ const CATEGORIES: { id: SettingsCategory; icon: any; label: string }[] = [
   { id: 'search', icon: Search, label: 'Arama Motoru' },
   { id: 'startup', icon: Home, label: 'Başlangıç' },
   { id: 'privacy', icon: Shield, label: 'Gizlilik' },
+  { id: 'passwords', icon: Key, label: 'Şifreler' },
   { id: 'shortcuts', icon: Keyboard, label: 'Kısayollar' },
   { id: 'extensions', icon: Puzzle, label: 'Eklentiler' },
   { id: 'about', icon: Info, label: 'Hakkında' },
@@ -54,7 +59,10 @@ export default function SettingsPage() {
     sidebarPerformanceEnabled, setSidebarPerformanceEnabled,
     sidebarCleanerEnabled, setSidebarCleanerEnabled,
     panicShortcut, setPanicShortcut,
+    panicUrl, setPanicUrl,
   } = useSettingsStore();
+
+
 
   const [homepageInput, setHomepageInput] = useState(homepage);
   const [adblockEnabled, setAdblockEnabled] = useState(true);
@@ -262,8 +270,14 @@ export default function SettingsPage() {
             <ShortcutsSection
               panicShortcut={panicShortcut}
               setPanicShortcut={setPanicShortcut}
+              panicUrl={panicUrl}
+              setPanicUrl={setPanicUrl}
             />
           )}
+
+          {activeCategory === 'passwords' && <PasswordsSection />}
+
+
           {activeCategory === 'extensions' && (
             <>
               <SectionTitle icon={Puzzle}>Eklentiler</SectionTitle>
@@ -822,9 +836,43 @@ function StartupSection({
   setHomepageInput: (v: string) => void;
   onSave: () => void;
 }) {
+  const handleSetDefault = async () => {
+    await window.electronAPI?.system?.setAsDefaultBrowser();
+  };
+
   return (
     <>
       <SectionTitle icon={Home}>Başlangıç</SectionTitle>
+      
+      {/* Varsayılan Tarayıcı Kartı */}
+      <SettingCard>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <SettingLabel 
+            title="Varsayılan Tarayıcı" 
+            subtitle="Tüm linkleri ve web sayfalarını Morrow ile açın." 
+          />
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={handleSetDefault}
+            style={{
+              padding: '8px 16px',
+              background: 'var(--accent)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 'var(--radius-sm)',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: 600,
+              fontFamily: 'Inter, sans-serif',
+              transition: 'all 0.2s',
+            }}
+          >
+            Varsayılan Yap
+          </motion.button>
+        </div>
+      </SettingCard>
+
       <SettingCard>
         <SettingLabel title="Ana Sayfa" subtitle="Tarayıcı açıldığında gösterilecek sayfa" />
         <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
@@ -975,11 +1023,17 @@ function PrivacySection({
 function ShortcutsSection({
   panicShortcut,
   setPanicShortcut,
+  panicUrl,
+  setPanicUrl,
 }: {
   panicShortcut: string;
   setPanicShortcut: (s: string) => void;
+  panicUrl: string;
+  setPanicUrl: (u: string) => void;
 }) {
   const [isRecording, setIsRecording] = useState(false);
+  const [urlInput, setUrlInput] = useState(panicUrl);
+
 
   useEffect(() => {
     if (!isRecording) return;
@@ -1050,6 +1104,60 @@ function ShortcutsSection({
           </div>
         </div>
       </SettingCard>
+      
+      <SettingCard>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <SettingLabel 
+            title="Panic Yönlendirme URL'i" 
+            subtitle="Panic butonu tetiklendiğinde açılacak sayfa." 
+          />
+          <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+            <input
+              type="text"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              placeholder="https://www.google.com"
+              style={{
+                flex: 1,
+                padding: '10px 14px',
+                borderRadius: '10px',
+                border: '1px solid var(--border-subtle)',
+                background: 'rgba(255,255,255,0.03)',
+                color: 'var(--text-primary)',
+                fontSize: '13px',
+                outline: 'none',
+                fontFamily: 'Inter, sans-serif'
+              }}
+              onFocus={(e) => e.target.style.borderColor = 'var(--accent)'}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--border-subtle)';
+                setPanicUrl(urlInput.trim() || 'https://www.google.com');
+              }}
+            />
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setPanicUrl(urlInput.trim() || 'https://www.google.com');
+                alert('Panic URL kaydedildi!');
+              }}
+              style={{
+                padding: '10px 20px',
+                background: 'var(--accent)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600
+              }}
+            >
+              Uygula
+            </motion.button>
+          </div>
+        </div>
+      </SettingCard>
+
 
       <div style={{ padding: '0 8px', marginTop: '12px' }}>
          <p style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
@@ -1081,6 +1189,36 @@ function AboutSection() {
   return (
     <>
       <SectionTitle icon={Info}>Hakkında</SectionTitle>
+      <SettingCard>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0' }}>
+          <SettingLabel 
+            title="Varsayılan Tarayıcı" 
+            subtitle="Morrow'u Windows'ta varsayılan tarayıcı olarak ayarlar" 
+          />
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={async () => {
+              if (window.electronAPI?.system?.setAsDefaultBrowser) {
+                await window.electronAPI.system.setAsDefaultBrowser();
+              }
+            }}
+            style={{
+              padding: '10px 20px',
+              background: 'var(--accent)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: 600
+            }}
+          >
+            Varsayılan Yap
+          </motion.button>
+        </div>
+      </SettingCard>
+
       <SettingCard>
         <div
           style={{
@@ -1167,6 +1305,100 @@ function AboutSection() {
             Electron v33 · React v19 · Zustand v5
           </div>
         </div>
+      </SettingCard>
+    </>
+  );
+}
+
+function PasswordsSection() {
+  const [passwords, setPasswords] = useState<any[]>([]);
+  const [visible, setVisible] = useState<Record<string, boolean>>({});
+
+  const loadPasswords = async () => {
+    if (window.electronAPI?.system?.getSavedPasswords) {
+      const data = await window.electronAPI.system.getSavedPasswords();
+      setPasswords(data || []);
+    }
+  };
+
+  useEffect(() => { loadPasswords(); }, []);
+
+  const toggleVisible = (id: string) => {
+    setVisible(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.electronAPI?.system?.deleteSavedPassword) {
+      await window.electronAPI.system.deleteSavedPassword(id);
+      loadPasswords();
+    }
+  };
+
+  return (
+    <>
+      <SectionTitle icon={Key}>Şifre Yöneticisi</SectionTitle>
+      <SettingCard>
+        <SettingLabel title="Kayıtlı Şifreler" subtitle="Daha önce giriş yaptığınız ve kaydettiğiniz sitelere ait hesap bilgileri." />
+        
+        {passwords.length === 0 ? (
+          <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+            Henüz tamamen güvenli olarak kaydedilmiş bir şifreniz bulunmuyor.
+          </div>
+        ) : (
+          <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {passwords.map((p) => (
+              <div key={p.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {p.origin ? new URL(p.origin).hostname : 'Bilinmeyen Kaynak'}
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    {p.username || 'Kullanıcı adı kaydedilmedi'}
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ 
+                    fontFamily: visible[p.id] ? 'monospace' : 'caption', 
+                    fontSize: visible[p.id] ? '14px' : '20px', 
+                    color: visible[p.id] ? 'var(--text-primary)' : 'var(--text-muted)', 
+                    background: 'rgba(0,0,0,0.3)', 
+                    padding: '8px 14px', 
+                    borderRadius: '8px', 
+                    minWidth: '130px', 
+                    textAlign: 'center',
+                    border: '1px solid rgba(255, 255, 255, 0.04)',
+                    letterSpacing: visible[p.id] ? '1px' : '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '38px'
+                  }}>
+                    {visible[p.id] ? p.password : '••••••••'}
+                  </div>
+                  
+                  <motion.button 
+                    whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.1)' }} 
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => toggleVisible(p.id)}
+                    style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.05)', color: 'var(--text-secondary)', cursor: 'pointer', padding: '10px', borderRadius: '50%', display: 'flex' }}
+                  >
+                    {visible[p.id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </motion.button>
+
+                  <motion.button 
+                    whileHover={{ scale: 1.05, background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }} 
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleDelete(p.id)}
+                    style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.05)', color: 'var(--text-muted)', cursor: 'pointer', padding: '10px', borderRadius: '50%', display: 'flex', transition: 'all 0.2s' }}
+                  >
+                    <Trash2 size={16} />
+                  </motion.button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </SettingCard>
     </>
   );
