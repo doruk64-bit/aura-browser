@@ -22,9 +22,6 @@ export const IPC_CHANNELS = {
   TAB_NEXT: 'tab:next',
   TAB_PREV: 'tab:prev',
   TAB_CLOSE_CURRENT: 'tab:close-current',
-  TAB_TRANSLATE: 'tab:translate',
-  TAB_TRANSLATE_TOGGLE: 'tab:translate:toggle',
-  TAB_TRANSLATE_CLOSE: 'tab:translate:close',
 
   // ─── Navigasyon ───
   NAV_GO: 'nav:go',
