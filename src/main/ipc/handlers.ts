@@ -125,7 +125,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
       await session.defaultSession.clearCache();
       await session.defaultSession.clearHostResolverCache();
       await session.defaultSession.clearStorageData({
-        storages: ['shadercache', 'filesystem', 'indexdb', 'websql']
+        storages: ['shader_cache', 'filesystem', 'indexdb', 'websql']
       });
       
       // 2. TabManager'a tüm sekmeleri optimize etmesini söyle
@@ -449,10 +449,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   // ─── Sekme Yönetimi ───
 
 
-  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE, async () => {
-    return getTabManager()?.translateActiveTab();
-  });
-
   ipcMain.handle(IPC_CHANNELS.TAB_TOGGLE_PIP, async () => {
     const wc = getTabManager()?.getActiveWebContents();
     if (!wc) return false;
@@ -594,7 +590,10 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle('tabs:panic', (event, url) => {
     getTabManager()?.panic(url);
+  });
 
+  ipcMain.on(IPC_CHANNELS.TAB_REPORT_BOUNDS, (_event, bounds: { x: number, y: number, width: number, height: number }) => {
+    getTabManager()?.updateTabBounds(bounds);
   });
 
   // ─── Navigasyon ───
@@ -671,6 +670,15 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle('history:search', (_event, query: string, limit?: number) => {
     return historyManager.search(query, limit);
+  });
+
+  ipcMain.handle('history:get-status', () => {
+    return getDatabase().getSettings().isHistoryEnabled;
+  });
+
+  ipcMain.handle('history:set-status', (_event, enabled: boolean) => {
+    getDatabase().setSettings({ isHistoryEnabled: enabled });
+    return true;
   });
 
   ipcMain.handle(IPC_CHANNELS.HISTORY_GET, (_event, limit?: number) => {
@@ -855,8 +863,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   let passwordPromptWin: any = null;
   let currentPasswordData: any = null;
 
-  let translatePromptWin: any = null;
-
   ipcMain.handle('password:toggle-prompt', (event, bounds: { x: number, y: number, data: any }) => {
     try {
       const path = require('path');
@@ -929,69 +935,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     if (resolved) {
       const win = activeWindowManager ? activeWindowManager.getMainWindow() : windowManager.getMainWindow();
       win?.webContents.send('password:prompt-resolved');
-    }
-  });
-
-  // ─── Translate Prompt Overlay ───
-  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE_TOGGLE, (event, bounds: { x: number, y: number }) => {
-    try {
-      const path = require('path');
-      if (!translatePromptWin || translatePromptWin.isDestroyed()) {
-        const { BrowserWindow } = require('electron');
-        translatePromptWin = new BrowserWindow({
-          width: 320,
-          height: 260,
-          frame: false,
-          transparent: true,
-          hasShadow: false, 
-          resizable: false,
-          alwaysOnTop: true,
-          skipTaskbar: true,
-          focusable: true,
-          thickFrame: false,
-          show: false,
-          webPreferences: {
-            preload: path.join(__dirname, '../preload.js'),
-            contextIsolation: true,
-            nodeIntegration: false,
-            sandbox: false
-          }
-        });
-
-        const { app: electronApp } = require('electron');
-        const isDev = process.env.NODE_ENV === 'development' || !electronApp.isPackaged;
-        
-        const url = isDev 
-          ? 'http://localhost:5173/#/translate-prompt-overlay' 
-          : `file://${path.join(__dirname, '..', '..', 'renderer', 'index.html')}#/translate-prompt-overlay`;
-        
-        translatePromptWin.loadURL(url);
-
-        translatePromptWin.on('blur', () => {
-          if (!translatePromptWin?.isDestroyed()) {
-            translatePromptWin?.hide();
-          }
-        });
-      }
-
-      const x = Math.round(bounds.x);
-      const y = Math.round(bounds.y);
-
-      translatePromptWin.setBounds({ x, y, width: 320, height: 260 });
-
-      if (translatePromptWin.isVisible()) {
-        translatePromptWin.hide();
-      } else {
-        translatePromptWin.show();
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  });
-
-  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE_CLOSE, () => {
-    if (translatePromptWin && !translatePromptWin.isDestroyed()) {
-      translatePromptWin.hide();
     }
   });
 
@@ -1194,6 +1137,52 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   ipcMain.handle('adblock:status', () => {
     return adBlocker?.isEnabled() ?? false;
   });
+
+  ipcMain.handle('workspace:get-all', () => {
+    return workspaceManager.getWorkspaces();
+  });
+
+  ipcMain.handle('workspace:get-active', () => {
+    return workspaceManager.getActiveWorkspace();
+  });
+
+  ipcMain.handle('workspace:set-active', (_event, id: string) => {
+    workspaceManager.setActiveWorkspace(id);
+    const tm = getTabManager();
+    if (tm) {
+      tm.activeWorkspace = id;
+      const workspaceTabs = tm.getTabList();
+      if (workspaceTabs.length > 0) {
+        tm.switchToTab(workspaceTabs[0].id);
+      } else {
+        tm.createTab('about:blank');
+      }
+    }
+  });
+
+  ipcMain.handle('workspace:add', (_event, name: string, icon?: string) => {
+    return workspaceManager.addWorkspace(name, icon);
+  });
+
+  ipcMain.handle('workspace:remove', (_event, id: string) => {
+    workspaceManager.removeWorkspace(id);
+  });
+
+  ipcMain.handle('workspace:reorder', (_event, newOrder: any[]) => {
+    workspaceManager.reorderWorkspaces(newOrder);
+  });
+
+  ipcMain.handle('workspace:update', (_event, id: string, name: string, icon: string) => {
+    return workspaceManager.updateWorkspace(id, name, icon);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_SET_TOUCHPAD_GESTURES_ENABLED, (_event, enabled: boolean) => {
+    const { getDatabase } = require('../database/db');
+    getDatabase().setSettings({ isTouchpadGesturesEnabled: enabled });
+    console.log(`[IPC] Touchpad Gestures updated: ${enabled}`);
+    return true;
+  });
+
   // ─── Eklentiler ───
 
   const extensionManager = getExtensionManager();
@@ -1303,4 +1292,67 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     }
     return null;
   });
+
+  // ─── Translation Handlers ───
+  let translateOverlayWin: Electron.BrowserWindow | null = null;
+
+  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE_TOGGLE, (_event, bounds: { x: number, y: number }) => {
+    const x = Math.floor(bounds.x);
+    const y = Math.floor(bounds.y);
+    
+    const win = translateOverlayWin;
+    if (win && !win.isDestroyed()) {
+      if (win.isVisible()) {
+        win.hide();
+      } else {
+        win.setPosition(x, y);
+        win.show();
+      }
+      return;
+    }
+
+    const { BrowserWindow } = require('electron');
+    const path = require('path');
+    
+    translateOverlayWin = new BrowserWindow({
+      width: 320,
+      height: 200,
+      x: x,
+      y: y,
+      frame: false,
+      transparent: true,
+      hasShadow: false,
+      alwaysOnTop: true,
+      skipTaskbar: true,
+      webPreferences: {
+        preload: path.join(__dirname, '..', 'preload.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: false,
+      },
+    });
+
+    const url = process.env.NODE_ENV === 'development' || !app.isPackaged
+      ? 'http://localhost:5173#/translate-prompt-overlay'
+      : `file://${path.join(__dirname, '..', '..', 'renderer', 'index.html')}#/translate-prompt-overlay`;
+
+    translateOverlayWin?.loadURL(url);
+
+    translateOverlayWin?.on('blur', () => {
+      translateOverlayWin?.hide();
+    });
+  });
+
+  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE_CLOSE, () => {
+    if (translateOverlayWin && !translateOverlayWin.isDestroyed()) {
+      translateOverlayWin.hide();
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.TAB_TRANSLATE, () => {
+    getTabManager()?.translateActiveTab();
+  });
+
+  // ─── Automated Language Detection Trigger ───
+
 }

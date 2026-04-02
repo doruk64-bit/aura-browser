@@ -107,10 +107,32 @@ html, body, #root {
   border: 1px solid var(--border-active);
 }
 
-/* ─── Scrollbar Yeniden Tasarımı ─── */
+/* ─── Lenis Smooth Scroll Core ─── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ─── Scrollbar Tasarımı (Premium & Proper) ─── */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -119,27 +141,19 @@ html, body, #root {
 
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
-  border-radius: 4px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
 
-/* ─── Animasyon Yardımcıları ─── */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-  50% { box-shadow: 0 0 0 8px transparent; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Sayfa iplerini temizle */
+::selection {
+  background: var(--accent-glow);
+  color: #fff;
 }
 
 .animate-fade-in {
@@ -156,8 +170,29 @@ html, body, #root {
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 
-/* ─── Shortcut Hover Delete ─── */
-.shortcut-circle:hover ~ .shortcut-delete,
-.shortcut-delete:hover {
-  display: flex !important;
+
+/* ─── SortableJS Premium Styles ─── */
+.sortable-ghost {
+  opacity: 0.15 !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+}
+
+.sortable-drag {
+  opacity: 0.9 !important;
+  background: rgba(30, 30, 45, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 12px;
+  cursor: grabbing !important;
+  z-index: 9999 !important;
+  transform: scale(1.05) !important;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+/* Chrome-like shifting effect */
+.favorite-item {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
 }

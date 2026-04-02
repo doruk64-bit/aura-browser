@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, Layout, Info, Check } from 'lucide-react';
+import { Plus, X, Layout, Info, Check, Edit2 } from 'lucide-react';
 
 export default function WorkspacesPanel() {
   const [workspaces, setWorkspaces] = useState<any[]>([]);
@@ -12,6 +12,9 @@ export default function WorkspacesPanel() {
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('📂');
   const emojis = ['📂', '💼', '🏠', '🎮', '💡', '🎨', '🎵', '✨'];
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const loadWorkspaces = () => {
     const api = window.electronAPI;
@@ -25,16 +28,87 @@ export default function WorkspacesPanel() {
     loadWorkspaces();
   }, []);
 
+  // Native React Drag and Drop Handlers
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault(); // Drop'a izin vermek için gerekli
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+    const updated = [...workspaces];
+    const [movedItem] = updated.splice(draggedIndex, 1);
+    updated.splice(targetIndex, 0, movedItem);
+
+    setWorkspaces(updated);
+    await window.electronAPI?.workspace.reorder(updated);
+    
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
   const handleSelect = async (id: string) => {
     await window.electronAPI?.workspace.setActive(id);
     setActiveWait(id);
   };
 
-  const handleAdd = async () => {
-    if (!newWorkspaceName.trim()) return;
-    await window.electronAPI?.workspace.add(newWorkspaceName.trim(), selectedEmoji);
+  const handleSave = async () => {
+    const name = newWorkspaceName.trim();
+    if (!name) return;
+
+    const currentEditingId = editingId;
+    const currentEmoji = selectedEmoji;
+
+    // Optimistik güncelleme (HIZLI TEPKİ: Saniyelerce bekleme, anında göster)
+    if (currentEditingId) {
+      setWorkspaces(prev => prev.map(w => 
+        w.id === currentEditingId ? { ...w, name, icon: currentEmoji } : w
+      ));
+    }
+
+    try {
+      if (currentEditingId) {
+        await window.electronAPI?.workspace.update(currentEditingId, name, currentEmoji);
+      } else {
+        await window.electronAPI?.workspace.add(name, currentEmoji);
+      }
+      
+      // Kayıt başarılıysa formu temizle
+      setEditingId(null);
+      setNewWorkspaceName('');
+      setSelectedEmoji('📂');
+    } catch (err) {
+      console.error("Workspace save error:", err);
+      // Hata durumunda listeyi tekrar yükle (geri al)
+      loadWorkspaces();
+    } finally {
+      // 200ms bekle (Ana işlemin veritabanını diske yazıp stabil hale gelmesi için)
+      setTimeout(() => loadWorkspaces(), 200);
+    }
+  };
+
+  const handleEditStart = (ws: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingId(ws.id);
+    setNewWorkspaceName(ws.name);
+    setSelectedEmoji(ws.icon || '📂');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
     setNewWorkspaceName('');
-    loadWorkspaces();
+    setSelectedEmoji('📂');
   };
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
@@ -64,20 +138,22 @@ export default function WorkspacesPanel() {
       </div>
 
       {/* ─── Workspace List ─── */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, overflowY: 'auto' }} className="custom-scrollbar">
-        <AnimatePresence mode="popLayout">
-          {workspaces.map((ws) => (
-            <motion.div
-              key={ws.id}
-              onClick={() => handleSelect(ws.id)}
-              layout
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              whileHover={{ background: 'rgba(139, 92, 246, 0.05)', borderColor: 'rgba(255,255,255,0.1)' }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                padding: '12px',
+      <div 
+        style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, overflowY: 'auto', padding: '2px' }} 
+        className="custom-scrollbar"
+      >
+        {workspaces.map((ws, i) => (
+          <div
+            key={ws.id}
+            draggable
+            onDragStart={() => handleDragStart(i)}
+            onDragOver={(e) => handleDragOver(e, i)}
+            onDrop={(e) => handleDrop(e, i)}
+            onDragEnd={handleDragEnd}
+            onClick={() => handleSelect(ws.id)}
+            className={`workspace-item ${draggedIndex === i ? 'is-dragging' : ''} ${dragOverIndex === i && draggedIndex !== i ? 'is-drag-over' : ''}`}
+            style={{
+              padding: '12px',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -132,6 +208,19 @@ export default function WorkspacesPanel() {
 
                 {ws.id !== 'default' && (
                   <button
+                    onClick={(e) => handleEditStart(ws, e)}
+                    style={{ 
+                      background: 'none', border: 'none', color: editingId === ws.id ? 'var(--accent)' : 'rgba(255,255,255,0.2)', 
+                      cursor: 'pointer', padding: '4px', opacity: 0.5, transition: 'all 0.2s'
+                    }}
+                    className="hover:opacity-100"
+                  >
+                    <Edit2 size={13} />
+                  </button>
+                )}
+
+                {ws.id !== 'default' && (
+                  <button
                     onClick={(e) => handleDelete(ws.id, e)}
                     style={{ 
                       background: 'none', border: 'none', color: 'rgba(255,255,255,0.2)', 
@@ -143,9 +232,8 @@ export default function WorkspacesPanel() {
                   </button>
                 )}
               </div>
-            </motion.div>
+            </div>
           ))}
-        </AnimatePresence>
       </div>
 
       {/* ─── Footer Section (Add New) ─── */}
@@ -199,12 +287,25 @@ export default function WorkspacesPanel() {
               outline: 'none',
               fontSize: '13px'
             }}
-            onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSave()}
           />
+          
+          {editingId && (
+            <button 
+              onClick={handleCancelEdit}
+              style={{
+                background: 'transparent', border: 'none', color: 'var(--text-muted)',
+                fontSize: '11px', cursor: 'pointer', padding: '0 8px', fontWeight: 600
+              }}
+            >
+              İptal
+            </button>
+          )}
+
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleAdd}
+            onClick={handleSave}
             style={{
               width: '32px', height: '32px', borderRadius: '14px',
               background: 'var(--accent)', color: 'white',
@@ -212,7 +313,7 @@ export default function WorkspacesPanel() {
               cursor: 'pointer'
             }}
           >
-            <Plus size={18} />
+            {editingId ? <Check size={18} /> : <Plus size={18} />}
           </motion.div>
         </div>
 
@@ -232,6 +333,29 @@ export default function WorkspacesPanel() {
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 0px;
+        }
+        .workspace-item {
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          user-select: none;
+        }
+        .workspace-item:hover {
+          background: rgba(139, 92, 246, 0.05) !important;
+          border-color: rgba(255,255,255,0.1) !important;
+          transform: translateY(-1px);
+        }
+        .workspace-item:active {
+          scale: 0.98;
+        }
+        .workspace-item.is-dragging {
+          opacity: 0.4;
+          background: rgba(139, 92, 246, 0.1) !important;
+          border: 1px dashed var(--accent) !important;
+        }
+        .workspace-item.is-drag-over {
+          border-color: var(--accent) !important;
+          background: rgba(139, 92, 246, 0.1) !important;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px var(--accent-glow);
         }
       `}</style>
     </div>

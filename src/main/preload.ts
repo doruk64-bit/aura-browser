@@ -54,7 +54,9 @@ const electronAPI = {
         ipcRenderer.invoke(IPC_CHANNELS.TAB_GROUP_REMOVE, tabId),
       toggleCollapse: (groupId: string) =>
         ipcRenderer.invoke(IPC_CHANNELS.TAB_GROUP_COLLAPSE, groupId),
-    }
+    },
+    reportBounds: (bounds: { x: number, y: number, width: number, height: number }) =>
+      ipcRenderer.send(IPC_CHANNELS.TAB_REPORT_BOUNDS, bounds),
   },
 
   // ─── Navigasyon ───
@@ -120,6 +122,8 @@ const electronAPI = {
     get: (limit?: number) => ipcRenderer.invoke(IPC_CHANNELS.HISTORY_GET, limit),
     clear: () => ipcRenderer.invoke(IPC_CHANNELS.HISTORY_CLEAR),
     search: (query: string, limit?: number) => ipcRenderer.invoke('history:search', query, limit),
+    getStatus: () => ipcRenderer.invoke('history:get-status'),
+    setStatus: (enabled: boolean) => ipcRenderer.invoke('history:set-status', enabled),
   },
 
   // ─── Yer İmleri ───
@@ -205,6 +209,18 @@ const electronAPI = {
     },
     isDefaultBrowser: () => ipcRenderer.invoke('system:is-default-browser'),
     setAsDefaultBrowser: () => ipcRenderer.invoke('system:set-as-default-browser'),
+    onGestureFeedback: (callback: (data: any) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, data: any) => callback(data);
+      ipcRenderer.on(IPC_CHANNELS.GESTURE_FEEDBACK, listener);
+      return () => ipcRenderer.removeListener(IPC_CHANNELS.GESTURE_FEEDBACK, listener);
+    },
+    setTouchpadGesturesEnabled: (enabled: boolean) =>
+      ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SET_TOUCHPAD_GESTURES_ENABLED, enabled),
+    on: (channel: string, callback: (...args: any[]) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, ...args: any[]) => callback(...args);
+      ipcRenderer.on(channel, listener);
+      return () => ipcRenderer.removeListener(channel, listener);
+    },
   },
   downloads: {
     get: () => ipcRenderer.invoke('downloads:get'),
@@ -238,6 +254,8 @@ const electronAPI = {
     setActive: (id: string) => ipcRenderer.invoke('workspace:set-active', id),
     add: (name: string, icon?: string) => ipcRenderer.invoke('workspace:add', name, icon),
     remove: (id: string) => ipcRenderer.invoke('workspace:remove', id),
+    reorder: (newOrder: any[]) => ipcRenderer.invoke('workspace:reorder', newOrder),
+    update: (id: string, name: string, icon: string) => ipcRenderer.invoke('workspace:update', id, name, icon),
   },
   sidebar: {
     setPanelWidth: (width: number) => ipcRenderer.invoke('sidebar:set-width', width),

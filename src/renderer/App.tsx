@@ -14,7 +14,6 @@ import FindBar from './components/FindBar/FindBar';
 import SettingsPage from './components/Settings/SettingsPage';
 import HistoryPage from './components/Pages/HistoryPage';
 import DownloadsPage from './components/Pages/DownloadsPage';
-import PerformanceOverlay from './components/PerformanceOverlay';
 import ChromeMenuOverlay from './components/TopBar/ChromeMenuOverlay';
 import PasswordPromptOverlay from './components/TopBar/PasswordPromptOverlay';
 import TranslatePromptOverlay from './components/TopBar/TranslatePromptOverlay';
@@ -22,8 +21,54 @@ import { useTabStore } from './store/useTabStore';
 import { useIPC } from './hooks/useIPC';
 import { useKeyboard } from './hooks/useKeyboard';
 import { useTheme } from './hooks/useTheme';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
+
+function BrowserLayout({ children, findVisible, setFindVisible, isFullscreen }: any) {
+  return (
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'var(--app-bg, radial-gradient(ellipse at 20% 50%, rgba(120, 40, 200, 0.18) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(60, 100, 255, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 90%, rgba(200, 50, 150, 0.1) 0%, transparent 50%), var(--bg-primary))',
+        overflow: 'hidden',
+        position: 'relative',
+      }}
+    >
+      <FindBar isVisible={findVisible} onClose={() => setFindVisible(false)} />
+
+      {/* Üst çubuk: sekmeler + omnibox + navigasyon */}
+      {!isFullscreen && <TopBar />}
+
+      {/* Gövde: sidebar + web içerik */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
+        {!isFullscreen && <Sidebar />}
+        <div 
+          id="main-content-scroll-root"
+          style={{ 
+            flex: 1, 
+            overflow: 'hidden', 
+            position: 'relative',
+            height: '100%'
+          }}
+        >
+          <div 
+            id="main-content-scroll-content"
+            style={{ height: '100%', width: '100%', display: 'flex' }}
+          >
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function App() {
+  // Sıfırdan yazılmış akıcı kaydırma sistemi (Lenis)
+  useSmoothScroll();
+
   const [findVisible, setFindVisible] = useState(false);
   const location = useLocation();
   const { tabs, activeTabId } = useTabStore();
@@ -51,33 +96,28 @@ function App() {
       <Route
         path="/"
         element={
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              background: 'var(--app-bg, radial-gradient(ellipse at 20% 50%, rgba(120, 40, 200, 0.18) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(60, 100, 255, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 90%, rgba(200, 50, 150, 0.1) 0%, transparent 50%), var(--bg-primary))',
-              overflow: 'hidden',
-              position: 'relative',
-            }}
-          >
-            <FindBar isVisible={findVisible} onClose={() => setFindVisible(false)} />
-
-            {/* Üst çubuk: sekmeler + omnibox + navigasyon */}
-            {!isFullscreen && <TopBar />}
-
-            {/* Gövde: sidebar + web içerik */}
-            <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
-              {!isFullscreen && <Sidebar />}
-              <WebViewArea />
-            </div>
-          </div>
+          <BrowserLayout findVisible={findVisible} setFindVisible={setFindVisible} isFullscreen={isFullscreen}>
+            <WebViewArea />
+          </BrowserLayout>
         }
       />
       <Route path="/settings" element={<SettingsPage />} />
-      <Route path="/history" element={<HistoryPage />} />
-      <Route path="/downloads" element={<DownloadsPage />} />
+      <Route 
+        path="/history" 
+        element={
+          <BrowserLayout findVisible={findVisible} setFindVisible={setFindVisible} isFullscreen={isFullscreen}>
+            <HistoryPage />
+          </BrowserLayout>
+        } 
+      />
+      <Route 
+        path="/downloads" 
+        element={
+          <BrowserLayout findVisible={findVisible} setFindVisible={setFindVisible} isFullscreen={isFullscreen}>
+            <DownloadsPage />
+          </BrowserLayout>
+        } 
+      />
       <Route path="/chromemenu-overlay" element={<ChromeMenuOverlay />} />
       <Route path="/password-prompt-overlay" element={<PasswordPromptOverlay />} />
       <Route path="/translate-prompt-overlay" element={<TranslatePromptOverlay />} />

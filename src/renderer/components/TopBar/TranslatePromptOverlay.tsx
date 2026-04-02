@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Languages, X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -63,8 +63,15 @@ export default function TranslatePromptOverlay() {
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Languages size={18} color="#8b5cf6" />
-              <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#ffffff' }}>Sayfayı Çevir</h3>
+              <div style={{ 
+                width: '24px', height: '24px', borderRadius: '6px', 
+                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)'
+              }}>
+                <Languages size={14} color="white" />
+              </div>
+              <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 700, color: '#ffffff', letterSpacing: '0.5px' }}>Morrow AI Çeviri</h3>
             </div>
             <motion.button
               whileHover={{ background: 'rgba(255,255,255,0.08)' }}
@@ -80,8 +87,8 @@ export default function TranslatePromptOverlay() {
             </motion.button>
           </div>
 
-          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.5' }}>
-            Bu web sayfasını Google Çeviri kullanarak Türkçe diline çevirmek ister misiniz?
+          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6', fontWeight: 500 }}>
+            Bu web sayfasını <span style={{ color: '#c4b5fd', fontWeight: 700 }}>Morrow AI</span> motoruyla anında Türkçe diline çevirebilirsiniz.
           </div>
 
           {/* Settings Section */}
@@ -110,18 +117,31 @@ export default function TranslatePromptOverlay() {
           <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
             <motion.button
               disabled={isTranslating}
-              whileHover={{ background: 'linear-gradient(135deg, #7c3aed, #db2777)' }}
+              whileHover={{ background: 'linear-gradient(135deg, #7c3aed, #db2777)', boxShadow: '0 8px 20px rgba(139, 92, 246, 0.4)' }}
               whileTap={{ scale: 0.97 }}
               onClick={handleTranslate}
               style={{ 
-                flex: 1, padding: '10px 0', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
-                border: 'none', borderRadius: '10px', color: '#ffffff', fontSize: '13px', 
-                cursor: isTranslating ? 'default' : 'pointer', fontWeight: 600, 
+                flex: 1, padding: '12px 0', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                border: 'none', borderRadius: '12px', color: '#ffffff', fontSize: '13px', 
+                cursor: isTranslating ? 'default' : 'pointer', fontWeight: 700, 
                 boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
-                opacity: isTranslating ? 0.8 : 1
+                opacity: isTranslating ? 0.8 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
-              {isTranslating ? 'Çevriliyor...' : 'Çevir'}
+              {isTranslating ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    style={{ width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%' }}
+                  />
+                  Çevriliyor...
+                </>
+              ) : (
+                <>✨ AI ile Çevir</>
+              )}
             </motion.button>
             <motion.button
               whileHover={{ background: 'rgba(255,255,255,0.08)' }}

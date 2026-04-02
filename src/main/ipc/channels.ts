@@ -98,6 +98,15 @@ export const IPC_CHANNELS = {
   // Custom Additions
   NAV_FAVICON_UPDATED: 'nav:favicon-updated',
   TAB_LIST_UPDATED: 'tab:list-updated',
+
+  // Translation
+  TAB_TRANSLATE: 'tab:translate',
+  TAB_TRANSLATE_TOGGLE: 'tab:translate-toggle',
+  TAB_TRANSLATE_CLOSE: 'tab:translate-close',
+  TAB_LANGUAGE_DETECTED: 'tab:language-detected',
+  GESTURE_FEEDBACK: 'gesture:feedback',
+  SYSTEM_SET_TOUCHPAD_GESTURES_ENABLED: 'system:set-touchpad-gestures-enabled',
+  TAB_REPORT_BOUNDS: 'tab:report-bounds',
 } as const;
 
 /** Tüm kanal isimlerinin tipi */

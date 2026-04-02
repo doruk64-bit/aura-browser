@@ -1,5 +1,5 @@
 {
-  "latest_id": 11,
-  "version": "1.4.4",
-  "notes": "v1.4.4 - Gelişmiş sayfa çeviri motoru, özelleştirilmiş sağ tık menüleri, kopyala-yapıştır iyileştirmeleri ve görsel cilalamalar."
+  "latest_id": 12,
+  "version": "1.4.5",
+  "notes": "v1.4.5 - Native macOS touchpad gestures added, legacy mouse gestures removed, layout stability improvements (no black edges)."
 }

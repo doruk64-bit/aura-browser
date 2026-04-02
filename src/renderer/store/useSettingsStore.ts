@@ -95,6 +95,7 @@ interface SettingsState {
   ramHardLimit: boolean;
   panicShortcut: string; // "Control+Shift+X"
   panicUrl: string; // Panic anında açılacak URL
+  touchpadGesturesEnabled: boolean;
 
 
   // Aksiyonlar
@@ -117,6 +118,7 @@ interface SettingsState {
   setRamHardLimit: (hard: boolean) => void;
   setPanicShortcut: (shortcut: string) => void;
   setPanicUrl: (url: string) => void;
+  setTouchpadGesturesEnabled: (enabled: boolean) => void;
 }
 
 
@@ -142,6 +144,7 @@ export const useSettingsStore = create<SettingsState>()(
       ramHardLimit: false,
       panicShortcut: 'Control+Shift+X',
       panicUrl: 'https://www.google.com',
+      touchpadGesturesEnabled: true,
 
 
       toggleSidebar: () =>
@@ -218,6 +221,10 @@ export const useSettingsStore = create<SettingsState>()(
         const { panicShortcut } = useSettingsStore.getState();
         (window as any).electronAPI?.system?.setPanicSettings?.(panicShortcut, url);
       },
+      setTouchpadGesturesEnabled: (enabled) => {
+        set({ touchpadGesturesEnabled: enabled });
+        (window as any).electronAPI?.system?.setTouchpadGesturesEnabled?.(enabled);
+      },
     }),
 
     {
@@ -242,6 +249,7 @@ export const useSettingsStore = create<SettingsState>()(
         ramHardLimit: state.ramHardLimit,
         panicShortcut: state.panicShortcut,
         panicUrl: state.panicUrl,
+        touchpadGesturesEnabled: state.touchpadGesturesEnabled,
       }),
 
     }

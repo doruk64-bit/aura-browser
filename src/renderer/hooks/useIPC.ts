@@ -6,15 +6,22 @@
  */
 
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTabStore } from '../store/useTabStore';
 import { useSettingsStore } from '../store/useSettingsStore';
 
 export function useIPC() {
   const { setTabs, updateTabUrl, updateTabTitle, updateTabLoading, updateTabFullscreen } = useTabStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const api = window.electronAPI;
     if (!api) return;
+
+    // Router navigasyon sinyalini dinle (morrow:// protokolleri için)
+    const unsubNavigate = api.system?.onNavigateMainRouter?.((path: string) => {
+      navigate(path);
+    });
 
     // Sekme listesi güncellemelerini dinle
     const unsubTabUpdate = api.tabs.onUpdate((data: any) => {
@@ -71,6 +78,7 @@ export function useIPC() {
       unsubLoading();
       unsubTitle();
       unsubFullscreen();
+      unsubNavigate?.();
     };
-  }, [setTabs, updateTabUrl, updateTabTitle, updateTabLoading, updateTabFullscreen]);
+  }, [setTabs, updateTabUrl, updateTabTitle, updateTabLoading, updateTabFullscreen, navigate]);
 }

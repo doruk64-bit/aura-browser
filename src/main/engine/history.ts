@@ -23,8 +23,13 @@ export class HistoryManager {
     } catch {}
 
     if (!url || url === 'about:blank') return;
-
+    
+    // Geçmiş izleme ayarını kontrol et
     const db = getDatabase();
+    if (!db.getSettings().isHistoryEnabled) {
+      return;
+    }
+ 
     const history = db.getHistory();
     const existingIndex = history.findIndex((h) => h.url === url);
 

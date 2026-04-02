@@ -16,6 +16,10 @@ export interface DatabaseSchema {
   workspaces: any[];
   pinnedTabs: any[];
   passwords: any[];
+  settings: {
+    isHistoryEnabled: boolean;
+    isTouchpadGesturesEnabled: boolean;
+  };
 }
 
 const defaultSchema: DatabaseSchema = {
@@ -29,6 +33,10 @@ const defaultSchema: DatabaseSchema = {
   ],
   pinnedTabs: [],
   passwords: [],
+  settings: {
+    isHistoryEnabled: true,
+    isTouchpadGesturesEnabled: true,
+  },
 };
 
 class JSONDatabase {
@@ -122,6 +130,15 @@ class JSONDatabase {
 
   setPasswords(passwords: any[]) {
     this.data.passwords = passwords;
+    this.saveData();
+  }
+
+  getSettings() {
+    return this.data.settings || defaultSchema.settings;
+  }
+
+  setSettings(settings: any) {
+    this.data.settings = { ...this.getSettings(), ...settings };
     this.saveData();
   }
 }

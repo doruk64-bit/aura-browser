@@ -74,7 +74,7 @@ export default function DownloadsPage() {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-primary)', overflow: 'hidden' }}>
+    <div style={{ width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-primary)', overflow: 'visible' }}>
       
       {/* ─── Top Bar ─── */}
       <div style={{ 
@@ -103,7 +103,7 @@ export default function DownloadsPage() {
       </div>
 
       {/* ─── Main Content ─── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '32px 0' }}>
+      <div style={{ flex: 1, padding: '32px 0' }}>
         <div style={{ maxWidth: '750px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
           
           {/* Search Bar */}

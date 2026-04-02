@@ -964,6 +964,9 @@ function PrivacySection({
         </div>
       </SettingCard>
 
+      {/* Geçmiş İzleme */}
+      <HistoryTrackingToggle />
+
       {/* Verileri Temizle */}
       <SettingCard>
         <SettingLabel
@@ -1041,9 +1044,9 @@ function ShortcutsSection({
   panicUrl: string;
   setPanicUrl: (u: string) => void;
 }) {
+  const { touchpadGesturesEnabled, setTouchpadGesturesEnabled } = useSettingsStore();
   const [isRecording, setIsRecording] = useState(false);
   const [urlInput, setUrlInput] = useState(panicUrl);
-
 
   useEffect(() => {
     if (!isRecording) return;
@@ -1071,8 +1074,18 @@ function ShortcutsSection({
 
   return (
     <>
-      <SectionTitle icon={Keyboard}>Kısayollar</SectionTitle>
-      
+      <SectionTitle icon={Keyboard}>Kısayollar ve Hareketler</SectionTitle>
+
+      <SettingCard>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <SettingLabel 
+            title="Touchpad Navigasyonu (İzleme Paneli)" 
+            subtitle="İki parmakla yana kaydırarak geri/ileri gidin veya aşağı kaydırarak sayfayı yenileyin" 
+          />
+          <ToggleSwitch enabled={touchpadGesturesEnabled} onToggle={() => setTouchpadGesturesEnabled(!touchpadGesturesEnabled)} />
+        </div>
+      </SettingCard>
+
       <SettingCard>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <SettingLabel 
@@ -1445,5 +1458,33 @@ function PasswordsSection() {
         )}
       </SettingCard>
     </>
+  );
+}
+
+function HistoryTrackingToggle() {
+  const [enabled, setEnabled] = useState(true);
+
+  useEffect(() => {
+    window.electronAPI?.history?.getStatus?.().then((res: boolean) => {
+      setEnabled(res);
+    });
+  }, []);
+
+  const handleToggle = async () => {
+    const next = !enabled;
+    setEnabled(next);
+    await window.electronAPI?.history?.setStatus?.(next);
+  };
+
+  return (
+    <SettingCard>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <SettingLabel
+          title="Geçmiş İzleme"
+          subtitle="Web sitelerindeki ziyaretlerinizin kaydedilip edilmeyeceğini belirleyin"
+        />
+        <ToggleSwitch enabled={enabled} onToggle={handleToggle} />
+      </div>
+    </SettingCard>
   );
 }

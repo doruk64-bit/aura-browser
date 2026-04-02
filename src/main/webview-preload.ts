@@ -117,4 +117,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             trySave();
         }
     }, true);
+
+    // C) Premium Mouse Gestures (Önceki sürümden temizlendi - Native Touchpad öncelikli)
 });

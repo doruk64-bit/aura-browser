@@ -249,9 +249,9 @@ export default function Omnibox() {
               transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
               style={{ display: 'inline-block' }}
             >
-              ◐
+              ⚪
             </motion.span>
-          ) : isFocused ? '⌕' : '🔒'}
+          ) : isFocused ? '🔍' : '🕒'}
         </div>
 
         {/* Input */}
@@ -287,6 +287,7 @@ export default function Omnibox() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             whileHover={{ color: 'var(--danger)' }}
+            whileTap={{ scale: 0.9 }}
             style={{
               background: 'none',
               border: 'none',
@@ -410,6 +411,7 @@ export default function Omnibox() {
 
         {/* Bar Butonları (AI, PiP ve diğerleri) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+
           {/* AI Sparkle Butonu */}
           <motion.button
             type="button"

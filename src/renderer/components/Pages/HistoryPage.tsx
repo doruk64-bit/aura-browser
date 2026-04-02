@@ -34,6 +34,20 @@ export default function HistoryPage() {
     setHistory([]);
   };
 
+  const [isHistoryEnabled, setIsHistoryEnabled] = useState(true);
+
+  useEffect(() => {
+    window.electronAPI?.history?.getStatus()?.then((enabled: boolean) => {
+      setIsHistoryEnabled(enabled);
+    });
+  }, []);
+
+  const toggleHistory = async () => {
+    const newState = !isHistoryEnabled;
+    setIsHistoryEnabled(newState);
+    await window.electronAPI?.history?.setStatus(newState);
+  };
+
   const filteredHistory = history.filter(item => {
     return (item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
             item.url?.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -62,7 +76,7 @@ export default function HistoryPage() {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-primary)', overflow: 'hidden' }}>
+    <div style={{ width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-primary)', overflow: 'visible' }}>
       
       {/* ─── Top Bar ─── */}
       <div style={{ 
@@ -92,6 +106,35 @@ export default function HistoryPage() {
           <h1 style={{ fontSize: '20px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>Geçmiş</h1>
         </div>
 
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginRight: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: isHistoryEnabled ? 'var(--accent)' : 'rgba(255,255,255,0.4)', transition: 'all 0.2s' }}>
+              Geçmişi İzle
+            </span>
+            <div 
+              onClick={toggleHistory}
+              style={{ 
+                width: '40px', height: '22px', borderRadius: '11px', 
+                background: isHistoryEnabled ? 'var(--accent)' : 'rgba(255,255,255,0.1)',
+                cursor: 'pointer', position: 'relative', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                border: '1px solid rgba(255,255,255,0.05)'
+              }}
+            >
+              <motion.div 
+                animate={{ x: isHistoryEnabled ? 20 : 2 }}
+                initial={false}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                style={{ 
+                  width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
+                  position: 'absolute', top: '2px', left: '0',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)' }} />
+        </div>
+
         <button
           onClick={clearHistory}
           style={{
@@ -113,7 +156,7 @@ export default function HistoryPage() {
       </div>
 
       {/* ─── Main Content ─── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '32px 0' }}>
+      <div style={{ flex: 1, padding: '32px 0' }}>
         <div style={{ maxWidth: '750px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
           
           {/* Search Bar */}
