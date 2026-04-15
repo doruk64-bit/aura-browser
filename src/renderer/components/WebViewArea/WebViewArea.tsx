@@ -10,22 +10,7 @@ import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore, SEARCH_ENGINES } from '../../store/useSettingsStore';
 import GestureOverlay from './GestureOverlay';
 
-// Discover thumbnails
-// @ts-ignore
-import thumb1 from '../../assets/discover/thumb1.png';
-// @ts-ignore
-import thumb2 from '../../assets/discover/thumb2.png';
-// @ts-ignore
-import thumb3 from '../../assets/discover/thumb3.png';
-// @ts-ignore
-import thumb4 from '../../assets/discover/thumb4.png';
-
-const DISCOVER_ITEMS = [
-  { img: thumb1, label: 'Aurora', url: 'https://www.nasa.gov/multimedia/imagegallery/index.html' },
-  { img: thumb2, label: 'Horizon', url: 'https://www.nationalgeographic.com/photography' },
-  { img: thumb3, label: 'Flow', url: 'https://www.behance.net/galleries/interaction' },
-  { img: thumb4, label: 'Mystic', url: 'https://www.artstation.com/channels/fantasy' },
-];
+// Discover images removed as per focus mode implementation
 
 const DEFAULT_FAVORITES = [
   { name: 'YouTube', url: 'https://www.youtube.com', icon: '📺', color: '#ff0000' },
@@ -342,95 +327,126 @@ export default function WebViewArea() {
       id="webview-area"
       style={{
         flex: 1,
-        background: 'radial-gradient(ellipse at 20% 50%, rgba(120,40,200,0.25) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(60,100,255,0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(200,50,150,0.15) 0%, transparent 50%), #0a0a12',
+        background: 'var(--app-bg)',
+        backgroundColor: 'var(--bg-primary)',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'relative',
-        overflow: 'visible',
-        minHeight: '100%',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ flex: 1, padding: '32px 0' }}>
-        <div style={{ position: 'absolute', top: '-100px', left: '-150px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
-        <div style={{ position: 'absolute', top: '100px', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
-        <div style={{ position: 'absolute', bottom: '-50px', left: '30%', width: '500px', height: '400px', background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
+      {/* Hafif Ortam Işığı */}
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '40px 24px 32px', boxSizing: 'border-box' }}>
-          <div style={{ width: '100%', maxWidth: '980px' }}>
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }} style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '14px', flexShrink: 0, background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f97316 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(139,92,246,0.4)' }}>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-                </svg>
-              </div>
-              <div>
-                <h1 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '4px', background: 'linear-gradient(135deg, #e0e0ff 0%, #c4b5fd 50%, #f9a8d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase', fontFamily: "'Inter', sans-serif", margin: 0 }}>Morrow</h1>
-                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', letterSpacing: '2px', marginTop: '2px', marginBottom: 0 }}>{greeting}</p>
-              </div>
-            </motion.div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.4fr) minmax(0,1fr)', gap: '18px', marginBottom: '24px', width: '100%' }}>
-              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', padding: '18px', overflow: 'hidden', minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                  <span style={{ fontSize: '14px' }}>✨</span>
-                  <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#e0e0ff', margin: 0 }}>Discover</h3>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: '8px' }}>
-                  {DISCOVER_ITEMS.map((item, i) => (
-                    <motion.div key={i} whileHover={{ scale: 1.05, y: -4 }} whileTap={{ scale: 0.95, opacity: 0.8 }} onClick={() => { if (item.url) window.electronAPI?.nav.go(item.url); }} transition={{ type: 'spring', stiffness: 400, damping: 20 }} style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '3/4', position: 'relative', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }}>
-                      <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', padding: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ fontSize: '8px', marginLeft: '1px' }}>▶</span></div>
-                        <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.8)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', minWidth: 0 }}>
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} style={{ background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', padding: '18px', flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '14px' }}>⭐</span>
-                    <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#e0e0ff', margin: 0 }}>Favorites</h3>
-                  </div>
-                  <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: '10px' }}>
-                    {shortcuts.map((site, index) => (
-                      <ShortcutItem 
-                        key={site.url} 
-                        site={site} 
-                        index={index} 
-                        handleFavoriteContextMenu={handleFavoriteContextMenu} 
-                        removeShortcut={removeShortcut} 
-                        getFaviconUrl={getFaviconUrl} 
-                      />
-                    ))}
-                  </div>
-                </motion.div>
-
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3 }} style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%)', backdropFilter: 'blur(20px)', borderRadius: '16px', border: '1px solid rgba(139,92,246,0.2)', padding: '18px', cursor: 'pointer', minWidth: 0 }} whileHover={{ scale: 1.02 }} onClick={() => { setEditingIndex(null); setNewSiteName(''); setNewSiteUrl(''); setIsModalOpen(true); }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0, background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: '16px' }}>📌</span></div>
-                    <div style={{ minWidth: 0 }}>
-                      <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#e0e0ff', margin: 0 }}>Project Morrow</h4>
-                      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px', marginBottom: 0 }}>Kısayol ekle & düzenle</p>
-                    </div>
-                    <div style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.3)', fontSize: '20px', flexShrink: 0 }}>+</div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
-              <form onSubmit={handleHomeSearch} style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
-                <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="text" placeholder="Düşüncelerini Ara..." style={{ width: '100%', padding: '14px 20px 14px 48px', borderRadius: '16px', background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', outline: 'none', fontSize: '14px', fontFamily: "'Inter', sans-serif", transition: 'border 0.2s, box-shadow 0.2s', boxSizing: 'border-box' }} onFocus={(e) => { e.target.style.borderColor = 'rgba(139,92,246,0.5)'; e.target.style.boxShadow = '0 0 20px rgba(139,92,246,0.15)'; }} onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.boxShadow = 'none'; }} />
-                <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '16px' }}>🔍</span>
-                <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', fontSize: '16px', opacity: 0.4 }}>✨</motion.div>
-              </form>
-            </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        style={{ 
+          position: 'relative', 
+          zIndex: 1, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          width: '100%', 
+          maxWidth: '640px',
+          padding: '0 24px'
+        }}
+      >
+        {/* Odak Logosu & Karşılama */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
+          <div style={{ 
+            width: '64px', height: '64px', borderRadius: '18px', 
+            background: 'linear-gradient(135deg, var(--accent) 0%, #ec4899 100%)', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            boxShadow: '0 8px 32px var(--accent-glow)',
+            marginBottom: '20px'
+          }}>
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+            </svg>
           </div>
+          <h1 style={{ 
+            fontSize: '32px', fontWeight: 800, letterSpacing: '4px', 
+            background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--accent-hover) 100%)', 
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', 
+            textTransform: 'uppercase', margin: 0 
+          }}>
+            Morrow
+          </h1>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '8px', letterSpacing: '1px' }}>
+            {greeting}
+          </p>
         </div>
-      </div>
+
+        {/* Merkezi Arama */}
+        <form onSubmit={handleHomeSearch} style={{ position: 'relative', width: '100%', marginBottom: '40px' }}>
+          <input 
+            value={searchValue} 
+            onChange={(e) => setSearchValue(e.target.value)} 
+            type="text" 
+            placeholder="Düşüncelerini Ara..." 
+            spellCheck={false}
+            autoComplete="off"
+            style={{ 
+               width: '100%', padding: '16px 24px 16px 52px', borderRadius: '24px', 
+               background: 'var(--bg-glass)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+               border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', 
+               outline: 'none', fontSize: '15px', fontFamily: "'Inter', sans-serif", 
+               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+               boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+            }} 
+            onFocus={(e) => { 
+               e.target.style.borderColor = 'var(--accent)'; 
+               e.target.style.boxShadow = '0 0 30px var(--accent-glow)'; 
+               e.target.style.background = 'var(--bg-glass)';
+            }} 
+            onBlur={(e) => { 
+               e.target.style.borderColor = 'var(--border-subtle)'; 
+               e.target.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)'; 
+            }} 
+          />
+          <span style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, fontSize: '18px' }}>🔍</span>
+          <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', opacity: 0.6 }}>✨</motion.div>
+        </form>
+
+        {/* Favoriler Grip */}
+        <div style={{ width: '100%' }}>
+           <div ref={gridRef} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px' }}>
+              {shortcuts.map((site, index) => (
+                <ShortcutItem 
+                  key={site.url} 
+                  site={site} 
+                  index={index} 
+                  handleFavoriteContextMenu={handleFavoriteContextMenu} 
+                  removeShortcut={removeShortcut} 
+                  getFaviconUrl={getFaviconUrl} 
+                />
+              ))}
+              <motion.div 
+                 whileHover={{ scale: 1.08, y: -3 }}
+                 whileTap={{ scale: 0.95 }}
+                 onClick={() => { setEditingIndex(null); setNewSiteName(''); setNewSiteUrl(''); setIsModalOpen(true); }}
+                 style={{ 
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', 
+                    cursor: 'pointer', position: 'relative', padding: '6px 2px' 
+                 }}
+              >
+                 <div style={{ 
+                    width: '40px', height: '40px', borderRadius: '10px', 
+                    background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.2)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                    color: 'var(--text-muted)', fontSize: '20px' 
+                 }}>
+                    +
+                 </div>
+                 <span style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>Ekle</span>
+              </motion.div>
+           </div>
+        </div>
+      </motion.div>
 
       <AnimatePresence>
         {isModalOpen && (

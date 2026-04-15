@@ -1,5 +1,5 @@
 {
-  "latest_id": 12,
-  "version": "1.4.5",
-  "notes": "v1.4.5 - Native macOS touchpad gestures added, layout stability improvements (no black edges), smoother UI transitions."
+  "latest_id": 13,
+  "version": "1.4.6",
+  "notes": "v1.4.6 - Incognito mode dark theme implementation, minimalist Focus hub redesign for new tabs, UI/UX structure cleanups."
 }

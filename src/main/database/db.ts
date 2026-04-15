@@ -59,7 +59,12 @@ class JSONDatabase {
     try {
       if (fs.existsSync(this.dbPath)) {
         const fileContent = fs.readFileSync(this.dbPath, 'utf8');
-        return { ...defaultSchema, ...JSON.parse(fileContent) };
+        const parsedData = JSON.parse(fileContent);
+        return { 
+          ...defaultSchema, 
+          ...parsedData,
+          settings: { ...defaultSchema.settings, ...(parsedData.settings || {}) }
+        };
       }
     } catch (e) {
       console.error('Veritabanı okuma hatası:', e);

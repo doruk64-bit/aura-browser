@@ -4,22 +4,20 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTabStore } from '../../store/useTabStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 
 export default function HistoryPanel() {
   const [history, setHistory] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [quickFilter, setQuickFilter] = useState<'all' | 'today' | 'yesterday' | 'week'>('all');
   const [selectedDate, setSelectedDate] = useState('');
+  const { activeWorkspaceId } = useTabStore();
 
   useEffect(() => {
     window.electronAPI?.history?.get?.()
       ?.then((data: any[]) => {
-        const mockData = [
-          { id: 101, title: 'Discover - Evrensel Bilim Dergisi', url: 'https://evrenselbilim.com/kuantum-mekanik', last_visited_at: new Date().getTime(), visit_count: 3 },
-          { id: 102, title: 'YouTube - Morgenröte Orkestrası Canlı Performans', url: 'https://youtube.com/watch?v=123', last_visited_at: new Date().getTime() - 3600000, visit_count: 1 },
-          { id: 103, title: 'Wikipedia - Türkiye Tarihi', url: 'https://tr.wikipedia.org/wiki/Türkiye', last_visited_at: new Date().getTime() - 7200000, visit_count: 5 }
-        ];
-        setHistory(data && data.length > 0 ? data : mockData);
+        setHistory(data && data.length > 0 ? data : []);
       })
       ?.catch(() => {
         setHistory([]);

@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Trash2, Search, Settings } from 'lucide-react';
+import { useTabStore } from '../../store/useTabStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 
 export default function HistoryPage() {
   const navigate = useNavigate();
   const [history, setHistory] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const { activeWorkspaceId } = useTabStore();
 
   useEffect(() => {
     window.electronAPI?.history?.get?.()

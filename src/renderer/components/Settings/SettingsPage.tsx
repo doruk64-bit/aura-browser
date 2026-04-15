@@ -70,6 +70,7 @@ export default function SettingsPage() {
     sidebarCleanerEnabled, setSidebarCleanerEnabled,
     panicShortcut, setPanicShortcut,
     panicUrl, setPanicUrl,
+    touchpadGesturesEnabled, setTouchpadGesturesEnabled,
   } = useSettingsStore();
 
 
@@ -451,8 +452,6 @@ function AppearanceSection({
 
       {/* Renkli Temalar */}
       <SettingCard>
-        <SettingLabel title="Renkli Temalar" subtitle="Özel renk animasyonlu tema paketleri" />
-      <SettingCard>
         <SettingLabel title="Premium Temalar" subtitle="Canlı renk geçişleri ve özel atmosferik temalar" />
         <div
           style={{
@@ -541,7 +540,6 @@ function AppearanceSection({
             </motion.button>
           ))}
         </div>
-      </SettingCard>
       </SettingCard>
 
       {/* Tema Seçimi (Aydınlık/Karanlık) */}

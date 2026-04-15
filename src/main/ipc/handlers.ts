@@ -15,6 +15,7 @@ import { AdBlocker } from '../engine/adblocker';
 import { DownloadManager } from '../engine/downloads';
 import { workspaceManager } from '../engine/workspace';
 import { getExtensionManager } from '../engine/extensions';
+import { getDatabase } from '../database/db';
 import { app, shell } from 'electron';
 import { execSync } from 'child_process';
 
@@ -669,7 +670,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   // ─── Geçmiş ───
 
   ipcMain.handle('history:search', (_event, query: string, limit?: number) => {
-    return historyManager.search(query, limit);
+    return historyManager.search(query, limit || 20);
   });
 
   ipcMain.handle('history:get-status', () => {
@@ -682,13 +683,7 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   });
 
   ipcMain.handle(IPC_CHANNELS.HISTORY_GET, (_event, limit?: number) => {
-    const path = require('path');
-    const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
-    const items = historyManager.getHistory(limit || 100);
-    try {
-      require('fs').appendFileSync(logPath, `\n[${new Date().toISOString()}] HISTORY_GET: count=${items.length}\n`);
-    } catch {}
-    return items;
+    return historyManager.getHistory(limit || 100);
   });
 
   ipcMain.handle(IPC_CHANNELS.HISTORY_CLEAR, () => {
@@ -748,31 +743,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   ipcMain.handle('system:set-route-state', (_event, route: string) => {
     getTabManager()?.setRendererRoute(route);
-  });
-
-  // ─── Çalışma Alanları (Workspaces) ───
-  ipcMain.handle('workspace:get-all', () => {
-    return workspaceManager.getWorkspaces();
-  });
-
-  ipcMain.handle('workspace:get-active', () => {
-    return workspaceManager.getActiveWorkspace();
-  });
-
-  ipcMain.handle('workspace:set-active', (_event, id: string) => {
-    workspaceManager.setActiveWorkspace(id);
-    const tm = getTabManager();
-    if (tm) {
-      tm.setActiveWorkspace(id);
-    }
-  });
-
-  ipcMain.handle('workspace:add', (_event, name: string, icon?: string) => {
-    return workspaceManager.addWorkspace(name, icon);
-  });
-
-  ipcMain.handle('workspace:remove', (_event, id: string) => {
-    workspaceManager.removeWorkspace(id);
   });
 
   // ─── Dal 4: Gelişmiş Özellikler ───
@@ -1012,6 +982,10 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     menu.popup({ window: win });
   });
 
+  ipcMain.handle('app:is-incognito', () => {
+    return activeWindowManager?.isIncognito ?? false;
+  });
+
   ipcMain.handle('app:new-incognito-window', () => {
     // Yeni bir gizli WindowManager başlat
     const incognitoWin = new WindowManager(true);
@@ -1151,6 +1125,8 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     const tm = getTabManager();
     if (tm) {
       tm.activeWorkspace = id;
+      tm.notifyTabUpdate();
+      console.log(`[IPC] workspace:set-active updated for TabManager to: ${id}`);
       const workspaceTabs = tm.getTabList();
       if (workspaceTabs.length > 0) {
         tm.switchToTab(workspaceTabs[0].id);

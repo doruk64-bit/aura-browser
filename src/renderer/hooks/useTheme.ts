@@ -45,8 +45,16 @@ export function useTheme() {
   }, [accentColor]);
 
   useEffect(() => {
+    window.electronAPI?.system?.isIncognito().then((isIncognito: boolean) => {
+      document.documentElement.dataset.incognito = isIncognito ? 'true' : 'false';
+    });
+  }, []);
+
+  useEffect(() => {
     const root = document.documentElement;
-    if (gxTheme) {
+    const isIncognito = root.dataset.incognito === 'true';
+
+    if (gxTheme && !isIncognito) {
       const t = (GX_THEMES as any).find((x: any) => x.id === gxTheme);
       if (t) {
         root.style.setProperty('--bg-primary', t.bg);

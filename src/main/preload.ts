@@ -145,6 +145,7 @@ const electronAPI = {
   // ─── Dal 4: Gelişmiş Özellikler ───
   system: {
     newIncognitoWindow: () => ipcRenderer.invoke('app:new-incognito-window'),
+    isIncognito: () => ipcRenderer.invoke('app:is-incognito'),
     showMainMenu: () => ipcRenderer.invoke('app:show-main-menu'),
     toggleChromeMenu: (bounds: { x: number, y: number }) => ipcRenderer.invoke('app:toggle-chrome-menu', bounds),
     closeChromeMenu: () => ipcRenderer.invoke('app:close-chrome-menu'),

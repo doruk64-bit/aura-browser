@@ -16,9 +16,12 @@ import { useState, useEffect } from 'react';
 
 export default function TopBar() {
   const [updateInfo, setUpdateInfo] = useState<{ progress: number, version: string } | null>(null);
+  const [isIncognito, setIsIncognito] = useState(false);
   const platform = window.electronAPI?.platform ?? 'win32';
 
   useEffect(() => {
+    window.electronAPI?.system?.isIncognito().then(setIsIncognito);
+    
     const unsubStarted = window.electronAPI?.system.onUpdateStarted((data) => {
       setUpdateInfo({ progress: 0, version: data.version });
     });
@@ -52,12 +55,31 @@ export default function TopBar() {
   );
 
   const LogoText = () => (
-    <span style={{
-      fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.5)',
-      letterSpacing: '0.5px', whiteSpace: 'nowrap',
-    }}>
-      Morrow Browser
-    </span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <span style={{
+        fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.5)',
+        letterSpacing: '0.5px', whiteSpace: 'nowrap',
+      }}>
+        Morrow Browser
+      </span>
+      {isIncognito && (
+        <div style={{
+          padding: '2px 8px',
+          background: 'rgba(147, 197, 253, 0.15)',
+          border: '1px solid rgba(147, 197, 253, 0.3)',
+          borderRadius: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px'
+        }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span style={{ fontSize: '9px', fontWeight: 700, color: '#93c5fd', textTransform: 'uppercase' }}>Gizli</span>
+        </div>
+      )}
+    </div>
   );
 
   return (

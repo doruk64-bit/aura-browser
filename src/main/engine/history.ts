@@ -14,7 +14,7 @@ export interface HistoryEntry {
 }
 
 export class HistoryManager {
-  addVisit(url: string, title: string): void {
+  addVisit(url: string, title: string, workspaceId: string = 'default'): void {
     const path = require('path');
     const { app } = require('electron');
     const logPath = path.join(app.getPath('userData'), 'nav_log.txt');
@@ -44,7 +44,7 @@ export class HistoryManager {
         title,
         visit_count: 1,
         last_visited_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
       });
     }
 
@@ -53,7 +53,9 @@ export class HistoryManager {
 
   getHistory(limit: number = 100, offset: number = 0): HistoryEntry[] {
     const db = getDatabase();
-    return db.getHistory()
+    const history = db.getHistory();
+
+    return history
       .sort((a, b) => new Date(b.last_visited_at).getTime() - new Date(a.last_visited_at).getTime())
       .slice(offset, offset + limit);
   }
@@ -61,8 +63,9 @@ export class HistoryManager {
   search(query: string, limit: number = 20): HistoryEntry[] {
     const db = getDatabase();
     const lowerQuery = query.toLowerCase();
-    
-    return db.getHistory()
+    const history = db.getHistory();
+
+    return history
       .filter((h) => h.url.toLowerCase().includes(lowerQuery) || h.title.toLowerCase().includes(lowerQuery))
       .sort((a, b) => {
         if (b.visit_count !== a.visit_count) return b.visit_count - a.visit_count;

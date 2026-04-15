@@ -1150,6 +1150,7 @@ export class TabManager {
       }
     });
 
+
     // Dal 4: Popupları yeni sekme olarak aç
     wc.setWindowOpenHandler((details) => {
       this.createTab(details.url);
@@ -1181,7 +1182,7 @@ export class TabManager {
     });
   }
 
-  private notifyTabUpdate(): void {
+  public notifyTabUpdate(): void {
     this.sendToRenderer(IPC_CHANNELS.TAB_UPDATE, {
       tabs: this.getTabList(),
       activeTabId: this.activeTabId,

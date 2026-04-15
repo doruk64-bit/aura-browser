@@ -103,6 +103,7 @@ export const IPC_CHANNELS = {
   TAB_LANGUAGE_DETECTED: 'tab:language-detected',
   GESTURE_FEEDBACK: 'gesture:feedback',
   SYSTEM_SET_TOUCHPAD_GESTURES_ENABLED: 'system:set-touchpad-gestures-enabled',
+  SYSTEM_SET_WORKSPACE_SPECIFIC_HISTORY_ENABLED: 'system:set-workspace-specific-history-enabled',
   TAB_REPORT_BOUNDS: 'tab:report-bounds',
 } as const;
 
