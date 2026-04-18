@@ -45,6 +45,7 @@ interface TabState {
   addTabToGroup: (tabId: number, groupId: string) => void;
   removeFromGroup: (tabId: number) => void;
   toggleGroupCollapse: (groupId: string) => void;
+  updateGroup: (groupId: string, title?: string, color?: string) => void;
 }
 
 export const useTabStore = create<TabState>((set) => ({
@@ -123,6 +124,12 @@ export const useTabStore = create<TabState>((set) => ({
   toggleGroupCollapse: (groupId) => 
     set((state) => {
        window.electronAPI?.tabs?.group?.toggleCollapse(groupId);
+       return state;
+    }),
+
+  updateGroup: (groupId, title, color) =>
+    set((state) => {
+       window.electronAPI?.tabs?.group?.update(groupId, title, color);
        return state;
     }),
 }));

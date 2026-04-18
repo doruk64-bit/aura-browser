@@ -3,28 +3,17 @@
  * Açık sekmeleri listeler + yeni sekme butonu
  */
 
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTabStore } from '../../store/useTabStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import Tab from './Tab';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  horizontalListSortingStrategy,
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+import Sortable from 'sortablejs';
 
 export default function TabStrip() {
-  const { tabs, activeTabId, reorderTabs, groupTabs } = useTabStore();
+  const { tabs, activeTabId, reorderTabs, groupTabs, groups, toggleGroupCollapse, updateGroup } = useTabStore();
+  const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
+  const [editGroupTitle, setEditGroupTitle] = useState<string>('');
   const { tabGroupingEnabled } = useSettingsStore();
 
   const handleCreate = () => {
@@ -44,23 +33,74 @@ export default function TabStrip() {
     window.electronAPI?.tabs.switchTo(tabId);
   };
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
+  const sortableRef = useRef<Sortable | null>(null);
+  const gridRef = useRef<HTMLDivElement | null>(null);
 
-
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    const activeId = active.id as number;
-
-    if (over && activeId !== (over.id as number)) {
-      const overId = over.id as number;
-      reorderTabs(activeId, overId);
-      window.electronAPI?.tabs.reorder(activeId, overId);
+  useEffect(() => {
+    if (gridRef.current) {
+      sortableRef.current = new Sortable(gridRef.current, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        dragClass: 'sortable-drag',
+        draggable: '.tab-item',
+        filter: '.no-drag',
+        direction: 'horizontal',
+        forceFallback: true,
+        fallbackTolerance: 3,
+        fallbackOnBody: true,
+        onStart: () => {
+          const dragEl = document.querySelector('.sortable-drag') as HTMLElement;
+          if (dragEl) {
+            // Başlangıçtaki dikey (Y) konumunu kaydet
+            const lockedY = dragEl.getBoundingClientRect().top;
+            
+            const lockY = () => {
+              const currentDragEl = document.querySelector('.sortable-drag') as HTMLElement;
+              if (currentDragEl) {
+                currentDragEl.style.setProperty('top', `${lockedY}px`, 'important');
+                (window as any)._dragLockFrame = requestAnimationFrame(lockY);
+              }
+            };
+            lockY();
+          }
+        },
+        onEnd: (evt) => {
+          if ((window as any)._dragLockFrame) {
+            cancelAnimationFrame((window as any)._dragLockFrame);
+          }
+          const itemEl = evt.item;
+          const activeId = Number(itemEl.getAttribute('data-id'));
+          const newIndex = evt.newIndex;
+          const oldIndex = evt.oldIndex;
+          
+          if (activeId && newIndex !== undefined && oldIndex !== undefined && newIndex !== oldIndex) {
+            // Find what was at the new index visually
+            // SortableJS mutates the DOM directly. We should use the DOM array to find the overId
+            const nodes = Array.from(gridRef.current!.querySelectorAll('.tab-item'));
+            // React hasn't updated yet, so nodes in the DOM currently represent the new state
+            // The item has already been inserted at 'newIndex'
+            // To sync with React state without causing hydration issues, we need to find the node that it swapped with
+            // Actually, if we just find the data-id of the element that we dropped on:
+            // But an easier way: we know oldIndex and newIndex relative to draggable items
+             
+            // We can just get the new order from the DOM
+            const newOrderIds = nodes.map(node => Number(node.getAttribute('data-id')));
+            const overId = newOrderIds[newIndex === newOrderIds.length - 1 ? newIndex - 1 : newIndex + 1] || newOrderIds[newIndex];
+            
+            // Reorder functionally using our store logic
+            if (activeId !== overId) {
+                reorderTabs(activeId, overId);
+                window.electronAPI?.tabs.reorder(activeId, overId);
+            }
+          }
+        }
+      });
     }
-  };
+
+    return () => {
+      sortableRef.current?.destroy();
+    };
+  }, [tabs.length]); // re-init or bind slightly, though Sortable handles DOM updates well natively
 
   return (
     <div
@@ -83,27 +123,97 @@ export default function TabStrip() {
           display: none;
         }
       `}</style>
-      <DndContext 
-        sensors={sensors} 
-        collisionDetection={closestCenter} 
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext items={tabs.map((t) => t.id)} strategy={horizontalListSortingStrategy}>
+      <div ref={gridRef} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
             {tabs.map((tab, index) => {
+              const previousTab = index > 0 ? tabs[index - 1] : null;
+              const isFirstInGroup = tab.groupId && (!previousTab || previousTab.groupId !== tab.groupId);
               const hasSeparator = index < tabs.length - 1 && tab.groupId !== tabs[index + 1]?.groupId;
+              
+              const group = tab.groupId ? groups.find(g => g.id === tab.groupId) : null;
+              
+              // Sadece sekmeyi gizle, grup etiketini (pill) her halükarda çiz
+              const isTabHidden = group?.collapsed && tab.id !== activeTabId;
+
               return (
-                <Tab
-                  key={tab.id}
-                  tab={tab}
-                  isActive={tab.id === activeTabId}
-                  hasSeparator={hasSeparator}
-                  onSelect={() => handleSelect(tab.id)}
-                  onClose={(e) => handleClose(e, tab.id)}
-                />
+                <React.Fragment key={`frag-${tab.id}`}>
+                  {isFirstInGroup && group && (
+                    <motion.div
+                      className="no-drag"
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        if (editingGroupId !== group.id) toggleGroupCollapse(group.id); 
+                      }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setEditingGroupId(group.id);
+                        setEditGroupTitle(group.title);
+                      }}
+                      whileHover={{ filter: 'brightness(1.1)' }}
+                      whileTap={{ scale: 0.95 }}
+                      title={group.collapsed ? 'Grubu Genişlet' : 'Grubu Daralt'}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '24px',
+                        padding: '0 8px',
+                        borderRadius: '12px',
+                        background: group.color,
+                        color: '#fff',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        marginRight: '6px',
+                        marginLeft: '4px',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        WebkitAppRegion: 'no-drag',
+                      } as any}
+                    >
+                      {editingGroupId === group.id ? (
+                        <input
+                          autoFocus
+                          value={editGroupTitle}
+                          onChange={(e) => setEditGroupTitle(e.target.value)}
+                          onBlur={() => {
+                            updateGroup(group.id, editGroupTitle.trim() || 'Grup');
+                            setEditingGroupId(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              updateGroup(group.id, editGroupTitle.trim() || 'Grup');
+                              setEditingGroupId(null);
+                            }
+                          }}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'inherit',
+                            font: 'inherit',
+                            outline: 'none',
+                            width: `${Math.max(40, editGroupTitle.length * 7)}px`,
+                            textAlign: 'center',
+                          }}
+                        />
+                      ) : (
+                        group.title
+                      )}
+                    </motion.div>
+                  )}
+                  {!isTabHidden && (
+                    <Tab
+                      key={tab.id}
+                      tab={tab}
+                      isActive={tab.id === activeTabId}
+                      hasSeparator={hasSeparator}
+                      onSelect={() => handleSelect(tab.id)}
+                      onClose={(e) => handleClose(e, tab.id)}
+                    />
+                  )}
+                </React.Fragment>
               );
             })}
-        </SortableContext>
-      </DndContext>
+      </div>
 
       {/* Yeni Sekme Butonu */}
       <motion.button

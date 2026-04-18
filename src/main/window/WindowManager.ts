@@ -5,7 +5,7 @@
  * donanım hızlandırma ve pencere boyut olaylarını yönetir.
  */
 
-import { BrowserWindow, app, screen } from 'electron';
+import { BrowserWindow, app, screen, Menu, MenuItem } from 'electron';
 import path from 'path';
 import { TabManager } from './tab-manager';
 
@@ -47,6 +47,28 @@ export class WindowManager {
     // Pencere hazır olduğunda göster (beyaz ekran flash'ını önle)
     this.mainWindow.once('ready-to-show', () => {
       this.mainWindow?.show();
+    });
+
+    // Ana pencere UI için sağ tık (Copy/Paste/Cut) menüsü
+    this.mainWindow.webContents.on('context-menu', (_event, params) => {
+      const menu = new Menu();
+
+      if (params.isEditable) {
+        menu.append(new MenuItem({ role: 'undo', label: 'Geri Al' }));
+        menu.append(new MenuItem({ role: 'redo', label: 'Yinele' }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ role: 'cut', label: 'Kes' }));
+        menu.append(new MenuItem({ role: 'copy', label: 'Kopyala' }));
+        menu.append(new MenuItem({ role: 'paste', label: 'Yapıştır' }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ role: 'selectAll', label: 'Tümünü Seç' }));
+      } else if (params.selectionText && params.selectionText.trim() !== '') {
+        menu.append(new MenuItem({ role: 'copy', label: 'Kopyala' }));
+      }
+
+      if (menu.items.length > 0) {
+        menu.popup({ window: this.mainWindow! });
+      }
     });
 
     // TabManager'ı başlat

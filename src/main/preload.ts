@@ -54,6 +54,8 @@ const electronAPI = {
         ipcRenderer.invoke(IPC_CHANNELS.TAB_GROUP_REMOVE, tabId),
       toggleCollapse: (groupId: string) =>
         ipcRenderer.invoke(IPC_CHANNELS.TAB_GROUP_COLLAPSE, groupId),
+      update: (groupId: string, title?: string, color?: string) =>
+        ipcRenderer.invoke(IPC_CHANNELS.TAB_GROUP_UPDATE, groupId, title, color),
     },
     reportBounds: (bounds: { x: number, y: number, width: number, height: number }) =>
       ipcRenderer.send(IPC_CHANNELS.TAB_REPORT_BOUNDS, bounds),

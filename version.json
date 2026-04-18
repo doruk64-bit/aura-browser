@@ -1,5 +1,5 @@
 {
-  "latest_id": 13,
-  "version": "1.4.6",
-  "notes": "v1.4.6 - Incognito mode dark theme implementation, minimalist Focus hub redesign for new tabs, UI/UX structure cleanups."
+  "latest_id": 14,
+  "version": "1.4.7",
+  "notes": "v1.4.7 - Premium SortableJS integration for fluid live tab reordering constraints, inline tab grouping, and new cosmic Morrow branding."
 }

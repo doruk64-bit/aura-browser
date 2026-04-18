@@ -651,20 +651,28 @@ export class TabManager {
       this.pinnedTabIds.add(tabId);
     }
 
+    // Sabitlenmiş sekmeleri otomatik olarak her zaman en sola al
+    const pinned = this.tabOrder.filter(id => this.pinnedTabIds.has(id));
+    const unpinned = this.tabOrder.filter(id => !this.pinnedTabIds.has(id));
+    this.tabOrder = [...pinned, ...unpinned];
+
     // Veritabanını güncelle
     const { getDatabase } = require('../database/db');
     const db = getDatabase();
 
     const pinnedTabs = [];
-    for (const [id, view] of this.tabs) {
+    for (const id of this.tabOrder) { // Order listesinden alarak mantıksal sıralamayı koru
       if (this.pinnedTabIds.has(id)) {
-        const wc = view.webContents;
-        const wsId = this.tabWorkspaces.get(id) || 'default';
-        pinnedTabs.push({
-          url: wc.getURL(),
-          title: wc.getTitle(),
-          workspaceId: wsId
-        });
+        const view = this.tabs.get(id);
+        if (view) {
+          const wc = view.webContents;
+          const wsId = this.tabWorkspaces.get(id) || 'default';
+          pinnedTabs.push({
+            url: wc.getURL(),
+            title: wc.getTitle(),
+            workspaceId: wsId
+          });
+        }
       }
     }
     db.setPinnedTabs(pinnedTabs);
@@ -737,6 +745,12 @@ export class TabManager {
     // Dizide yer değiştirme (Splice)
     const [movedTab] = this.tabOrder.splice(oldIndex, 1);
     this.tabOrder.splice(newIndex, 0, movedTab);
+
+    // Sürükle-bırak sonrasında bile pinned sekmelerin arasına
+    // normal sekme karışmasını engelle (Chrome mantığı)
+    const pinned = this.tabOrder.filter(id => this.pinnedTabIds.has(id));
+    const unpinned = this.tabOrder.filter(id => !this.pinnedTabIds.has(id));
+    this.tabOrder = [...pinned, ...unpinned];
 
     this.notifyTabUpdate();
   }
@@ -1380,6 +1394,15 @@ export class TabManager {
     const group = this.tabGroups.get(groupId);
     if (group) {
       group.collapsed = !group.collapsed;
+      this.notifyTabUpdate();
+    }
+  }
+
+  updateTabGroup(groupId: string, title?: string, color?: string): void {
+    const group = this.tabGroups.get(groupId);
+    if (group) {
+      if (title !== undefined) group.title = title;
+      if (color !== undefined) group.color = color;
       this.notifyTabUpdate();
     }
   }

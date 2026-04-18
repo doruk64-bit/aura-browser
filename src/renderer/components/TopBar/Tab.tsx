@@ -4,8 +4,6 @@
  */
 
 import { motion } from 'framer-motion';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import type { Tab as TabType } from '../../store/useTabStore';
 
 interface TabProps {
@@ -17,22 +15,6 @@ interface TabProps {
 }
 
 export default function Tab({ tab, isActive, hasSeparator, onSelect, onClose }: TabProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition: dndTransition,
-    isDragging,
-  } = useSortable({ id: tab.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: dndTransition,
-    zIndex: isDragging ? 50 : 1,
-    opacity: isDragging ? 0.9 : 1,
-  };
-
   const getFaviconUrl = (url: string) => {
     try {
       if (!url || url === 'about:blank') return null;
@@ -47,26 +29,25 @@ export default function Tab({ tab, isActive, hasSeparator, onSelect, onClose }: 
 
   return (
     <motion.div
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      layout={!isDragging}
+      data-id={tab.id}
       initial={{ opacity: 0, scale: 0.85, width: 0 }}
-      animate={{ opacity: isDragging ? 0.9 : 1, scale: isDragging ? 1.05 : 1, width: 'auto' }}
+      animate={{ opacity: 1, scale: 1, width: 'auto' }}
       exit={{ opacity: 0, scale: 0.85, width: 0 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       onPointerDown={(e) => {
         // Orta tuş ile kapatma desteği
-        if (e.button === 1) onClose(e as any);
-        else onSelect();
+        if (e.button === 1) {
+          onClose(e as any);
+        } else {
+          onSelect();
+        }
       }}
       onContextMenu={(e) => {
         e.preventDefault();
         window.electronAPI?.tabs.showContextMenu(tab.id, !!tab.isPinned);
       }}
-      className="no-drag no-select"
+      className="tab-item no-select"
       style={{
-        ...style,
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
@@ -74,8 +55,8 @@ export default function Tab({ tab, isActive, hasSeparator, onSelect, onClose }: 
         padding: '0 12px',
         borderRadius: 'var(--radius-sm)',
         cursor: 'pointer',
-        minWidth: tab.isPinned ? '36px' : tab.groupId ? '60px' : '100px',
-        maxWidth: tab.isPinned ? '36px' : tab.groupId ? '90px' : '200px',
+        minWidth: (tab.isPinned && !isActive) ? '36px' : tab.groupId ? '60px' : '100px',
+        maxWidth: (tab.isPinned && !isActive) ? '36px' : tab.groupId ? '90px' : '200px',
         flexShrink: 0,
         marginRight: hasSeparator ? '12px' : '0px',
         fontSize: '12px',
@@ -137,7 +118,7 @@ export default function Tab({ tab, isActive, hasSeparator, onSelect, onClose }: 
       </div>
 
       {/* Başlık */}
-      {!tab.isPinned && (
+      {(!tab.isPinned || isActive) && (
         <span style={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -149,7 +130,7 @@ export default function Tab({ tab, isActive, hasSeparator, onSelect, onClose }: 
       )}
 
       {/* Kapat butonu */}
-      {!tab.isPinned && (
+      {(!tab.isPinned || isActive) && (
         <motion.button
           onClick={onClose}
           onPointerDown={(e) => e.stopPropagation()} // Drag'ı engelle

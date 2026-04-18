@@ -11,6 +11,7 @@ import { useSettingsStore, SEARCH_ENGINES } from '../../store/useSettingsStore';
 import GestureOverlay from './GestureOverlay';
 
 // Discover images removed as per focus mode implementation
+import logoImg from '../../assets/logo.jpg';
 
 const DEFAULT_FAVORITES = [
   { name: 'YouTube', url: 'https://www.youtube.com', icon: '📺', color: '#ff0000' },
@@ -359,14 +360,13 @@ export default function WebViewArea() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
           <div style={{ 
             width: '64px', height: '64px', borderRadius: '18px', 
-            background: 'linear-gradient(135deg, var(--accent) 0%, #ec4899 100%)', 
+            background: 'var(--bg-elevated)', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
             boxShadow: '0 8px 32px var(--accent-glow)',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            overflow: 'hidden'
           }}>
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-            </svg>
+            <img src={logoImg} alt="Morrow" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <h1 style={{ 
             fontSize: '32px', fontWeight: 800, letterSpacing: '4px', 

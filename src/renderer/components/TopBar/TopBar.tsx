@@ -11,6 +11,7 @@ import NavigationButtons from './NavigationButtons';
 import Omnibox from './Omnibox';
 import ChromeMenu from './ChromeMenu';
 import DefaultBrowserBanner from './DefaultBrowserBanner';
+import logoImg from '../../assets/logo.jpg';
 
 import { useState, useEffect } from 'react';
 
@@ -42,16 +43,14 @@ export default function TopBar() {
   }, []);
 
   const LogoIcon = () => (
-    <div style={{
-      width: '18px', height: '18px', borderRadius: '5px',
-      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-        <path d="M2 17l10 5 10-5" />
-      </svg>
-    </div>
+    <img 
+      src={logoImg} 
+      alt="Morrow Logo"
+      style={{
+        width: '18px', height: '18px', borderRadius: '5px',
+        objectFit: 'cover'
+      }} 
+    />
   );
 
   const LogoText = () => (

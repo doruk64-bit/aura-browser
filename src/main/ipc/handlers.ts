@@ -537,6 +537,10 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     getTabManager()?.toggleGroupCollapse(groupId);
   });
 
+  ipcMain.handle(IPC_CHANNELS.TAB_GROUP_UPDATE, (_event, groupId: string, title?: string, color?: string) => {
+    getTabManager()?.updateTabGroup(groupId, title, color);
+  });
+
   ipcMain.handle('tab:show-context-menu', (_event, tabId: number, isPinned: boolean) => {
     const tabManager = getTabManager();
     const win = windowManager.getMainWindow();

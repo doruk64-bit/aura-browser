@@ -15,6 +15,7 @@ export const IPC_CHANNELS = {
   TAB_GROUP_ADD: 'tab:group-add',
   TAB_GROUP_REMOVE: 'tab:group-remove',
   TAB_GROUP_COLLAPSE: 'tab:group-collapse',
+  TAB_GROUP_UPDATE: 'tab:group-update',
   TAB_TOGGLE_PIP: 'tab:toggle-pip',
   TAB_EXECUTE_JS: 'tab:execute-js',
   TAB_GET_ZOOM_LEVEL: 'tab:get-zoom-level',
