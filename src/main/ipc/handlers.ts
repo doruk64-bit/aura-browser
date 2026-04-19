@@ -1185,8 +1185,8 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
   let lastAnchorRect: { x: number; y: number; width: number; height: number } = { x: 0, y: 0, width: 30, height: 30 };
 
   ipcMain.handle('extension:open-list-popup', async (_event, anchorRect: { x: number; y: number; width: number; height: number }) => {
-    const { BrowserWindow: BW, screen: scr } = require('electron');
-    lastAnchorRect = anchorRect; // extension popup için sakla
+    const { BrowserWindow: BW } = require('electron');
+    lastAnchorRect = anchorRect;
     
     if (extListWindow && !extListWindow.isDestroyed()) {
       extListWindow.close();
@@ -1198,65 +1198,203 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     const mainWin = BW.getAllWindows().find((w: any) => !w.__extensionPopup && !w.__extList);
     const winBounds = mainWin?.getBounds() || { x: 0, y: 0 };
 
-    const popupWidth = 310;
+    const popupWidth = 320;
     const popupX = Math.round(winBounds.x + anchorRect.x + anchorRect.width - popupWidth);
     const popupY = Math.round(winBounds.y + anchorRect.y + anchorRect.height + 6);
 
-    const extData = extensions.map((ext: any) => {
-      const iconUrl = `chrome-extension://${ext.id}/icon48.png`;
-      return { id: ext.id, name: ext.name, version: ext.version, iconUrl };
-    });
+    const extData = extensions.map((ext: any) => ({
+      id: ext.id,
+      name: ext.name,
+      version: ext.version,
+      iconUrl: ext.iconUrl
+    }));
 
     const html = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, 'Inter', sans-serif; background: #1c1b2e; color: #fff; border-radius: 14px; overflow: hidden; border: 1px solid rgba(139,92,246,0.25); }
-.header { padding: 13px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; }
-.header h3 { font-size: 13px; font-weight: 700; color:#fff; }
-.close-btn { background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:15px; width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; }
-.close-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
-.subtitle { padding: 10px 16px 4px; font-size:11px; font-weight:600; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.5px; }
-.ext-list { overflow-y: auto; }
-.ext-item { display:flex; align-items:center; gap:12px; padding:8px 16px; cursor:pointer; transition:background 0.1s; }
-.ext-item:hover { background:rgba(255,255,255,0.05); }
-.ext-icon { width:32px; height:32px; border-radius:8px; background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; overflow:hidden; }
-.ext-icon img { width:100%; height:100%; object-fit:contain; }
-.ext-info { flex:1; min-width:0; }
-.ext-name { font-size:13px; font-weight:500; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ext-ver { font-size:10px; color:rgba(255,255,255,0.35); }
-.actions { display:flex; gap:2px; flex-shrink:0; }
-.action-btn { width:26px; height:26px; background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; }
-.action-btn:hover { background:rgba(248,113,113,0.12); color:#f87171; }
-.footer { border-top: 1px solid rgba(255,255,255,0.07); padding:4px; }
-.footer-btn { width:100%; display:flex; align-items:center; gap:10px; padding:10px 12px; background:none; border:none; border-radius:10px; color:rgba(255,255,255,0.6); cursor:pointer; font-size:12px; font-weight:500; }
-.footer-btn:hover { background:rgba(255,255,255,0.05); color:#fff; }
-.empty { padding:28px 16px; text-align:center; color:rgba(255,255,255,0.3); font-size:12px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { 
+    font-family: -apple-system, 'SF Pro Display', 'Inter', sans-serif; 
+    background: rgba(13, 10, 25, 0.98); 
+    color: #fff; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    height: 520px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header { 
+    padding: 14px 18px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center;
+    flex-shrink: 0;
+  }
+  .header h3 { font-size: 14px; font-weight: 700; color:#fff; }
+  .close-btn { 
+    background:none; border:none; color:rgba(255,255,255,0.3); 
+    cursor:pointer; font-size:16px; width:26px; height:26px; 
+    border-radius:8px; display:flex; align-items:center; justify-content:center;
+    transition: 0.2s;
+  }
+  .close-btn:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .content::-webkit-scrollbar { width: 4px; }
+  .content::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.2); border-radius: 10px; }
+
+  /* action card */
+  .action-card {
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+    border-radius: 18px;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .action-card:hover { transform: scale(1.02); }
+  .action-card .bg-icon { position: absolute; right: -8px; top: -8px; font-size: 40px; opacity: 0.1; }
+  .action-card .card-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .action-card p { font-size: 10px; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.4; }
+
+  /* search bar */
+  .search-area {
+    display: flex; gap: 8px; flex-shrink: 0; margin-bottom: 4px; padding: 0 4px;
+  }
+  .search-box {
+    flex: 1; position: relative;
+  }
+  .search-box input {
+    width: 100%; padding: 10px 10px 10px 32px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; color: #fff; font-size: 12px; outline: none;
+  }
+  .search-icon { position: absolute; left: 10px; top: 10px; opacity: 0.3; }
+
+  .subtitle { 
+    font-size:10px; font-weight:800; 
+    color:rgba(139, 92, 246, 0.6); 
+    text-transform:uppercase; 
+    letter-spacing:1px; 
+    padding: 0 4px;
+  }
+
+  .ext-item { 
+    display:flex; align-items:center; gap:12px; 
+    padding:12px; border-radius: 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.03);
+    transition: all 0.2s; 
+    cursor: pointer;
+  }
+  .ext-item:hover { 
+    background:rgba(255,255,255,0.04); 
+    border-color: rgba(139, 92, 246, 0.2);
+    transform: translateX(2px);
+  }
+  
+  .ext-icon { 
+    width:36px; height:36px; border-radius:10px; 
+    background:rgba(255,255,255,0.04); 
+    display:flex; align-items:center; justify-content:center; 
+    flex-shrink:0; overflow:hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .ext-icon img { width:20px; height:20px; object-fit:contain; }
+  
+  .ext-info { flex:1; min-width:0; }
+  .ext-name { font-size:12px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ext-ver { font-size:10px; color:rgba(255,255,255,0.3); }
+
+  .action-btn { 
+    width:26px; height:26px; background:none; border:none; 
+    color:rgba(255,255,255,0.2); cursor:pointer; 
+    border-radius:8px; display:flex; align-items:center; justify-content:center; 
+    transition: 0.2s;
+  }
+  .action-btn:hover { color:#f87171; background: rgba(248,113,113,0.1); }
+
+  .footer { 
+    border-top: 1px solid rgba(255,255,255,0.05); 
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+  .footer-btn { 
+    width:100%; display:flex; align-items:center; gap:10px; 
+    padding:10px 12px; background:none; border:none; 
+    border-radius:10px; color:rgba(255,255,255,0.4); 
+    cursor:pointer; font-size:12px; font-weight:600;
+    transition: 0.2s;
+  }
+  .footer-btn:hover { background:rgba(255,255,255,0.05); color:#fff; }
+
+  .empty { padding:40px 20px; text-align:center; color:rgba(255,255,255,0.2); font-size:12px; }
 </style>
 </head>
 <body>
-<div class="header"><h3>Uzantılar</h3><button class="close-btn" onclick="window.close()">&#x2715;</button></div>
-${extData.length > 0 ? '<div class="subtitle">Yüklü Uzantılar</div>' : ''}
-<div class="ext-list">
-${extData.length === 0 ? '<div class="empty">Henüz yüklü uzantı yok.</div>' : extData.map((e: any) => `
-<div class="ext-item" onclick="openPopup('${e.id}')">
-  <div class="ext-icon"><img src="${e.iconUrl}" onerror="this.style.display='none';this.parentElement.textContent='🧩'"></div>
-  <div class="ext-info"><div class="ext-name">${e.name}</div><div class="ext-ver">v${e.version}</div></div>
-  <div class="actions"><button class="action-btn" onclick="event.stopPropagation();removeExt('${e.id}')" title="Kaldır">&#x2715;</button></div>
-</div>`).join('')}
+<div class="header"><h3>Uzantılar</h3><button class="close-btn" onclick="window.close()">✕</button></div>
+
+<div class="content">
+  <div class="action-card" onclick="openWebStore()">
+    <div class="bg-icon">🌐</div>
+    <div class="card-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Chrome Web Store
+    </div>
+    <p>Binlerce eklentiyi keşfet ve kur.</p>
+  </div>
+
+  <div class="search-area">
+    <div class="search-box">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Eklentilerde ara..." oninput="filterExts(this.value)">
+    </div>
+  </div>
+
+  <div class="subtitle">Yüklü Modüller</div>
+  <div class="ext-container" id="extContainer">
+    ${extData.length === 0 ? '<div class="empty">Yüklü eklenti yok.</div>' : extData.map((e: any) => `
+    <div class="ext-item" data-name="${e.name.toLowerCase()}" onclick="openPopup('${e.id}')">
+      <div class="ext-icon"><img src="${e.iconUrl}" onerror="this.style.display='none';this.parentElement.textContent='🧩'"></div>
+      <div class="ext-info"><div class="ext-name">${e.name}</div><div class="ext-ver">v${e.version}</div></div>
+      <div class="actions"><button class="action-btn" onclick="event.stopPropagation();removeExt('${e.id}')" title="Kaldır">✕</button></div>
+    </div>`).join('')}
+  </div>
 </div>
+
 <div class="footer">
-  <button class="footer-btn" onclick="openWebStore()">🌐 Chrome Web Store</button>
-  <button class="footer-btn" onclick="openSettings()">⚙️ Uzantıları yönet</button>
+  <button class="footer-btn" onclick="openSettings()">⚙️ Uzantıları Yönet</button>
 </div>
+
 <script>
   const { ipcRenderer } = require('electron');
   function openPopup(id) { ipcRenderer.invoke('extension:open-popup-from-list', id); window.close(); }
-  function removeExt(id) { ipcRenderer.invoke('extension:remove', id); window.close(); }
+  function removeExt(id) { if(confirm('Eklentiyi kaldırmak istediğine emin misin?')) { ipcRenderer.invoke('extension:remove', id); window.close(); } }
   function openWebStore() { ipcRenderer.invoke('extension:open-web-store'); window.close(); }
   function openSettings() { ipcRenderer.invoke('system:navigate-main-router', '/settings?category=extensions'); window.close(); }
+  
+  function filterExts(q) {
+    const items = document.querySelectorAll('.ext-item');
+    items.forEach(it => {
+      const name = it.getAttribute('data-name');
+      it.style.display = name.includes(q.toLowerCase()) ? 'flex' : 'none';
+    });
+  }
 <\/script>
 </body></html>`;
 

@@ -16,6 +16,7 @@ export interface LoadedExtension {
   name: string;
   version: string;
   path: string;
+  iconUrl: string;
 }
 
 let extensionManagerInstance: ExtensionManager | null = null;
@@ -70,14 +71,38 @@ export class ExtensionManager {
 
   // ─── Extension Management ───
 
+  private getIconUrl(ext: Electron.Extension): string {
+    let iconRelativePath = 'icon.png';
+    try {
+      const manifestPath = path.join(ext.path, 'manifest.json');
+      if (fs.existsSync(manifestPath)) {
+        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        const icons = manifest.icons || {};
+        iconRelativePath = icons['128'] || icons['48'] || icons['16'] || Object.values(icons)[0] || 'icon.png';
+      }
+
+      const fullPath = path.join(ext.path, iconRelativePath);
+      if (fs.existsSync(fullPath)) {
+        const buffer = fs.readFileSync(fullPath);
+        const extname = path.extname(fullPath).toLowerCase().replace('.', '');
+        const mimeType = extname === 'svg' ? 'image/svg+xml' : `image/${extname || 'png'}`;
+        return `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+    } catch (e) {
+      console.error(`[ExtensionManager] Icon loading error (${ext.id}):`, e);
+    }
+    // Fallback to protocol
+    return `chrome-extension://${ext.id}/${iconRelativePath}`;
+  }
+
   /** Yüklü eklentileri döndür (UI için) */
   getLoadedExtensions(): LoadedExtension[] {
-    // session.getAllExtensions() ile her zaman güncel listeyi al
     return this.profileSession.getAllExtensions().map(ext => ({
       id: ext.id,
       name: ext.name,
       version: ext.version,
       path: ext.path,
+      iconUrl: this.getIconUrl(ext),
     }));
   }
 
@@ -95,7 +120,13 @@ export class ExtensionManager {
     try {
       const ext = await this.profileSession.loadExtension(extensionPath, { allowFileAccess: true });
       console.log(`[ExtensionManager] Eklenti yüklendi: ${ext.name}`);
-      return { id: ext.id, name: ext.name, version: ext.version, path: ext.path };
+      return { 
+        id: ext.id, 
+        name: ext.name, 
+        version: ext.version, 
+        path: ext.path,
+        iconUrl: this.getIconUrl(ext)
+      };
     } catch (e) {
       console.error('[ExtensionManager] Eklenti yükleme hatası:', e);
       return null;

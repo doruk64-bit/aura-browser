@@ -179,80 +179,92 @@ export default function Sidebar() {
     <div
       className="no-select"
       style={{
-        width: '64px',
-        height: '100%',
-        background: 'var(--sidebar-bg)',
-        backdropFilter: 'blur(30px) saturate(200%)',
-        WebkitBackdropFilter: 'blur(30px) saturate(200%)',
-        borderRight: '1px solid rgba(139, 92, 246, 0.08)',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '8px 5px',
-        gap: '1px',
-        flexShrink: 0,
+        height: '100%',
         position: 'relative',
         zIndex: 50,
       }}
     >
-      {/* ─── Primary Actions ─── */}
-      <SidebarBtn icon={icons.focus} label="Focus" accent="#f472b6" onClick={() => window.electronAPI?.nav.go('about:blank')} />
-      <Divider />
-      <SidebarBtn icon={icons.ai} label="AI Bot" accent="#fbbf24" isActive={activePanel === 'ai'} onClick={() => toggle('ai')} />
-      <SidebarBtn icon={icons.tabs} label="Yer İmleri" isActive={activePanel === 'bookmarks'} onClick={() => toggle('bookmarks')} />
-      <Divider />
-
-      {/* ─── Secondary Actions ─── */}
-      <SidebarBtn icon={icons.history} label="Geçmiş" isActive={activePanel === 'history'} onClick={() => toggle('history')} />
-      <SidebarBtn icon={icons.download} label="İndirme" isActive={activePanel === 'downloads'} onClick={() => toggle('downloads')} />
-      <SidebarBtn icon={icons.folder} label="Alanlar" isActive={activePanel === 'workspaces'} onClick={() => toggle('workspaces')} />
-      <SidebarBtn icon={icons.notes} label="Notlar" isActive={activePanel === 'notes'} onClick={() => toggle('notes')} />
-
-      {sidebarPerformanceEnabled && (
-        <SidebarBtn icon={icons.bolt} label="Panel" isActive={activePanel === 'performance'} onClick={() => toggle('performance')} />
-      )}
-
-      {/* Spacer */}
-      <div style={{ flex: 1 }} />
-      
-      {/* Morrow Bot Micro-Widget */}
-      <PerformanceOverlay onClick={() => toggle('performance')} />
-
-      <Divider />
-      <SidebarBtn icon={icons.settings} label="Ayarlar" onClick={() => navigate('/settings')} />
-
-      {/* Sparkle */}
-      <motion.div
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-        style={{ marginTop: '4px', marginBottom: '2px',
-          fontSize: '12px', opacity: 0.4,
+      {/* ─── Left Icon Strip ─── */}
+      <div
+        style={{
+          width: '64px',
+          height: '100%',
+          background: 'var(--sidebar-bg)',
+          backdropFilter: 'blur(30px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(30px) saturate(200%)',
+          borderRight: '1px solid rgba(139, 92, 246, 0.08)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '8px 5px',
+          gap: '1px',
+          flexShrink: 0,
         }}
-      >✦</motion.div>
+      >
+        {/* ─── Primary Actions ─── */}
+        <SidebarBtn icon={icons.focus} label="Focus" accent="#f472b6" onClick={() => window.electronAPI?.nav.go('about:blank')} />
+        <Divider />
+        <SidebarBtn icon={icons.ai} label="AI Bot" accent="#fbbf24" isActive={activePanel === 'ai'} onClick={() => toggle('ai')} />
+        <SidebarBtn icon={icons.tabs} label="Yer İmleri" isActive={activePanel === 'bookmarks'} onClick={() => toggle('bookmarks')} />
+        <Divider />
 
-      {/* ─── Side Panel ─── */}
+        {/* ─── Secondary Actions ─── */}
+        <SidebarBtn icon={icons.history} label="Geçmiş" isActive={activePanel === 'history'} onClick={() => toggle('history')} />
+        <SidebarBtn icon={icons.download} label="İndirme" isActive={activePanel === 'downloads'} onClick={() => toggle('downloads')} />
+        <SidebarBtn icon={icons.folder} label="Alanlar" isActive={activePanel === 'workspaces'} onClick={() => toggle('workspaces')} />
+        <SidebarBtn icon={icons.notes} label="Notlar" isActive={activePanel === 'notes'} onClick={() => toggle('notes')} />
+
+        {sidebarPerformanceEnabled && (
+          <SidebarBtn icon={icons.bolt} label="Panel" isActive={activePanel === 'performance'} onClick={() => toggle('performance')} />
+        )}
+
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
+        
+        {/* Morrow Bot Micro-Widget */}
+        <PerformanceOverlay onClick={() => toggle('performance')} />
+
+        <Divider />
+        <SidebarBtn icon={icons.settings} label="Ayarlar" onClick={() => navigate('/settings')} />
+
+        {/* Sparkle */}
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+          style={{ marginTop: '4px', marginBottom: '2px',
+            fontSize: '12px', opacity: 0.4,
+          }}
+        >✦</motion.div>
+      </div>
+
+      {/* ─── Side Panel (Flex child, pushes content) ─── */}
       {activePanel !== 'none' && (
         <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -10 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, width: 0 }}
+          animate={{ opacity: 1, width: 320 }}
+          transition={{ duration: 0.25 }}
           style={{
-            position: 'absolute', left: '64px', top: 0, bottom: 0, width: '320px', zIndex: -1,
-            background: '#0d0a19', // Opaque version of the sidebar background
+            height: '100%',
+            background: '#0d0a19',
             borderRight: '1px solid rgba(139, 92, 246, 0.15)',
-            display: 'flex', flexDirection: 'column', overflow: 'hidden',
+            display: 'flex', 
+            flexDirection: 'column', 
+            overflow: 'hidden',
             boxShadow: '10px 0 30px rgba(0,0,0,0.5)',
+            position: 'relative',
+            zIndex: 1
           }}
         >
-          <div style={{ padding: '16px', paddingBottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>
+          <div style={{ padding: '16px', paddingBottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', minWidth: '320px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap' }}>
               {activePanel === 'bookmarks' && '📑 Yer İmleri'}
               {activePanel === 'history' && '🕐 Geçmiş'}
               {activePanel === 'downloads' && '📥 İndirmeler'}
               {activePanel === 'workspaces' && '📂 Çalışma Alanları'}
               {activePanel === 'notes' && '📝 Not Defteri'}
               {activePanel === 'ai' && '✨ Morrow AI'}
+              {activePanel === 'performance' && '⚡️ Performans'}
               {activePanel === 'cleaner' && '🧹 Araçlar'}
             </h3>
             <motion.button
@@ -265,7 +277,7 @@ export default function Sidebar() {
             >✕</motion.button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100% - 40px)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100% - 40px)', minWidth: '320px' }}>
             {activePanel === 'history' && <HistoryPanel />}
             {activePanel === 'bookmarks' && <BookmarksPanel />}
             {activePanel === 'downloads' && <DownloadsPanel />}
