@@ -1,4 +1,4 @@
-# 🚀 Morrow Browser v1.4.9 - The "Vault" Update
+# 🚀 Morrow Browser v1.5.0 - The "Vault" Update
 
 Bu sürümle birlikte Morrow Browser'ın tasarım dilini bir üst seviyeye taşıyor ve en çok geri bildirim aldığımız eklenti yönetimini baştan aşağı yeniliyoruz! 💎🛡️
 
