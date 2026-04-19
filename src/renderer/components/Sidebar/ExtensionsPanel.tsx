@@ -1,5 +1,9 @@
 /**
- * ExtensionsPanel — Yüklü eklentileri listeleyen ve yeni eklenti yükleme paneli
+ * ExtensionsPanel — Yüklü eklentileri listeleyen panel
+ *
+ * Kurulum artık tamamen Chrome Web Store üzerinden yapılır.
+ * Kullanıcı chrome.google.com/webstore'a gidip eklenti kurar,
+ * electron-chrome-web-store bunu otomatik yakalar.
  */
 
 import { useEffect, useState } from 'react';
@@ -15,9 +19,6 @@ interface ExtensionInfo {
 export default function ExtensionsPanel() {
   const [extensions, setExtensions] = useState<ExtensionInfo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [crxInput, setCrxInput] = useState('');
-  const [installingCrx, setInstallingCrx] = useState(false);
-  const [crxError, setCrxError] = useState('');
 
   const loadExtensions = async () => {
     const list = await window.electronAPI?.extensions?.list();
@@ -32,9 +33,7 @@ export default function ExtensionsPanel() {
     setLoading(true);
     try {
       const result = await window.electronAPI?.extensions?.load();
-      if (result) {
-        await loadExtensions();
-      }
+      if (result) await loadExtensions();
     } catch (err) {
       console.error('Eklenti yükleme hatası:', err);
     }
@@ -46,38 +45,40 @@ export default function ExtensionsPanel() {
     await loadExtensions();
   };
 
-  const handleInstallCrx = async () => {
-    if (!crxInput.trim()) return;
-    
-    setInstallingCrx(true);
-    setCrxError('');
-    
-    try {
-      // Regex accepts full URLs or exact 32-char IDs
-      const match = crxInput.match(/(?:detail\/[^\/]+\/|)([a-z]{32})/);
-      if (!match || !match[1]) {
-        throw new Error("Geçerli bir Eklenti ID'si veya Chrome Web Mağazası linki bulunamadı.");
-      }
-      
-      const extensionId = match[1];
-      const result = await window.electronAPI?.extensions?.installCrx(extensionId);
-      
-      if (result) {
-        setCrxInput('');
-        await loadExtensions();
-      } else {
-        setCrxError("İndirme veya yükleme başarısız oldu. Bağlantıyı kontrol edin.");
-      }
-    } catch (err: any) {
-      setCrxError(err.message || 'Bilinmeyen bir hata oluştu');
-    } finally {
-      setInstallingCrx(false);
-    }
+  const openWebStore = () => {
+    window.electronAPI?.nav?.go('https://chrome.google.com/webstore/category/extensions');
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      {/* Eklenti Yükle Butonu */}
+
+      {/* Chrome Web Store'dan Kur */}
+      <motion.button
+        onClick={openWebStore}
+        whileHover={{ scale: 1.02, background: 'rgba(99,102,241,0.18)' }}
+        whileTap={{ scale: 0.98 }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '12px 16px',
+          background: 'rgba(99,102,241,0.10)',
+          border: '1px solid rgba(99,102,241,0.35)',
+          borderRadius: 'var(--radius-md)',
+          color: 'var(--accent)',
+          cursor: 'pointer',
+          width: '100%',
+          textAlign: 'left',
+          fontSize: '13px',
+          fontWeight: 600,
+          fontFamily: 'Inter, sans-serif',
+        }}
+      >
+        <span style={{ fontSize: '18px' }}>🌐</span>
+        Chrome Web Store'u Aç
+      </motion.button>
+
+      {/* Klasörden Unpacked Yükle */}
       <motion.button
         onClick={handleLoad}
         disabled={loading}
@@ -91,7 +92,7 @@ export default function ExtensionsPanel() {
           background: 'rgba(255,255,255,0.06)',
           border: '1px dashed var(--border-active)',
           borderRadius: 'var(--radius-md)',
-          color: 'var(--accent)',
+          color: 'var(--text-secondary)',
           cursor: loading ? 'wait' : 'pointer',
           width: '100%',
           textAlign: 'left',
@@ -101,81 +102,16 @@ export default function ExtensionsPanel() {
         }}
       >
         <span style={{ fontSize: '18px' }}>{loading ? '⏳' : '📂'}</span>
-        {loading ? 'Yükleniyor...' : 'Klasörden Eklenti Yükle (Unpacked)'}
+        {loading ? 'Yükleniyor...' : 'Klasörden Yükle (Geliştirici)'}
       </motion.button>
-
-      {/* Chrome Mağaza Linkinden Ekleme Alanı */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        padding: '12px',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-md)',
-      }}>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <input
-            type="text"
-            value={crxInput}
-            onChange={(e) => setCrxInput(e.target.value)}
-            placeholder="Chrome Eklenti Linki (örn: https://chromeweb...)"
-            disabled={installingCrx}
-            style={{
-              flex: 1,
-              background: 'rgba(0,0,0,0.2)',
-              border: '1px solid var(--border-muted)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '8px 12px',
-              color: 'var(--text-primary)',
-              fontSize: '12px',
-              fontFamily: 'Inter, sans-serif',
-              outline: 'none',
-              minWidth: 0
-            }}
-          />
-          <motion.button
-            onClick={handleInstallCrx}
-            disabled={installingCrx || !crxInput.trim()}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              padding: '0 16px',
-              background: installingCrx ? 'var(--bg-elevated)' : 'var(--accent)',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 'var(--radius-sm)',
-              fontSize: '12px',
-              fontWeight: 600,
-              cursor: installingCrx || !crxInput.trim() ? 'not-allowed' : 'pointer',
-              opacity: installingCrx || !crxInput.trim() ? 0.6 : 1,
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {installingCrx ? 'İniyor...' : '🔥 Kur'}
-          </motion.button>
-        </div>
-        {crxError && (
-          <div style={{ color: 'var(--danger)', fontSize: '11px', marginTop: '4px' }}>
-            {crxError}
-          </div>
-        )}
-      </div>
 
       {/* Yüklü Eklentiler */}
       {extensions.length === 0 ? (
-        <div
-          style={{
-            padding: '20px',
-            textAlign: 'center',
-            color: 'var(--text-muted)',
-            fontSize: '12px',
-          }}
-        >
-          <p style={{ fontSize: '28px', marginBottom: '8px' }}>🧩</p>
-          <p>Henüz yüklü eklenti yok.</p>
-          <p style={{ marginTop: '4px', fontSize: '11px' }}>
-            Chrome Web Mağazası'ndan indirdiğiniz unpacked eklenti klasörünü yükleyebilirsiniz.
+        <div style={{ padding: '24px 12px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '12px' }}>
+          <p style={{ fontSize: '32px', marginBottom: '10px' }}>🧩</p>
+          <p style={{ fontWeight: 500, marginBottom: '6px' }}>Henüz eklenti yüklü değil</p>
+          <p style={{ fontSize: '11px', opacity: 0.7, lineHeight: '1.6' }}>
+            Chrome Web Store'a giderek<br />istediğin eklentiyi kurabilirsin.
           </p>
         </div>
       ) : (
@@ -196,18 +132,16 @@ export default function ExtensionsPanel() {
                 gap: '10px',
               }}
             >
-              <span style={{ fontSize: '20px' }}>🧩</span>
+              <img
+                src={`chrome-extension://${ext.id}/icon128.png`}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                style={{ width: 28, height: 28, borderRadius: 6, flexShrink: 0 }}
+              />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: 500,
-                    color: 'var(--text-primary)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
+                <div style={{
+                  fontSize: '13px', fontWeight: 500, color: 'var(--text-primary)',
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
                   {ext.name}
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -218,13 +152,9 @@ export default function ExtensionsPanel() {
                 onClick={() => handleRemove(ext.id)}
                 whileHover={{ color: 'var(--danger)', scale: 1.1 }}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  padding: '4px',
-                  flexShrink: 0,
+                  background: 'none', border: 'none',
+                  color: 'var(--text-muted)', cursor: 'pointer',
+                  fontSize: '13px', padding: '4px', flexShrink: 0,
                 }}
                 title="Eklentiyi Kaldır"
               >
@@ -236,17 +166,14 @@ export default function ExtensionsPanel() {
       )}
 
       {/* Bilgi */}
-      <div
-        style={{
-          marginTop: '8px',
-          padding: '10px',
-          borderRadius: 'var(--radius-sm)',
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid var(--border-subtle)',
-        }}
-      >
-        <p style={{ color: 'var(--text-muted)', fontSize: '11px', lineHeight: '1.5' }}>
-          💡 <strong>İpucu:</strong> Geliştiriciler için "Klasörden Yükle" butonunu kullanabilir veya Chrome Mağazası'ndan girdiğiniz bir eklentinin linkini yukarıya yapıştırıp tek tıkla kurabilirsiniz!
+      <div style={{
+        padding: '10px 12px',
+        borderRadius: 'var(--radius-sm)',
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid var(--border-subtle)',
+      }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '11px', lineHeight: '1.6' }}>
+          💡 <strong>Chrome Web Store</strong>'a git, eklentini bul ve <strong>"Chrome'a Ekle"</strong> butonuna tıkla. Morrow otomatik olarak kurar.
         </p>
       </div>
     </div>

@@ -1167,13 +1167,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
 
   const extensionManager = getExtensionManager();
 
-  // uBlock Origin Entegrasyonu (Başlangıçta otomatik yükle)
-  const ublockId = 'cjpalhdlnbpafiamejdnhcphjbkeiagm';
-  extensionManager.installCrx(ublockId).catch((err) => {
-    console.error('[AdBlock] uBlock Origin yükleme hatası:', err);
-  });
-
-
   ipcMain.handle(IPC_CHANNELS.EXTENSION_LOAD, async () => {
     return extensionManager.loadFromDialog();
   });
@@ -1186,9 +1179,6 @@ export function registerIPCHandlers(windowManager: WindowManager, adBlocker: AdB
     return extensionManager.getLoadedExtensions();
   });
 
-  ipcMain.handle(IPC_CHANNELS.EXTENSION_INSTALL_CRX, async (_event, extensionId: string) => {
-    return extensionManager.installCrx(extensionId);
-  });
 
   // ─── Extension List Popup (BrowserWindow olarak, webview’un üzerinde) ───
   let extListWindow: import('electron').BrowserWindow | null = null;
